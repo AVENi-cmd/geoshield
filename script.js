@@ -260,8 +260,16 @@
 
   function syncQuickContact(key) {
     const branch = branches[key] || branches.hofuf;
-    if (quickCall) quickCall.href = `tel:+${branch.phone}`;
-    if (quickWhatsApp) quickWhatsApp.href = `https://wa.me/${branch.phone}`;
+    if (quickCall) {
+      quickCall.href = `tel:+${branch.phone}`;
+      quickCall.setAttribute('aria-label', `الاتصال بـ${branch.title}`);
+      quickCall.title = `الاتصال بـ${branch.title}`;
+    }
+    if (quickWhatsApp) {
+      quickWhatsApp.href = `https://wa.me/${branch.phone}`;
+      quickWhatsApp.setAttribute('aria-label', `مراسلة ${branch.title} عبر واتساب`);
+      quickWhatsApp.title = `مراسلة ${branch.title} عبر واتساب`;
+    }
   }
 
   const branchLayout = $('#branches .branch-layout');
@@ -269,15 +277,18 @@
     branchLayout.classList.add('branches-static');
     const cards = document.createElement('div');
     cards.className = 'branch-cards';
-    cards.innerHTML = Object.entries(branches).map(([key, branch], index) => `
-      <article class="branch-card" data-branch-card="${key}">
+    cards.innerHTML = Object.entries(branches).map(([key, branch], index) => {
+      const headingId = `branch-${key}-title`;
+      return `
+      <article class="branch-card" data-branch-card="${key}" aria-labelledby="${headingId}">
         <div class="branch-card-top"><span class="branch-mark">0${index + 1}</span><span class="branch-eyebrow">GEOSHIELD CENTER</span></div>
-        <h3>${branch.title}</h3>
-        <p class="branch-address">${branch.address}</p>
-        <a class="branch-phone" href="tel:+${branch.phone}" dir="ltr">${branch.displayPhone}</a>
+        <h3 id="${headingId}">${branch.title}</h3>
+        <address class="branch-address">${branch.address}</address>
+        <a class="branch-phone" href="tel:+${branch.phone}" dir="ltr" aria-label="الاتصال بـ${branch.title}">${branch.displayPhone}</a>
         <div class="branch-hours"><span>السبت - الخميس</span><strong>9:00 ص - 10:00 م</strong><span>الجمعة</span><strong>4:00 م - 10:00 م</strong></div>
-        <div class="actions"><a class="button primary" href="https://wa.me/${branch.phone}" target="_blank" rel="noopener">واتساب الفرع</a><a class="button ghost" href="${branch.map}" target="_blank" rel="noopener">عرض الموقع</a></div>
-      </article>`).join('');
+        <div class="actions"><a class="button primary" href="https://wa.me/${branch.phone}" target="_blank" rel="noopener" aria-label="مراسلة ${branch.title} عبر واتساب">واتساب الفرع</a><a class="button ghost" href="${branch.map}" target="_blank" rel="noopener" aria-label="عرض موقع ${branch.title} على الخريطة">عرض الموقع</a></div>
+      </article>`;
+    }).join('');
     branchLayout.append(cards);
   }
 
@@ -326,19 +337,20 @@
     event.preventDefault();
     if (!form.reportValidity()) return;
     const data = new FormData(form);
-    const branchKey = data.get('branch');
+    const value = name => String(data.get(name) || '').trim();
+    const branchKey = value('branch');
     const branch = branchKey === 'khafji' ? branches.khafji : branches.hofuf;
     const branchName = branchKey === 'khafji' ? 'الخفجي' : 'الأحساء';
     const message = [
       'السلام عليكم، أرغب بحجز موعد لدى جيوشيلد.',
       '',
-      `الاسم: ${data.get('name')}`,
-      `رقم الجوال: ${data.get('phone')}`,
-      `السيارة: ${data.get('car')}`,
-      `الخدمة: ${data.get('service')}`,
+      `الاسم: ${value('name')}`,
+      `رقم الجوال: ${value('phone')}`,
+      `السيارة: ${value('car')}`,
+      `الخدمة: ${value('service')}`,
       `الفرع: ${branchName}`,
-      `التاريخ المفضل: ${data.get('date') || 'غير محدد'}`,
-      `ملاحظات: ${data.get('notes') || 'لا يوجد'}`
+      `التاريخ المفضل: ${value('date') || 'غير محدد'}`,
+      `ملاحظات: ${value('notes') || 'لا يوجد'}`
     ].join('\n');
     location.href = `https://wa.me/${branch.phone}?text=${encodeURIComponent(message)}`;
   });
