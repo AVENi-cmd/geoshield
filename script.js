@@ -60,6 +60,12 @@
     });
   }
 
+  const phoneInput = $('input[name="phone"]');
+  if (phoneInput) {
+    phoneInput.dir = 'ltr';
+    phoneInput.autocomplete = 'tel-national';
+  }
+
   const header = $('#header');
   const menu = $('#menu');
   const nav = $('#nav');
@@ -113,11 +119,14 @@
 
   if (dots) dots.setAttribute('role', 'group');
   slides.forEach((slide, index) => {
+    const slideId = `hero-slide-${index + 1}`;
+    slide.id = slideId;
     slide.setAttribute('aria-hidden', String(index !== current));
     if (!dots) return;
     const button = document.createElement('button');
     button.type = 'button';
     button.setAttribute('aria-label', `عرض الشريحة ${index + 1}`);
+    button.setAttribute('aria-controls', slideId);
     button.addEventListener('click', () => goToSlide(index));
     dots.append(button);
   });
@@ -171,6 +180,7 @@
     if (Math.abs(distance) > 48) goToSlide(current + (distance > 0 ? -1 : 1));
     setHeroPaused(false);
   }, { passive: true });
+  hero?.addEventListener('touchcancel', () => setHeroPaused(false), { passive: true });
   if (canHover) {
     hero?.addEventListener('pointerenter', () => setHeroPaused(true));
     hero?.addEventListener('pointerleave', () => setHeroPaused(false));
@@ -280,7 +290,7 @@
     cards.innerHTML = Object.entries(branches).map(([key, branch], index) => {
       const headingId = `branch-${key}-title`;
       return `
-      <article class="branch-card" data-branch-card="${key}" aria-labelledby="${headingId}">
+      <article class="branch-card reveal visible" data-branch-card="${key}" aria-labelledby="${headingId}">
         <div class="branch-card-top"><span class="branch-mark">0${index + 1}</span><span class="branch-eyebrow">GEOSHIELD CENTER</span></div>
         <h3 id="${headingId}">${branch.title}</h3>
         <address class="branch-address">${branch.address}</address>
