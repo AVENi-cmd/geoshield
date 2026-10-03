@@ -18,6 +18,14 @@
     '<svg viewBox="0 0 24 24"><path d="M12 3v18M5 7l14 10M19 7 5 17"/><circle cx="12" cy="12" r="9"/></svg>',
     '<svg viewBox="0 0 24 24"><path d="M7 20v-9M17 20v-9M4 11h16l-2-6H6l-2 6Z"/><path d="M9 8h6M10 20h4"/></svg>'
   ];
+  const uiIcons = {
+    previous: '<svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>',
+    next: '<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>',
+    phone: '<svg viewBox="0 0 24 24"><path d="M7.2 3.8 9.8 7l-2 2.2a15.8 15.8 0 0 0 7 7l2.2-2 3.2 2.6c.4.3.5.9.2 1.3-1 1.5-2.4 2.2-4 2-6.5-.9-11.6-6-12.5-12.5-.2-1.6.5-3 2-4 .4-.3 1-.2 1.3.2Z"/></svg>',
+    message: '<svg viewBox="0 0 24 24"><path d="M5 5h14v11H9l-4 3V5Z"/><path d="M8 9h8M8 12h5"/></svg>',
+    map: '<svg viewBox="0 0 24 24"><path d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11Z"/><circle cx="12" cy="10" r="2"/></svg>',
+    calendar: '<svg viewBox="0 0 24 24"><path d="M5 7h14v13H5zM8 4v5M16 4v5M5 11h14"/></svg>'
+  };
 
   $$('.mini-services > div').forEach((item, index) => {
     if (!item.querySelector('.gs-icon')) item.insertAdjacentHTML('afterbegin', `<span class="gs-icon" aria-hidden="true">${serviceIcons[index % serviceIcons.length]}</span>`);
@@ -112,15 +120,26 @@
   const slides = $$('.hero-slide');
   const dots = $('.hero-dots');
   const progress = $('.hero-progress i');
+  const previousArrow = $('.hero-arrow.prev');
+  const nextArrow = $('.hero-arrow.next');
   let current = Math.max(0, slides.findIndex(slide => slide.classList.contains('active')));
   let timer;
   let touchStartX = 0;
   let heroPaused = false;
 
-  if (dots) dots.setAttribute('role', 'group');
+  hero?.setAttribute('aria-roledescription', 'carousel');
+  if (previousArrow) previousArrow.innerHTML = uiIcons.previous;
+  if (nextArrow) nextArrow.innerHTML = uiIcons.next;
+  if (dots) {
+    dots.setAttribute('role', 'group');
+    dots.replaceChildren();
+  }
   slides.forEach((slide, index) => {
     const slideId = `hero-slide-${index + 1}`;
     slide.id = slideId;
+    slide.setAttribute('role', 'group');
+    slide.setAttribute('aria-roledescription', 'slide');
+    slide.setAttribute('aria-label', `${index + 1} من ${slides.length}`);
     slide.setAttribute('aria-hidden', String(index !== current));
     if (!dots) return;
     const button = document.createElement('button');
@@ -172,8 +191,8 @@
     scheduleHero();
   }
 
-  $('.prev')?.addEventListener('click', () => goToSlide(current - 1));
-  $('.next')?.addEventListener('click', () => goToSlide(current + 1));
+  previousArrow?.addEventListener('click', () => goToSlide(current - 1));
+  nextArrow?.addEventListener('click', () => goToSlide(current + 1));
   hero?.addEventListener('touchstart', event => { touchStartX = event.touches[0].clientX; setHeroPaused(true); }, { passive: true });
   hero?.addEventListener('touchend', event => {
     const distance = event.changedTouches[0].clientX - touchStartX;
@@ -218,6 +237,7 @@
       const buttonId = `${key}-tab`;
       const panelId = `${key}-panel`;
       button.id = buttonId;
+      button.setAttribute('role', 'tab');
       button.setAttribute('aria-controls', panelId);
       button.tabIndex = button.classList.contains('active') ? 0 : -1;
       if (panel) {
@@ -256,17 +276,28 @@
     });
   }
 
+  const packageTabsContainer = $('.package-tabs');
   const packageTabs = $$('.package-tabs button');
   const packagePanels = $$('.package-panel');
+  packageTabsContainer?.setAttribute('aria-orientation', 'horizontal');
   setupTabs(packageTabs, packagePanels, button => `package-${button.dataset.package}`, panel => `package-${panel.dataset.panel}`);
 
   const branches = {
-    hofuf: { title: 'فرع الأحساء - الهفوف', address: 'المملكة العربية السعودية - الهفوف - حي البندرية - شارع الأمير نايف', displayPhone: '055 329 1112', phone: '966553291112', map: 'https://maps.app.goo.gl/4hiJ3tTdzweoCe7K6' },
-    khafji: { title: 'فرع الخفجي', address: 'المملكة العربية السعودية - الخفجي - حي الفيحاء - شارع الملك عبدالله بن عبدالعزيز', displayPhone: '053 572 8805', phone: '966535728805', map: 'https://maps.app.goo.gl/Xf6qwvbKYHtd15xc9' }
+    hofuf: { title: 'فرع الأحساء - الهفوف', eyebrow: 'AL AHSA', address: 'المملكة العربية السعودية - الهفوف - حي البندرية - شارع الأمير نايف', displayPhone: '055 329 1112', phone: '966553291112', map: 'https://maps.app.goo.gl/4hiJ3tTdzweoCe7K6' },
+    khafji: { title: 'فرع الخفجي', eyebrow: 'AL KHAFJI', address: 'المملكة العربية السعودية - الخفجي - حي الفيحاء - شارع الملك عبدالله بن عبدالعزيز', displayPhone: '053 572 8805', phone: '966535728805', map: 'https://maps.app.goo.gl/Xf6qwvbKYHtd15xc9' }
   };
   const quickCall = $('.mobile-bar a[href^="tel:"]');
   const quickWhatsApp = $('.mobile-bar a[href^="https://wa.me/"]');
+  const quickBooking = $('.mobile-bar a[href="#booking"]');
   const branchSelect = $('select[name="branch"]');
+
+  function addActionIcon(link, svg) {
+    if (!link || $('.mobile-action-icon', link)) return;
+    link.insertAdjacentHTML('afterbegin', `<span class="mobile-action-icon" aria-hidden="true">${svg}</span>`);
+  }
+  addActionIcon(quickCall, uiIcons.phone);
+  addActionIcon(quickWhatsApp, uiIcons.message);
+  addActionIcon(quickBooking, uiIcons.calendar);
 
   function syncQuickContact(key) {
     const branch = branches[key] || branches.hofuf;
@@ -282,6 +313,21 @@
     }
   }
 
+  const footerColumns = $$('.footer-grid > div');
+  [['hofuf', footerColumns[1]], ['khafji', footerColumns[2]]].forEach(([key, column]) => {
+    const branch = branches[key];
+    if (!column || !branch) return;
+    const phone = $('a[href^="tel:"]', column);
+    const address = $('span', column);
+    if (phone) {
+      phone.href = `tel:+${branch.phone}`;
+      phone.textContent = branch.displayPhone;
+      phone.dir = 'ltr';
+      phone.setAttribute('aria-label', `الاتصال بـ${branch.title}`);
+    }
+    if (address) address.textContent = branch.address;
+  });
+
   const branchLayout = $('#branches .branch-layout');
   if (branchLayout && !$('.branch-cards', branchLayout)) {
     branchLayout.classList.add('branches-static');
@@ -291,12 +337,12 @@
       const headingId = `branch-${key}-title`;
       return `
       <article class="branch-card reveal visible" data-branch-card="${key}" aria-labelledby="${headingId}">
-        <div class="branch-card-top"><span class="branch-mark">0${index + 1}</span><span class="branch-eyebrow">GEOSHIELD CENTER</span></div>
+        <div class="branch-card-top"><span class="branch-mark">0${index + 1}</span><span class="branch-eyebrow">${branch.eyebrow}</span></div>
         <h3 id="${headingId}">${branch.title}</h3>
         <address class="branch-address">${branch.address}</address>
-        <a class="branch-phone" href="tel:+${branch.phone}" dir="ltr" aria-label="الاتصال بـ${branch.title}">${branch.displayPhone}</a>
+        <a class="branch-phone" href="tel:+${branch.phone}" dir="ltr" aria-label="الاتصال بـ${branch.title}"><span class="ui-icon branch-phone-icon" aria-hidden="true">${uiIcons.phone}</span><span>${branch.displayPhone}</span></a>
         <div class="branch-hours"><span>السبت - الخميس</span><strong>9:00 ص - 10:00 م</strong><span>الجمعة</span><strong>4:00 م - 10:00 م</strong></div>
-        <div class="actions"><a class="button primary" href="https://wa.me/${branch.phone}" target="_blank" rel="noopener" aria-label="مراسلة ${branch.title} عبر واتساب">واتساب الفرع</a><a class="button ghost" href="${branch.map}" target="_blank" rel="noopener" aria-label="عرض موقع ${branch.title} على الخريطة">عرض الموقع</a></div>
+        <div class="actions"><a class="button primary" href="https://wa.me/${branch.phone}" target="_blank" rel="noopener" aria-label="مراسلة ${branch.title} عبر واتساب"><span class="ui-icon" aria-hidden="true">${uiIcons.message}</span><span>واتساب الفرع</span></a><a class="button ghost" href="${branch.map}" target="_blank" rel="noopener" aria-label="عرض موقع ${branch.title} على الخريطة"><span class="ui-icon" aria-hidden="true">${uiIcons.map}</span><span>عرض الموقع</span></a></div>
       </article>`;
     }).join('');
     branchLayout.append(cards);
@@ -309,12 +355,13 @@
   const lightboxImage = lightbox ? $('img', lightbox) : null;
   const lightboxClose = lightbox ? $('button', lightbox) : null;
   let lastFocus = null;
+  let previousBodyOverflow = '';
 
   function closeLightbox() {
     if (!lightbox?.classList.contains('open')) return;
     lightbox.classList.remove('open');
     lightbox.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
+    document.body.style.overflow = previousBodyOverflow;
     lastFocus?.focus();
   }
 
@@ -322,6 +369,7 @@
     const image = $('img', item);
     if (!lightbox || !lightboxImage || !image) return;
     lastFocus = item;
+    previousBodyOverflow = document.body.style.overflow;
     lightboxImage.src = image.src;
     lightboxImage.alt = image.alt;
     lightbox.classList.add('open');
