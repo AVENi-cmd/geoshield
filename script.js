@@ -309,17 +309,49 @@
     Fri: 'الجمعة',
     Sat: 'السبت'
   };
-  const riyadhWeekday = new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'Asia/Riyadh' }).format(new Date());
-  const todayName = weekdayNames[riyadhWeekday];
-  if (todayName) {
-    $$('.weekly-hours .hours-row').forEach(row => {
-      const day = $('span', row)?.textContent.trim();
-      const isToday = day === todayName;
-      row.classList.toggle('today', isToday);
-      if (isToday) row.setAttribute('aria-current', 'date');
-      else row.removeAttribute('aria-current');
+
+  const officialHours = {
+    Sun: [[540, 720], [930, 1350]],
+    Mon: [[540, 720], [930, 1350]],
+    Tue: [[540, 720], [930, 1350]],
+    Wed: [[540, 720], [930, 1350]],
+    Thu: [[540, 720], [930, 1350]],
+    Fri: [[960, 1200]],
+    Sat: [[540, 720], [930, 1350]]
+  };
+
+  function updateBranchHoursState() {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Riyadh',
+      weekday: 'short',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23'
+    }).formatToParts(new Date());
+    const part = type => parts.find(item => item.type === type)?.value || '';
+    const weekday = part('weekday');
+    const todayName = weekdayNames[weekday];
+    const minutesNow = Number(part('hour')) * 60 + Number(part('minute'));
+    const isOpen = (officialHours[weekday] || []).some(([start, end]) => minutesNow >= start && minutesNow < end);
+
+    $$('.weekly-hours').forEach(hours => {
+      const title = $('.hours-title', hours);
+      if (title) {
+        title.textContent = `ساعات العمل الرسمية • ${isOpen ? 'مفتوح الآن' : 'مغلق الآن'}`;
+        title.setAttribute('aria-live', 'polite');
+      }
+      $$('.hours-row', hours).forEach(row => {
+        const day = $('span', row)?.textContent.trim();
+        const isToday = day === todayName;
+        row.classList.toggle('today', isToday);
+        if (isToday) row.setAttribute('aria-current', 'date');
+        else row.removeAttribute('aria-current');
+      });
     });
   }
+
+  updateBranchHoursState();
+  setInterval(updateBranchHoursState, 60000);
 
   const quickCall = $('.mobile-bar a[href^="tel:"]');
   const quickWhatsApp = $('.mobile-bar a[href*="wa.me"]');
