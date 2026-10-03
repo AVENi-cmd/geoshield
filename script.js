@@ -26,6 +26,9 @@
     if (!item.querySelector('.why-icon')) item.insertAdjacentHTML('afterbegin', `<span class="why-icon" aria-hidden="true">${promiseIcons[index % promiseIcons.length]}</span>`);
   });
 
+  const installmentsHero = $('.hero-slide img[src*="hero-slider-geoshield-installments"]');
+  if (installmentsHero) installmentsHero.alt = 'خيارات الدفع والتقسيط لدى جيوشيلد';
+
   const promiseCards = $$('.why-grid article');
   if (promiseCards[3]) {
     const title = $('h3', promiseCards[3]);
