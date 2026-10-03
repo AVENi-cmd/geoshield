@@ -12,12 +12,14 @@
     '<svg viewBox="0 0 24 24"><path d="M12 3 4 7v5c0 5 3.4 8 8 9 4.6-1 8-4 8-9V7l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>',
     '<svg viewBox="0 0 24 24"><path d="M5 16h14l-1.5-5h-11L5 16Z"/><path d="M7 16v2M17 16v2M8 11l1-3h6l1 3"/></svg>'
   ];
+
   const promiseIcons = [
     '<svg viewBox="0 0 24 24"><path d="M12 3 4 7v5c0 5 3.4 8 8 9 4.6-1 8-4 8-9V7l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>',
     '<svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/><path d="M7 3 4 6M17 3l3 3"/></svg>',
     '<svg viewBox="0 0 24 24"><path d="M12 3v18M5 7l14 10M19 7 5 17"/><circle cx="12" cy="12" r="9"/></svg>',
     '<svg viewBox="0 0 24 24"><path d="M7 20v-9M17 20v-9M4 11h16l-2-6H6l-2 6Z"/><path d="M9 8h6M10 20h4"/></svg>'
   ];
+
   const uiIcons = {
     previous: '<svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>',
     next: '<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>',
@@ -27,52 +29,15 @@
     calendar: '<svg viewBox="0 0 24 24"><path d="M5 7h14v13H5zM8 4v5M16 4v5M5 11h14"/></svg>'
   };
 
+  const iconSpan = (icon, className = 'ui-icon') => `<span class="${className}" aria-hidden="true">${icon}</span>`;
+
   $$('.mini-services > div').forEach((item, index) => {
     if (!item.querySelector('.gs-icon')) item.insertAdjacentHTML('afterbegin', `<span class="gs-icon" aria-hidden="true">${serviceIcons[index % serviceIcons.length]}</span>`);
   });
+
   $$('.why-grid article').forEach((item, index) => {
     if (!item.querySelector('.why-icon')) item.insertAdjacentHTML('afterbegin', `<span class="why-icon" aria-hidden="true">${promiseIcons[index % promiseIcons.length]}</span>`);
   });
-
-  const installmentsHero = $('.hero-slide img[src*="hero-slider-geoshield-installments"]');
-  if (installmentsHero) installmentsHero.alt = 'خيارات الدفع والتقسيط لدى جيوشيلد';
-
-  const promiseCards = $$('.why-grid article');
-  if (promiseCards[3]) {
-    const title = $('h3', promiseCards[3]);
-    const text = $('p', promiseCards[3]);
-    if (title) title.textContent = 'عناية بعد التركيب';
-    if (text) text.textContent = 'فحص مجاني خلال 4 أسابيع وصيانة دورية كل 6 شهور.';
-  }
-
-  const aftercareItems = $$('.aftercare li');
-  if (aftercareItems[1]) {
-    const text = $('span', aftercareItems[1]);
-    if (text) text.textContent = 'بدون فتح النوافذ بعد تركيب العازل الحراري.';
-  }
-  const aftercare = $('.aftercare');
-  if (aftercare && !$('.warranty-maintenance-note')) {
-    aftercare.insertAdjacentHTML('afterend', '<p class="notice warranty-maintenance-note">عدم الالتزام بالصيانة الدورية يلغي الضمان.</p>');
-  }
-
-  const serviceSelect = $('select[name="service"]');
-  if (serviceSelect) {
-    const requiredStandalone = ['حماية الزجاج', 'رش وحماية أسفل السيارة', 'التلبيس الداخلي'];
-    const existing = new Set($$('option', serviceSelect).map(option => option.textContent.trim()));
-    requiredStandalone.forEach(label => {
-      if (existing.has(label)) return;
-      const option = document.createElement('option');
-      option.value = label;
-      option.textContent = label;
-      serviceSelect.append(option);
-    });
-  }
-
-  const phoneInput = $('input[name="phone"]');
-  if (phoneInput) {
-    phoneInput.dir = 'ltr';
-    phoneInput.autocomplete = 'tel-national';
-  }
 
   const header = $('#header');
   const menu = $('#menu');
@@ -92,11 +57,17 @@
     menu.setAttribute('aria-expanded', String(open));
     menu.setAttribute('aria-label', open ? 'إغلاق القائمة' : 'فتح القائمة');
   });
+
   $$('#nav a').forEach(link => link.addEventListener('click', () => closeMenu()));
+
   document.addEventListener('pointerdown', event => {
     if (innerWidth <= 1050 && nav?.classList.contains('open') && !nav.contains(event.target) && !menu?.contains(event.target)) closeMenu();
   });
-  addEventListener('resize', () => { if (innerWidth > 1050) closeMenu(); }, { passive: true });
+
+  addEventListener('resize', () => {
+    if (innerWidth > 1050) closeMenu();
+  }, { passive: true });
+
   const syncHeader = () => header?.classList.toggle('scrolled', scrollY > 24);
   addEventListener('scroll', syncHeader, { passive: true });
   syncHeader();
@@ -105,7 +76,9 @@
     const navLinks = $$('#nav a[href^="#"]');
     const sections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
     const navObserver = new IntersectionObserver(entries => {
-      const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
       if (!visible) return;
       navLinks.forEach(link => {
         const active = link.getAttribute('href') === `#${visible.target.id}`;
@@ -122,10 +95,10 @@
   const progress = $('.hero-progress i');
   const previousArrow = $('.hero-arrow.prev');
   const nextArrow = $('.hero-arrow.next');
+  const heroPauseReasons = new Set();
   let current = Math.max(0, slides.findIndex(slide => slide.classList.contains('active')));
   let timer;
   let touchStartX = 0;
-  let heroPaused = false;
 
   hero?.setAttribute('aria-roledescription', 'carousel');
   if (previousArrow) previousArrow.innerHTML = uiIcons.previous;
@@ -134,6 +107,7 @@
     dots.setAttribute('role', 'group');
     dots.replaceChildren();
   }
+
   slides.forEach((slide, index) => {
     const slideId = `hero-slide-${index + 1}`;
     slide.id = slideId;
@@ -150,29 +124,41 @@
     dots.append(button);
   });
 
+  const heroCanRun = () => !reduceMotion && !document.hidden && heroPauseReasons.size === 0 && slides.length > 1;
+
+  function stopHero() {
+    clearTimeout(timer);
+    if (progress) progress.style.transition = 'none';
+  }
+
   function scheduleHero() {
     clearTimeout(timer);
-    if (!reduceMotion && !heroPaused && !document.hidden && slides.length > 1) timer = setTimeout(() => goToSlide(current + 1), 6500);
+    if (heroCanRun()) timer = setTimeout(() => goToSlide(current + 1), 6500);
   }
+
   function restartProgress() {
     if (!progress) return;
     progress.style.transition = 'none';
     progress.style.width = '0';
-    if (!reduceMotion && !heroPaused && !document.hidden) requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (!heroCanRun()) return;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (!heroCanRun()) return;
       progress.style.transition = 'width 6.5s linear';
       progress.style.width = '100%';
     }));
   }
-  function setHeroPaused(paused) {
-    heroPaused = paused;
-    if (paused) {
-      clearTimeout(timer);
-      if (progress) progress.style.transition = 'none';
-    } else {
+
+  function setHeroPause(reason, paused) {
+    if (paused) heroPauseReasons.add(reason);
+    else heroPauseReasons.delete(reason);
+    if (heroCanRun()) {
       restartProgress();
       scheduleHero();
+    } else {
+      stopHero();
     }
   }
+
   function goToSlide(index) {
     if (!slides.length) return;
     current = (index + slides.length) % slides.length;
@@ -193,28 +179,40 @@
 
   previousArrow?.addEventListener('click', () => goToSlide(current - 1));
   nextArrow?.addEventListener('click', () => goToSlide(current + 1));
-  hero?.addEventListener('touchstart', event => { touchStartX = event.touches[0].clientX; setHeroPaused(true); }, { passive: true });
+
+  hero?.addEventListener('touchstart', event => {
+    touchStartX = event.touches[0].clientX;
+    setHeroPause('touch', true);
+  }, { passive: true });
+
   hero?.addEventListener('touchend', event => {
     const distance = event.changedTouches[0].clientX - touchStartX;
     if (Math.abs(distance) > 48) goToSlide(current + (distance > 0 ? -1 : 1));
-    setHeroPaused(false);
+    setHeroPause('touch', false);
   }, { passive: true });
-  hero?.addEventListener('touchcancel', () => setHeroPaused(false), { passive: true });
+
+  hero?.addEventListener('touchcancel', () => setHeroPause('touch', false), { passive: true });
+
   if (canHover) {
-    hero?.addEventListener('pointerenter', () => setHeroPaused(true));
-    hero?.addEventListener('pointerleave', () => setHeroPaused(false));
+    hero?.addEventListener('pointerenter', () => setHeroPause('pointer', true));
+    hero?.addEventListener('pointerleave', () => setHeroPause('pointer', false));
   }
-  hero?.addEventListener('focusin', () => setHeroPaused(true));
-  hero?.addEventListener('focusout', event => { if (!hero.contains(event.relatedTarget)) setHeroPaused(false); });
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      clearTimeout(timer);
-      if (progress) progress.style.transition = 'none';
-      return;
-    }
-    restartProgress();
-    scheduleHero();
+
+  hero?.addEventListener('focusin', () => setHeroPause('focus', true));
+  hero?.addEventListener('focusout', event => {
+    if (!hero.contains(event.relatedTarget)) setHeroPause('focus', false);
   });
+
+  document.addEventListener('visibilitychange', () => setHeroPause('document', document.hidden));
+
+  if (hero && 'IntersectionObserver' in window) {
+    const heroObserver = new IntersectionObserver(entries => {
+      const entry = entries[0];
+      if (entry) setHeroPause('viewport', !entry.isIntersecting);
+    }, { threshold: .08 });
+    heroObserver.observe(hero);
+  }
+
   goToSlide(current);
 
   if ('IntersectionObserver' in window && !reduceMotion) {
@@ -246,6 +244,7 @@
         panel.setAttribute('aria-labelledby', buttonId);
         panel.hidden = !panel.classList.contains('active');
       }
+
       const activate = () => {
         buttons.forEach(item => {
           const active = item === button;
@@ -259,6 +258,7 @@
           item.hidden = !active;
         });
       };
+
       button.addEventListener('click', activate);
       button.addEventListener('keydown', event => {
         let next;
@@ -276,28 +276,38 @@
     });
   }
 
-  const packageTabsContainer = $('.package-tabs');
   const packageTabs = $$('.package-tabs button');
   const packagePanels = $$('.package-panel');
-  packageTabsContainer?.setAttribute('aria-orientation', 'horizontal');
   setupTabs(packageTabs, packagePanels, button => `package-${button.dataset.package}`, panel => `package-${panel.dataset.panel}`);
 
   const branches = {
-    hofuf: { title: 'فرع الأحساء - الهفوف', eyebrow: 'AL AHSA', address: 'المملكة العربية السعودية - الهفوف - حي البندرية - شارع الأمير نايف', displayPhone: '055 329 1112', phone: '966553291112', map: 'https://maps.app.goo.gl/4hiJ3tTdzweoCe7K6' },
-    khafji: { title: 'فرع الخفجي', eyebrow: 'AL KHAFJI', address: 'المملكة العربية السعودية - الخفجي - حي الفيحاء - شارع الملك عبدالله بن عبدالعزيز', displayPhone: '053 572 8805', phone: '966535728805', map: 'https://maps.app.goo.gl/Xf6qwvbKYHtd15xc9' }
+    hofuf: {
+      title: 'فرع الأحساء - الهفوف',
+      phone: '966553291112'
+    },
+    khafji: {
+      title: 'فرع الخفجي',
+      phone: '966535728805'
+    }
   };
+
+  $$('.branch-card').forEach(card => {
+    const phone = $('.branch-phone', card);
+    const whatsApp = $('.actions a[href*="wa.me"]', card);
+    const map = $('.actions a[href*="maps.app.goo.gl"]', card);
+    if (phone && !phone.querySelector('.ui-icon')) phone.insertAdjacentHTML('afterbegin', iconSpan(uiIcons.phone, 'ui-icon branch-phone-icon'));
+    if (whatsApp && !whatsApp.querySelector('.ui-icon')) whatsApp.insertAdjacentHTML('afterbegin', iconSpan(uiIcons.message));
+    if (map && !map.querySelector('.ui-icon')) map.insertAdjacentHTML('afterbegin', iconSpan(uiIcons.map));
+  });
+
   const quickCall = $('.mobile-bar a[href^="tel:"]');
-  const quickWhatsApp = $('.mobile-bar a[href^="https://wa.me/"]');
+  const quickWhatsApp = $('.mobile-bar a[href*="wa.me"]');
   const quickBooking = $('.mobile-bar a[href="#booking"]');
   const branchSelect = $('select[name="branch"]');
 
-  function addActionIcon(link, svg) {
-    if (!link || $('.mobile-action-icon', link)) return;
-    link.insertAdjacentHTML('afterbegin', `<span class="mobile-action-icon" aria-hidden="true">${svg}</span>`);
-  }
-  addActionIcon(quickCall, uiIcons.phone);
-  addActionIcon(quickWhatsApp, uiIcons.message);
-  addActionIcon(quickBooking, uiIcons.calendar);
+  if (quickCall && !quickCall.querySelector('.mobile-action-icon')) quickCall.insertAdjacentHTML('afterbegin', iconSpan(uiIcons.phone, 'mobile-action-icon'));
+  if (quickWhatsApp && !quickWhatsApp.querySelector('.mobile-action-icon')) quickWhatsApp.insertAdjacentHTML('afterbegin', iconSpan(uiIcons.message, 'mobile-action-icon'));
+  if (quickBooking && !quickBooking.querySelector('.mobile-action-icon')) quickBooking.insertAdjacentHTML('afterbegin', iconSpan(uiIcons.calendar, 'mobile-action-icon'));
 
   function syncQuickContact(key) {
     const branch = branches[key] || branches.hofuf;
@@ -311,41 +321,6 @@
       quickWhatsApp.setAttribute('aria-label', `مراسلة ${branch.title} عبر واتساب`);
       quickWhatsApp.title = `مراسلة ${branch.title} عبر واتساب`;
     }
-  }
-
-  const footerColumns = $$('.footer-grid > div');
-  [['hofuf', footerColumns[1]], ['khafji', footerColumns[2]]].forEach(([key, column]) => {
-    const branch = branches[key];
-    if (!column || !branch) return;
-    const phone = $('a[href^="tel:"]', column);
-    const address = $('span', column);
-    if (phone) {
-      phone.href = `tel:+${branch.phone}`;
-      phone.textContent = branch.displayPhone;
-      phone.dir = 'ltr';
-      phone.setAttribute('aria-label', `الاتصال بـ${branch.title}`);
-    }
-    if (address) address.textContent = branch.address;
-  });
-
-  const branchLayout = $('#branches .branch-layout');
-  if (branchLayout && !$('.branch-cards', branchLayout)) {
-    branchLayout.classList.add('branches-static');
-    const cards = document.createElement('div');
-    cards.className = 'branch-cards';
-    cards.innerHTML = Object.entries(branches).map(([key, branch], index) => {
-      const headingId = `branch-${key}-title`;
-      return `
-      <article class="branch-card reveal visible" data-branch-card="${key}" aria-labelledby="${headingId}">
-        <div class="branch-card-top"><span class="branch-mark">0${index + 1}</span><span class="branch-eyebrow">${branch.eyebrow}</span></div>
-        <h3 id="${headingId}">${branch.title}</h3>
-        <address class="branch-address">${branch.address}</address>
-        <a class="branch-phone" href="tel:+${branch.phone}" dir="ltr" aria-label="الاتصال بـ${branch.title}"><span class="ui-icon branch-phone-icon" aria-hidden="true">${uiIcons.phone}</span><span>${branch.displayPhone}</span></a>
-        <div class="branch-hours"><span>السبت - الخميس</span><strong>9:00 ص - 10:00 م</strong><span>الجمعة</span><strong>4:00 م - 10:00 م</strong></div>
-        <div class="actions"><a class="button primary" href="https://wa.me/${branch.phone}" target="_blank" rel="noopener" aria-label="مراسلة ${branch.title} عبر واتساب"><span class="ui-icon" aria-hidden="true">${uiIcons.message}</span><span>واتساب الفرع</span></a><a class="button ghost" href="${branch.map}" target="_blank" rel="noopener" aria-label="عرض موقع ${branch.title} على الخريطة"><span class="ui-icon" aria-hidden="true">${uiIcons.map}</span><span>عرض الموقع</span></a></div>
-      </article>`;
-    }).join('');
-    branchLayout.append(cards);
   }
 
   branchSelect?.addEventListener('change', () => syncQuickContact(branchSelect.value));
@@ -377,8 +352,12 @@
     document.body.style.overflow = 'hidden';
     lightboxClose?.focus();
   }));
+
   lightboxClose?.addEventListener('click', closeLightbox);
-  lightbox?.addEventListener('click', event => { if (event.target === lightbox) closeLightbox(); });
+  lightbox?.addEventListener('click', event => {
+    if (event.target === lightbox) closeLightbox();
+  });
+
   addEventListener('keydown', event => {
     if (event.key === 'Escape') {
       if (lightbox?.classList.contains('open')) closeLightbox();
@@ -390,10 +369,18 @@
     }
   });
 
+  $$('.faq details').forEach(detail => detail.addEventListener('toggle', () => {
+    if (!detail.open) return;
+    $$('.faq details').forEach(other => {
+      if (other !== detail) other.open = false;
+    });
+  }));
+
   const form = $('#bookingForm');
   form?.addEventListener('submit', event => {
     event.preventDefault();
     if (!form.reportValidity()) return;
+
     const data = new FormData(form);
     const value = name => String(data.get(name) || '').trim();
     const branchKey = value('branch');
@@ -410,6 +397,7 @@
       `التاريخ المفضل: ${value('date') || 'غير محدد'}`,
       `ملاحظات: ${value('notes') || 'لا يوجد'}`
     ].join('\n');
+
     location.href = `https://wa.me/${branch.phone}?text=${encodeURIComponent(message)}`;
   });
 
