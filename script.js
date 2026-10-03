@@ -300,6 +300,27 @@
     if (map && !map.querySelector('.ui-icon')) map.insertAdjacentHTML('afterbegin', iconSpan(uiIcons.map));
   });
 
+  const weekdayNames = {
+    Sun: 'الأحد',
+    Mon: 'الاثنين',
+    Tue: 'الثلاثاء',
+    Wed: 'الأربعاء',
+    Thu: 'الخميس',
+    Fri: 'الجمعة',
+    Sat: 'السبت'
+  };
+  const riyadhWeekday = new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'Asia/Riyadh' }).format(new Date());
+  const todayName = weekdayNames[riyadhWeekday];
+  if (todayName) {
+    $$('.weekly-hours .hours-row').forEach(row => {
+      const day = $('span', row)?.textContent.trim();
+      const isToday = day === todayName;
+      row.classList.toggle('today', isToday);
+      if (isToday) row.setAttribute('aria-current', 'date');
+      else row.removeAttribute('aria-current');
+    });
+  }
+
   const quickCall = $('.mobile-bar a[href^="tel:"]');
   const quickWhatsApp = $('.mobile-bar a[href*="wa.me"]');
   const quickBooking = $('.mobile-bar a[href="#booking"]');
@@ -403,8 +424,13 @@
 
   const dateInput = $('input[type="date"]');
   if (dateInput) {
-    const now = new Date();
-    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-    dateInput.min = local.toISOString().slice(0, 10);
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Riyadh',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).formatToParts(new Date());
+    const part = type => parts.find(item => item.type === type)?.value || '';
+    dateInput.min = `${part('year')}-${part('month')}-${part('day')}`;
   }
 })();
