@@ -4,6 +4,7 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   const serviceIcons = [
     '<svg viewBox="0 0 24 24"><path d="M4 15c3-1 5-3 6-7 3 1 5 3 6 6 1 3 0 5-2 6-3 1-7-1-10-5Z"/><path d="M8 17c2-1 4-3 5-6"/></svg>',
@@ -79,7 +80,9 @@
     if (innerWidth <= 1050 && nav?.classList.contains('open') && !nav.contains(event.target) && !menu?.contains(event.target)) closeMenu();
   });
   addEventListener('resize', () => { if (innerWidth > 1050) closeMenu(); }, { passive: true });
-  addEventListener('scroll', () => header?.classList.toggle('scrolled', scrollY > 24), { passive: true });
+  const syncHeader = () => header?.classList.toggle('scrolled', scrollY > 24);
+  addEventListener('scroll', syncHeader, { passive: true });
+  syncHeader();
 
   if ('IntersectionObserver' in window) {
     const navLinks = $$('#nav a[href^="#"]');
@@ -87,7 +90,11 @@
     const navObserver = new IntersectionObserver(entries => {
       const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
       if (!visible) return;
-      navLinks.forEach(link => link.toggleAttribute('aria-current', link.getAttribute('href') === `#${visible.target.id}`));
+      navLinks.forEach(link => {
+        const active = link.getAttribute('href') === `#${visible.target.id}`;
+        if (active) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
     }, { rootMargin: '-30% 0px -60%', threshold: [0, .2, .5] });
     sections.forEach(section => navObserver.observe(section));
   }
@@ -120,7 +127,7 @@
     if (!progress) return;
     progress.style.transition = 'none';
     progress.style.width = '0';
-    if (!reduceMotion && !heroPaused) requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (!reduceMotion && !heroPaused && !document.hidden) requestAnimationFrame(() => requestAnimationFrame(() => {
       progress.style.transition = 'width 6.5s linear';
       progress.style.width = '100%';
     }));
@@ -146,7 +153,8 @@
     if (dots) $$('button', dots).forEach((button, buttonIndex) => {
       const active = buttonIndex === current;
       button.classList.toggle('active', active);
-      button.toggleAttribute('aria-current', active);
+      if (active) button.setAttribute('aria-current', 'true');
+      else button.removeAttribute('aria-current');
     });
     restartProgress();
     scheduleHero();
@@ -160,11 +168,21 @@
     if (Math.abs(distance) > 48) goToSlide(current + (distance > 0 ? -1 : 1));
     setHeroPaused(false);
   }, { passive: true });
-  hero?.addEventListener('pointerenter', () => setHeroPaused(true));
-  hero?.addEventListener('pointerleave', () => setHeroPaused(false));
+  if (canHover) {
+    hero?.addEventListener('pointerenter', () => setHeroPaused(true));
+    hero?.addEventListener('pointerleave', () => setHeroPaused(false));
+  }
   hero?.addEventListener('focusin', () => setHeroPaused(true));
   hero?.addEventListener('focusout', event => { if (!hero.contains(event.relatedTarget)) setHeroPaused(false); });
-  document.addEventListener('visibilitychange', () => document.hidden ? clearTimeout(timer) : scheduleHero());
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      clearTimeout(timer);
+      if (progress) progress.style.transition = 'none';
+      return;
+    }
+    restartProgress();
+    scheduleHero();
+  });
   goToSlide(current);
 
   if ('IntersectionObserver' in window && !reduceMotion) {
@@ -308,7 +326,17 @@
     const branchKey = data.get('branch');
     const branch = branchKey === 'khafji' ? branches.khafji : branches.hofuf;
     const branchName = branchKey === 'khafji' ? 'الخفجي' : 'الأحساء';
-    const message = `السلام عليكم، أرغب بحجز موعد لدى جيوشيلد.\n\nالاسم: ${data.get('name')}\nرقم الجوال: ${data.get('phone')}\nالسيارة: ${data.get('car')}\nالخدمة: ${data.get('service')}\nالفرع: ${branchName}\nالتاريخ المفضل: ${data.get('date') || 'غير محدد'}\nملاحظات: ${data.get('notes') || 'لا يوجد'}`;
+    const message = [
+      'السلام عليكم، أرغب بحجز موعد لدى جيوشيلد.',
+      '',
+      `الاسم: ${data.get('name')}`,
+      `رقم الجوال: ${data.get('phone')}`,
+      `السيارة: ${data.get('car')}`,
+      `الخدمة: ${data.get('service')}`,
+      `الفرع: ${branchName}`,
+      `التاريخ المفضل: ${data.get('date') || 'غير محدد'}`,
+      `ملاحظات: ${data.get('notes') || 'لا يوجد'}`
+    ].join('\n');
     location.href = `https://wa.me/${branch.phone}?text=${encodeURIComponent(message)}`;
   });
 
