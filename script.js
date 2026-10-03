@@ -19,15 +19,34 @@
   ];
 
   $$('.mini-services > div').forEach((item, index) => {
-    if (!item.querySelector('.gs-icon')) {
-      item.insertAdjacentHTML('afterbegin', `<span class="gs-icon" aria-hidden="true">${serviceIcons[index % serviceIcons.length]}</span>`);
-    }
+    if (!item.querySelector('.gs-icon')) item.insertAdjacentHTML('afterbegin', `<span class="gs-icon" aria-hidden="true">${serviceIcons[index % serviceIcons.length]}</span>`);
   });
   $$('.why-grid article').forEach((item, index) => {
-    if (!item.querySelector('.why-icon')) {
-      item.insertAdjacentHTML('afterbegin', `<span class="why-icon" aria-hidden="true">${promiseIcons[index % promiseIcons.length]}</span>`);
-    }
+    if (!item.querySelector('.why-icon')) item.insertAdjacentHTML('afterbegin', `<span class="why-icon" aria-hidden="true">${promiseIcons[index % promiseIcons.length]}</span>`);
   });
+
+  // Keep visible marketing copy limited to confirmed aftercare facts.
+  const promiseCards = $$('.why-grid article');
+  if (promiseCards[3]) {
+    const title = $('h3', promiseCards[3]);
+    const text = $('p', promiseCards[3]);
+    if (title) title.textContent = 'عناية بعد التركيب';
+    if (text) text.textContent = 'فحص مجاني خلال 4 أسابيع وصيانة دورية كل 6 شهور.';
+  }
+
+  // Complete the standalone services available through the booking form.
+  const serviceSelect = $('select[name="service"]');
+  if (serviceSelect) {
+    const requiredStandalone = ['حماية الزجاج', 'رش وحماية أسفل السيارة', 'التلبيس الداخلي'];
+    const existing = new Set($$('option', serviceSelect).map(option => option.textContent.trim()));
+    requiredStandalone.forEach(label => {
+      if (existing.has(label)) return;
+      const option = document.createElement('option');
+      option.textContent = label;
+      option.value = label;
+      serviceSelect.append(option);
+    });
+  }
 
   const header = $('#header');
   const menu = $('#menu');
@@ -47,14 +66,11 @@
     menu.setAttribute('aria-expanded', String(open));
     menu.setAttribute('aria-label', open ? 'إغلاق القائمة' : 'فتح القائمة');
   });
-
   $$('#nav a').forEach(link => link.addEventListener('click', () => closeMenu()));
   document.addEventListener('pointerdown', event => {
     if (innerWidth <= 1050 && nav?.classList.contains('open') && !nav.contains(event.target) && !menu?.contains(event.target)) closeMenu();
   });
-  addEventListener('resize', () => {
-    if (innerWidth > 1050) closeMenu();
-  }, { passive: true });
+  addEventListener('resize', () => { if (innerWidth > 1050) closeMenu(); }, { passive: true });
   addEventListener('scroll', () => header?.classList.toggle('scrolled', scrollY > 24), { passive: true });
 
   if ('IntersectionObserver' in window) {
@@ -63,10 +79,7 @@
     const navObserver = new IntersectionObserver(entries => {
       const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
       if (!visible) return;
-      navLinks.forEach(link => {
-        const active = link.getAttribute('href') === `#${visible.target.id}`;
-        link.toggleAttribute('aria-current', active);
-      });
+      navLinks.forEach(link => link.toggleAttribute('aria-current', link.getAttribute('href') === `#${visible.target.id}`));
     }, { rootMargin: '-30% 0px -60%', threshold: [0, .2, .5] });
     sections.forEach(section => navObserver.observe(section));
   }
@@ -81,7 +94,6 @@
   let heroPaused = false;
 
   if (dots) dots.setAttribute('role', 'group');
-
   slides.forEach((slide, index) => {
     slide.setAttribute('aria-hidden', String(index !== current));
     if (!dots) return;
@@ -96,19 +108,15 @@
     clearTimeout(timer);
     if (!reduceMotion && !heroPaused && !document.hidden && slides.length > 1) timer = setTimeout(() => goToSlide(current + 1), 6500);
   }
-
   function restartProgress() {
     if (!progress) return;
     progress.style.transition = 'none';
     progress.style.width = '0';
-    if (!reduceMotion && !heroPaused) {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        progress.style.transition = 'width 6.5s linear';
-        progress.style.width = '100%';
-      }));
-    }
+    if (!reduceMotion && !heroPaused) requestAnimationFrame(() => requestAnimationFrame(() => {
+      progress.style.transition = 'width 6.5s linear';
+      progress.style.width = '100%';
+    }));
   }
-
   function setHeroPaused(paused) {
     heroPaused = paused;
     if (paused) {
@@ -119,7 +127,6 @@
       scheduleHero();
     }
   }
-
   function goToSlide(index) {
     if (!slides.length) return;
     current = (index + slides.length) % slides.length;
@@ -128,23 +135,18 @@
       slide.classList.toggle('active', active);
       slide.setAttribute('aria-hidden', String(!active));
     });
-    if (dots) {
-      $$('button', dots).forEach((button, buttonIndex) => {
-        const active = buttonIndex === current;
-        button.classList.toggle('active', active);
-        button.toggleAttribute('aria-current', active);
-      });
-    }
+    if (dots) $$('button', dots).forEach((button, buttonIndex) => {
+      const active = buttonIndex === current;
+      button.classList.toggle('active', active);
+      button.toggleAttribute('aria-current', active);
+    });
     restartProgress();
     scheduleHero();
   }
 
   $('.prev')?.addEventListener('click', () => goToSlide(current - 1));
   $('.next')?.addEventListener('click', () => goToSlide(current + 1));
-  hero?.addEventListener('touchstart', event => {
-    touchStartX = event.touches[0].clientX;
-    setHeroPaused(true);
-  }, { passive: true });
+  hero?.addEventListener('touchstart', event => { touchStartX = event.touches[0].clientX; setHeroPaused(true); }, { passive: true });
   hero?.addEventListener('touchend', event => {
     const distance = event.changedTouches[0].clientX - touchStartX;
     if (Math.abs(distance) > 48) goToSlide(current + (distance > 0 ? -1 : 1));
@@ -153,9 +155,7 @@
   hero?.addEventListener('pointerenter', () => setHeroPaused(true));
   hero?.addEventListener('pointerleave', () => setHeroPaused(false));
   hero?.addEventListener('focusin', () => setHeroPaused(true));
-  hero?.addEventListener('focusout', event => {
-    if (!hero.contains(event.relatedTarget)) setHeroPaused(false);
-  });
+  hero?.addEventListener('focusout', event => { if (!hero.contains(event.relatedTarget)) setHeroPaused(false); });
   document.addEventListener('visibilitychange', () => document.hidden ? clearTimeout(timer) : scheduleHero());
   goToSlide(current);
 
@@ -235,14 +235,12 @@
     branchInfo.setAttribute('role', 'tabpanel');
     branchInfo.setAttribute('tabindex', '0');
   }
-
   function syncQuickContact(key) {
     const branch = branches[key] || branches.hofuf;
     if (quickCall) quickCall.href = `tel:+${branch.phone}`;
     if (quickWhatsApp) quickWhatsApp.href = `https://wa.me/${branch.phone}`;
     if (branchSelect && branchSelect.value !== key) branchSelect.value = key;
   }
-
   function renderBranch(key, activeButton) {
     const branch = branches[key];
     if (!branch || !branchInfo) return;
@@ -293,7 +291,6 @@
   const lightboxImage = lightbox ? $('img', lightbox) : null;
   const lightboxClose = lightbox ? $('button', lightbox) : null;
   let lastFocus = null;
-
   function closeLightbox() {
     if (!lightbox?.classList.contains('open')) return;
     lightbox.classList.remove('open');
@@ -301,7 +298,6 @@
     document.body.style.overflow = '';
     lastFocus?.focus();
   }
-
   $$('.work-item').forEach(item => item.addEventListener('click', () => {
     const image = $('img', item);
     if (!lightbox || !lightboxImage || !image) return;
@@ -314,10 +310,7 @@
     lightboxClose?.focus();
   }));
   lightboxClose?.addEventListener('click', closeLightbox);
-  lightbox?.addEventListener('click', event => {
-    if (event.target === lightbox) closeLightbox();
-  });
-
+  lightbox?.addEventListener('click', event => { if (event.target === lightbox) closeLightbox(); });
   addEventListener('keydown', event => {
     if (event.key === 'Escape') {
       if (lightbox?.classList.contains('open')) closeLightbox();
