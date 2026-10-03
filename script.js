@@ -251,8 +251,8 @@
   setupTabs(packageTabs, packagePanels, button => `package-${button.dataset.package}`, panel => `package-${panel.dataset.panel}`);
 
   const branches = {
-    hofuf: { title: 'فرع الأحساء - الهفوف', address: 'حي البندرية - شارع الأمير نايف', displayPhone: '055 329 1112', phone: '966553291112', map: 'https://maps.app.goo.gl/4hiJ3tTdzweoCe7K6' },
-    khafji: { title: 'فرع الخفجي', address: 'حي الفيحاء - شارع الملك عبدالله', displayPhone: '053 572 8805', phone: '966535728805', map: 'https://maps.app.goo.gl/Xf6qwvbKYHtd15xc9' }
+    hofuf: { title: 'فرع الأحساء - الهفوف', address: 'المملكة العربية السعودية - الهفوف - حي البندرية - شارع الأمير نايف', displayPhone: '055 329 1112', phone: '966553291112', map: 'https://maps.app.goo.gl/4hiJ3tTdzweoCe7K6' },
+    khafji: { title: 'فرع الخفجي', address: 'المملكة العربية السعودية - الخفجي - حي الفيحاء - شارع الملك عبدالله بن عبدالعزيز', displayPhone: '053 572 8805', phone: '966535728805', map: 'https://maps.app.goo.gl/Xf6qwvbKYHtd15xc9' }
   };
   const quickCall = $('.mobile-bar a[href^="tel:"]');
   const quickWhatsApp = $('.mobile-bar a[href^="https://wa.me/"]');
