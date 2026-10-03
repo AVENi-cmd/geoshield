@@ -25,7 +25,6 @@
     if (!item.querySelector('.why-icon')) item.insertAdjacentHTML('afterbegin', `<span class="why-icon" aria-hidden="true">${promiseIcons[index % promiseIcons.length]}</span>`);
   });
 
-  // Keep visible marketing copy limited to confirmed aftercare facts.
   const promiseCards = $$('.why-grid article');
   if (promiseCards[3]) {
     const title = $('h3', promiseCards[3]);
@@ -34,7 +33,16 @@
     if (text) text.textContent = 'فحص مجاني خلال 4 أسابيع وصيانة دورية كل 6 شهور.';
   }
 
-  // Complete the standalone services available through the booking form.
+  const aftercareItems = $$('.aftercare li');
+  if (aftercareItems[1]) {
+    const text = $('span', aftercareItems[1]);
+    if (text) text.textContent = 'بدون فتح النوافذ بعد تركيب العازل الحراري.';
+  }
+  const aftercare = $('.aftercare');
+  if (aftercare && !$('.warranty-maintenance-note')) {
+    aftercare.insertAdjacentHTML('afterend', '<p class="notice warranty-maintenance-note">عدم الالتزام بالصيانة الدورية يلغي الضمان.</p>');
+  }
+
   const serviceSelect = $('select[name="service"]');
   if (serviceSelect) {
     const requiredStandalone = ['حماية الزجاج', 'رش وحماية أسفل السيارة', 'التلبيس الداخلي'];
@@ -42,8 +50,8 @@
     requiredStandalone.forEach(label => {
       if (existing.has(label)) return;
       const option = document.createElement('option');
-      option.textContent = label;
       option.value = label;
+      option.textContent = label;
       serviceSelect.append(option);
     });
   }
@@ -222,75 +230,44 @@
   setupTabs(packageTabs, packagePanels, button => `package-${button.dataset.package}`, panel => `package-${panel.dataset.panel}`);
 
   const branches = {
-    hofuf: { title: 'فرع الأحساء - الهفوف', address: 'حي البندرية - شارع الأمير نايف', phone: '966553291112', map: 'https://maps.app.goo.gl/4hiJ3tTdzweoCe7K6' },
-    khafji: { title: 'فرع الخفجي', address: 'حي الفيحاء - شارع الملك عبدالله', phone: '966535728805', map: 'https://maps.app.goo.gl/Xf6qwvbKYHtd15xc9' }
+    hofuf: { title: 'فرع الأحساء - الهفوف', address: 'حي البندرية - شارع الأمير نايف', displayPhone: '055 329 1112', phone: '966553291112', map: 'https://maps.app.goo.gl/4hiJ3tTdzweoCe7K6' },
+    khafji: { title: 'فرع الخفجي', address: 'حي الفيحاء - شارع الملك عبدالله', displayPhone: '053 572 8805', phone: '966535728805', map: 'https://maps.app.goo.gl/Xf6qwvbKYHtd15xc9' }
   };
   const quickCall = $('.mobile-bar a[href^="tel:"]');
   const quickWhatsApp = $('.mobile-bar a[href^="https://wa.me/"]');
   const branchSelect = $('select[name="branch"]');
-  const branchInfo = $('#branchInfo');
-  const branchTabs = $$('.branch-tabs button');
 
-  if (branchInfo) {
-    branchInfo.setAttribute('role', 'tabpanel');
-    branchInfo.setAttribute('tabindex', '0');
-  }
   function syncQuickContact(key) {
     const branch = branches[key] || branches.hofuf;
     if (quickCall) quickCall.href = `tel:+${branch.phone}`;
     if (quickWhatsApp) quickWhatsApp.href = `https://wa.me/${branch.phone}`;
-    if (branchSelect && branchSelect.value !== key) branchSelect.value = key;
-  }
-  function renderBranch(key, activeButton) {
-    const branch = branches[key];
-    if (!branch || !branchInfo) return;
-    branchInfo.innerHTML = `<span class="branch-eyebrow">GEOSHIELD CENTER</span><h3>${branch.title}</h3><p class="branch-address">${branch.address}</p><div class="branch-hours"><span>السبت - الخميس</span><strong>9:00 ص - 10:00 م</strong><span>الجمعة</span><strong>4:00 م - 10:00 م</strong></div><div class="actions"><a class="button primary" href="https://wa.me/${branch.phone}" target="_blank" rel="noopener">واتساب الفرع</a><a class="button ghost" href="${branch.map}" target="_blank" rel="noopener">عرض الموقع</a></div>`;
-    if (activeButton?.id) branchInfo.setAttribute('aria-labelledby', activeButton.id);
-    syncQuickContact(key);
   }
 
-  branchTabs.forEach((button, index) => {
-    const key = button.dataset.branch;
-    button.id = `branch-${key}-tab`;
-    button.setAttribute('aria-controls', 'branchInfo');
-    button.tabIndex = button.classList.contains('active') ? 0 : -1;
-    const activate = () => {
-      branchTabs.forEach(item => {
-        const active = item === button;
-        item.classList.toggle('active', active);
-        item.setAttribute('aria-selected', String(active));
-        item.tabIndex = active ? 0 : -1;
-      });
-      renderBranch(key, button);
-    };
-    button.addEventListener('click', activate);
-    button.addEventListener('keydown', event => {
-      let next;
-      if (event.key === 'Home') next = branchTabs[0];
-      else if (event.key === 'End') next = branchTabs.at(-1);
-      else if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
-        const step = event.key === 'ArrowRight' ? -1 : 1;
-        next = branchTabs[(index + step + branchTabs.length) % branchTabs.length];
-      }
-      if (!next) return;
-      event.preventDefault();
-      next.focus();
-      next.click();
-    });
-  });
+  const branchLayout = $('#branches .branch-layout');
+  if (branchLayout && !$('.branch-cards', branchLayout)) {
+    branchLayout.classList.add('branches-static');
+    const cards = document.createElement('div');
+    cards.className = 'branch-cards';
+    cards.innerHTML = Object.entries(branches).map(([key, branch], index) => `
+      <article class="branch-card" data-branch-card="${key}">
+        <div class="branch-card-top"><span class="branch-mark">0${index + 1}</span><span class="branch-eyebrow">GEOSHIELD CENTER</span></div>
+        <h3>${branch.title}</h3>
+        <p class="branch-address">${branch.address}</p>
+        <a class="branch-phone" href="tel:+${branch.phone}" dir="ltr">${branch.displayPhone}</a>
+        <div class="branch-hours"><span>السبت - الخميس</span><strong>9:00 ص - 10:00 م</strong><span>الجمعة</span><strong>4:00 م - 10:00 م</strong></div>
+        <div class="actions"><a class="button primary" href="https://wa.me/${branch.phone}" target="_blank" rel="noopener">واتساب الفرع</a><a class="button ghost" href="${branch.map}" target="_blank" rel="noopener">عرض الموقع</a></div>
+      </article>`).join('');
+    branchLayout.append(cards);
+  }
 
-  branchSelect?.addEventListener('change', () => {
-    const button = branchTabs.find(item => item.dataset.branch === branchSelect.value);
-    button ? button.click() : syncQuickContact(branchSelect.value);
-  });
-  const initialBranchButton = $('.branch-tabs button.active');
-  if (initialBranchButton) renderBranch(initialBranchButton.dataset.branch, initialBranchButton);
-  else syncQuickContact(branchSelect?.value || 'hofuf');
+  branchSelect?.addEventListener('change', () => syncQuickContact(branchSelect.value));
+  syncQuickContact(branchSelect?.value || 'hofuf');
 
   const lightbox = $('#lightbox');
   const lightboxImage = lightbox ? $('img', lightbox) : null;
   const lightboxClose = lightbox ? $('button', lightbox) : null;
   let lastFocus = null;
+
   function closeLightbox() {
     if (!lightbox?.classList.contains('open')) return;
     lightbox.classList.remove('open');
@@ -298,6 +275,7 @@
     document.body.style.overflow = '';
     lastFocus?.focus();
   }
+
   $$('.work-item').forEach(item => item.addEventListener('click', () => {
     const image = $('img', item);
     if (!lightbox || !lightboxImage || !image) return;
