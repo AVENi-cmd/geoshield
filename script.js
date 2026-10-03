@@ -1,1 +1,74 @@
-document.addEventListener('DOMContentLoaded',()=>{const header=document.getElementById('siteHeader');const menuBtn=document.getElementById('menuToggle');const nav=document.getElementById('mainNav');const setHeader=()=>header?.classList.toggle('scrolled',window.scrollY>20);setHeader();window.addEventListener('scroll',setHeader,{passive:true});menuBtn?.addEventListener('click',()=>{const open=nav.classList.toggle('open');document.body.classList.toggle('menu-open',open);menuBtn.setAttribute('aria-expanded',String(open))});nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');document.body.classList.remove('menu-open');menuBtn?.setAttribute('aria-expanded','false')}));const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;const animated=document.querySelectorAll('[data-animate]');if(reduce){animated.forEach(el=>el.classList.add('in-view'))}else{const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in-view');io.unobserve(e.target)}}),{threshold:.12});animated.forEach(el=>io.observe(el))}const counters=document.querySelectorAll('.counter[data-target]');const runCounter=el=>{const target=Number(el.dataset.target||0),suffix=el.dataset.suffix||'';if(reduce){el.textContent=target.toLocaleString('en-US')+suffix;return}const start=performance.now(),duration=1300;const step=now=>{const p=Math.min((now-start)/duration,1);const eased=1-Math.pow(1-p,3);el.textContent=Math.round(target*eased).toLocaleString('en-US')+suffix;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)};const counterObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){runCounter(e.target);counterObserver.unobserve(e.target)}}),{threshold:.4});counters.forEach(c=>counterObserver.observe(c));const branches={hofuf:{title:'فرع الأحساء - الهفوف',address:'حي البندرية - شارع الأمير نايف',phone:'0553291112',wa:'966553291112',map:'https://maps.app.goo.gl/4hiJ3tTdzweoCe7K6',image:'images/branch-hofuf.jpg',alt:'فرع جيوشيلد الأحساء'},khafji:{title:'فرع الخفجي',address:'حي الفيحاء - شارع الملك عبدالله',phone:'0535728805',wa:'966535728805',map:'https://maps.app.goo.gl/Xf6qwvbKYHtd15xc9',image:'images/branch-khafji.jpg',alt:'فرع جيوشيلد الخفجي'}};document.querySelectorAll('.branch-tab').forEach(btn=>btn.addEventListener('click',()=>{const b=branches[btn.dataset.branch];if(!b)return;document.querySelectorAll('.branch-tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.getElementById('branchTitle').textContent=b.title;document.getElementById('branchAddress').textContent=b.address;const img=document.getElementById('branchImage');img.src=b.image;img.alt=b.alt;img.style.display='block';document.getElementById('branchCall').href='tel:'+b.phone;document.getElementById('branchCall').textContent=b.phone;document.getElementById('branchWhatsapp').href='https://wa.me/'+b.wa;document.getElementById('branchMap').href=b.map}));document.querySelectorAll('.package-tab').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.package-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.package-panel').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.getElementById(btn.dataset.tab)?.classList.add('active')}));const date=document.getElementById('date');if(date){const d=new Date();const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');date.min=`${y}-${m}-${day}`}document.getElementById('bookingForm')?.addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.currentTarget);const branch=f.get('branch')||'hofuf';const nums={hofuf:'966553291112',khafji:'966535728805'};const names={hofuf:'الأحساء',khafji:'الخفجي'};const text=`السلام عليكم، أرغب بحجز موعد:\n\nالاسم: ${f.get('name')||''}\nالجوال: ${f.get('phone')||''}\nالسيارة: ${f.get('car')||''}\nالخدمة: ${f.get('service')||''}\nالفرع: ${names[branch]}\nالتاريخ: ${f.get('date')||'غير محدد'}\nملاحظات: ${f.get('notes')||'لا يوجد'}`;window.open(`https://wa.me/${nums[branch]}?text=${encodeURIComponent(text)}`,'_blank','noopener')});const items=[...document.querySelectorAll('.lightbox-item')];const lightbox=document.getElementById('lightbox');const lbImg=document.getElementById('lightboxImage');let current=0;const openAt=i=>{current=(i+items.length)%items.length;lbImg.src=items[current].dataset.src;lightbox.classList.add('open');lightbox.setAttribute('aria-hidden','false');document.body.style.overflow='hidden'};const close=()=>{lightbox.classList.remove('open');lightbox.setAttribute('aria-hidden','true');document.body.style.overflow=''};items.forEach((item,i)=>item.addEventListener('click',()=>openAt(i)));lightbox?.querySelector('.lightbox-close')?.addEventListener('click',close);lightbox?.querySelector('.lightbox-prev')?.addEventListener('click',()=>openAt(current-1));lightbox?.querySelector('.lightbox-next')?.addEventListener('click',()=>openAt(current+1));lightbox?.addEventListener('click',e=>{if(e.target===lightbox)close()});document.addEventListener('keydown',e=>{if(!lightbox?.classList.contains('open'))return;if(e.key==='Escape')close();if(e.key==='ArrowLeft')openAt(current+1);if(e.key==='ArrowRight')openAt(current-1)})});
+(() => {
+  'use strict';
+
+  const menu = document.getElementById('menu');
+  const nav = document.getElementById('nav');
+  menu?.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    menu.setAttribute('aria-expanded', String(open));
+  });
+  nav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    menu?.setAttribute('aria-expanded', 'false');
+  }));
+
+  const slides = [...document.querySelectorAll('.slide')];
+  const dotsWrap = document.getElementById('dots');
+  let current = Math.max(0, slides.findIndex(s => s.classList.contains('active')));
+  let timer;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.setAttribute('aria-label', `انتقل للشريحة ${i + 1}`);
+    dot.addEventListener('click', () => { show(i); restart(); });
+    dotsWrap?.appendChild(dot);
+  });
+  const dots = [...(dotsWrap?.children || [])];
+
+  function show(index) {
+    current = (index + slides.length) % slides.length;
+    slides.forEach((s, i) => s.classList.toggle('active', i === current));
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+  function restart() {
+    clearInterval(timer);
+    timer = setInterval(() => show(current + 1), 5500);
+  }
+  document.getElementById('prev')?.addEventListener('click', () => { show(current - 1); restart(); });
+  document.getElementById('next')?.addEventListener('click', () => { show(current + 1); restart(); });
+  show(current);
+  restart();
+
+  const branches = {
+    hofuf: {
+      title: 'فرع الأحساء',
+      address: 'الهفوف – حي البندرية – شارع الأمير نايف',
+      phone: '0553291112',
+      wa: '966553291112'
+    },
+    khafji: {
+      title: 'فرع الخفجي',
+      address: 'الخفجي – حي الفيحاء – شارع الملك عبدالله',
+      phone: '0535728805',
+      wa: '966535728805'
+    }
+  };
+
+  document.querySelectorAll('.branch-tab').forEach(btn => btn.addEventListener('click', () => {
+    const data = branches[btn.dataset.branch];
+    if (!data) return;
+    document.querySelectorAll('.branch-tab').forEach(b => b.classList.toggle('active', b === btn));
+    document.getElementById('branchInfo').innerHTML = `
+      <h3>${data.title}</h3><p>${data.address}</p>
+      <div class="actions">
+        <a class="btn primary" href="tel:${data.phone}">اتصال</a>
+        <a class="btn outline" target="_blank" rel="noopener" href="https://wa.me/${data.wa}">واتساب</a>
+      </div>`;
+  }));
+
+  const header = document.getElementById('header');
+  const onScroll = () => header?.classList.toggle('scrolled', scrollY > 20);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
