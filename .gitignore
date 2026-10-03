@@ -1,0 +1,14 @@
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.tmp
+*.log
+node_modules/
+.cache/
+videos/*.mp4
+videos/*.mov
+videos/*.webm
+*.psd
+*.ai
