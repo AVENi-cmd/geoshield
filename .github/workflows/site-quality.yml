@@ -56,12 +56,21 @@ jobs:
               return re.sub(r'\s+', ' ', without_tags).strip()
 
           agency_sentence = 'وكالة جيوشيلد لفرعي الأحساء والخفجي تابعة لمجموعة عواد الظفيري'
+          group_link_pattern = re.compile(
+              r'<a\b[^>]*>(?:(?!</a>).)*مجموعة عواد الظفيري(?:(?!</a>).)*</a>',
+              flags=re.S,
+          )
+          primary_nav_match = re.search(r'<nav\s+id="nav"[^>]*>(.*?)</nav>', html, flags=re.S)
+          primary_nav_links = re.findall(r'href="([^"]+)"', primary_nav_match.group(1)) if primary_nav_match else []
+
           checks = {
               'Arabic RTL document': '<html lang="ar" dir="rtl">' in html,
               'Group ownership on homepage': agency_sentence in visible_text(html),
               'Group ownership on 404': agency_sentence in visible_text(error_html),
               'Group ownership in README': agency_sentence in readme,
               'Group ownership in llms.txt': agency_sentence in llms,
+              'Group affiliation remains unlinked': not group_link_pattern.search(html) and not group_link_pattern.search(error_html),
+              'Primary navigation stays internal': bool(primary_nav_match) and bool(primary_nav_links) and all(href.startswith('#') for href in primary_nav_links),
               'No superseded institution wording': 'مؤسسة عواد الظفيري' not in '\n'.join((html, error_html, readme, llms)),
               'Hofuf phone': '055 329 1112' in html and '966553291112' in html,
               'Khafji phone': '053 572 8805' in html and '966535728805' in html,
