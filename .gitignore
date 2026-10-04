@@ -12,3 +12,15 @@ videos/*.mov
 videos/*.webm
 *.psd
 *.ai
+
+# Local environment and secret material
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Backup/export files
+*.bak
+*.backup
+*.old
