@@ -24,9 +24,10 @@ jobs:
         run: |
           from pathlib import Path
           from html.parser import HTMLParser
+          from xml.etree import ElementTree as ET
+          from urllib.parse import urlsplit
           import json
           import re
-          import sys
 
           root = Path('.')
           required = [
@@ -38,7 +39,9 @@ jobs:
               raise SystemExit(f"Missing required files: {', '.join(missing)}")
 
           html = (root / 'index.html').read_text(encoding='utf-8')
+          error_html = (root / '404.html').read_text(encoding='utf-8')
           script = (root / 'script.js').read_text(encoding='utf-8')
+          robots = (root / 'robots.txt').read_text(encoding='utf-8')
 
           checks = {
               'Arabic RTL document': '<html lang="ar" dir="rtl">' in html,
@@ -51,6 +54,9 @@ jobs:
               'Booking section': 'id="booking"' in html and 'id="bookingForm"' in html,
               'FAQ section': 'id="faq"' in html,
               'No branch photography': 'branch-photo' not in html and 'branch-image' not in html,
+              'Canonical URL': '<link rel="canonical" href="https://aveni-cmd.github.io/geoshield/">' in html,
+              'Search description': '<meta name="description"' in html,
+              '404 stays out of index': '<meta name="robots" content="noindex,follow">' in error_html,
           }
 
           failed = [name for name, ok in checks.items() if not ok]
@@ -79,28 +85,94 @@ jobs:
           for block in jsonld_blocks:
               json.loads(block)
 
-          class ReferenceParser(HTMLParser):
+          class AuditParser(HTMLParser):
               def __init__(self):
                   super().__init__()
-                  self.refs = []
+                  self.ids = []
+                  self.internal_anchors = []
+                  self.assets = []
+                  self.images = []
+                  self.blank_links = []
+                  self.h1_count = 0
+
               def handle_starttag(self, tag, attrs):
                   attrs = dict(attrs)
-                  key = 'src' if tag in {'img', 'script'} else 'href' if tag == 'link' else None
-                  if key and attrs.get(key):
-                      self.refs.append(attrs[key])
+                  if attrs.get('id'):
+                      self.ids.append(attrs['id'])
+                  if tag == 'h1':
+                      self.h1_count += 1
+                  if tag == 'a':
+                      href = attrs.get('href', '')
+                      if href.startswith('#') and len(href) > 1:
+                          self.internal_anchors.append(href[1:])
+                      if attrs.get('target') == '_blank':
+                          self.blank_links.append((href, attrs.get('rel', '')))
+                  if tag == 'img' and attrs.get('src'):
+                      self.assets.append(attrs['src'])
+                      self.images.append(attrs)
+                  elif tag == 'script' and attrs.get('src'):
+                      self.assets.append(attrs['src'])
+                  elif tag == 'link' and attrs.get('href'):
+                      self.assets.append(attrs['href'])
 
-          parser = ReferenceParser()
-          parser.feed(html)
-          local_refs = []
-          for ref in parser.refs:
-              if ref.startswith(('http://', 'https://', '//', '#', 'data:')):
+          def audit_document(name, source, require_single_h1=True):
+              parser = AuditParser()
+              parser.feed(source)
+
+              duplicate_ids = sorted({item for item in parser.ids if parser.ids.count(item) > 1})
+              if duplicate_ids:
+                  raise SystemExit(f"{name}: duplicate IDs: {', '.join(duplicate_ids)}")
+
+              broken_anchors = sorted(set(parser.internal_anchors) - set(parser.ids))
+              if broken_anchors:
+                  raise SystemExit(f"{name}: broken internal anchors: {', '.join(broken_anchors)}")
+
+              if require_single_h1 and parser.h1_count != 1:
+                  raise SystemExit(f"{name}: expected exactly one H1, found {parser.h1_count}")
+
+              for image in parser.images:
+                  src = image.get('src', '')
+                  if 'alt' not in image or not image.get('alt', '').strip():
+                      raise SystemExit(f"{name}: image missing useful alt text: {src}")
+                  if not image.get('width') or not image.get('height'):
+                      raise SystemExit(f"{name}: image missing intrinsic dimensions: {src}")
+
+              for href, rel in parser.blank_links:
+                  if 'noopener' not in rel.split():
+                      raise SystemExit(f"{name}: target=_blank link missing rel=noopener: {href}")
+
+              return parser.assets
+
+          asset_refs = []
+          asset_refs.extend(audit_document('index.html', html))
+          asset_refs.extend(audit_document('404.html', error_html))
+
+          missing_refs = set()
+          for ref in asset_refs:
+              if ref.startswith(('http://', 'https://', '//', 'data:')):
                   continue
-              ref = ref.split('?', 1)[0].split('#', 1)[0]
-              if ref:
-                  local_refs.append(ref)
+              path = urlsplit(ref).path
+              if path.startswith('/geoshield/'):
+                  path = path[len('/geoshield/'):]
+              else:
+                  path = path.lstrip('/')
+              if path and not (root / path).is_file():
+                  missing_refs.add(path)
 
-          missing_refs = sorted({ref for ref in local_refs if not (root / ref).is_file()})
           if missing_refs:
-              raise SystemExit('Broken local references: ' + ', '.join(missing_refs))
+              raise SystemExit('Broken local references: ' + ', '.join(sorted(missing_refs)))
+
+          try:
+              sitemap = ET.parse(root / 'sitemap.xml')
+          except ET.ParseError as exc:
+              raise SystemExit(f'Invalid sitemap.xml: {exc}')
+
+          namespace = {'sm': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+          locs = [node.text.strip() for node in sitemap.findall('.//sm:loc', namespace) if node.text]
+          homepage = 'https://aveni-cmd.github.io/geoshield/'
+          if homepage not in locs:
+              raise SystemExit('sitemap.xml does not contain the canonical homepage URL')
+          if f'Sitemap: {homepage}sitemap.xml' not in robots:
+              raise SystemExit('robots.txt sitemap URL does not match the canonical site URL')
 
           print('All GeoShield site quality checks passed.')
