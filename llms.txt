@@ -5,6 +5,7 @@ Official website for GeoShield branches in Al Ahsa (Al Hofuf) and Al Khafji, Sau
 Website: https://aveni-cmd.github.io/geoshield/
 Language: Arabic (RTL)
 Primary market: Saudi Arabia
+Affiliation: وكالة جيوشيلد لفرعي الأحساء والخفجي تابعة لمجموعة عواد الظفيري
 
 ## Main services
 
@@ -17,6 +18,8 @@ Primary market: Saudi Arabia
 - Interior wrapping/protection
 
 ## Branches
+
+Both GeoShield branches are affiliated with مجموعة عواد الظفيري.
 
 ### Al Ahsa - Al Hofuf
 - Arabic name: فرع الأحساء - الهفوف
@@ -67,5 +70,5 @@ Saturday: 09:00-12:00, 15:30-22:30
 
 - Package prices shown on the website exclude VAT.
 - Booking requests are prepared in the website and then sent to the selected branch through WhatsApp.
-- The agency statement used on the website is: الوكالة معتمدة ومملوكة لمؤسسة عواد الظفيري
+- The agency statement used on the website is: وكالة جيوشيلد لفرعي الأحساء والخفجي تابعة لمجموعة عواد الظفيري
 - For current prices and offers, use the visible website content as the primary source.
