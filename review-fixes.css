@@ -29,7 +29,7 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 .work-item{overflow:hidden;min-width:0}
 .work-item img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
 
-/* Packages — real HTML content, artwork bound by stable package ids. */
+/* Packages — image and copy are separate blocks so text can never overlap artwork. */
 .packages{--pkg-orange:#e8622b;--pkg-orange2:#ff7a3f;position:relative;overflow:hidden;background:linear-gradient(180deg,#f5f4f0 0%,#eceae4 100%)}
 .packages .shell{position:relative;z-index:1;overflow:hidden}
 .packages .heading{max-width:900px;margin-bottom:34px}
@@ -39,26 +39,29 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 .package-tabs button{min-width:0;min-height:48px;padding:9px 12px;border:0;border-radius:999px;background:transparent;color:#676e73;font-size:12px;font-weight:700}
 .package-tabs button.active,.package-tabs button[aria-selected=true]{background:#15191d;color:#fff}
 .package-panel{width:100%;min-width:0}
-.package-panel.active{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:20px}
+.package-panel.active{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:20px;align-items:start}
 .package-panel[hidden]{display:none!important}
-.package-panel:not(.package-services) article{position:relative;overflow:hidden;display:flex;flex-direction:column;width:100%;min-width:0;min-height:610px;padding:calc(56.25% + 28px) 28px 28px;border:1px solid rgba(17,20,24,.11);border-radius:28px;background-color:#fff;background-position:center top;background-size:100% auto;background-repeat:no-repeat;color:#171a1d;box-shadow:0 20px 55px rgba(17,20,24,.075)}
+.package-panel:not(.package-services) article{--package-image:none;position:relative;overflow:hidden;display:flex;flex-direction:column;width:100%;min-width:0;min-height:0;padding:28px;border:1px solid rgba(17,20,24,.11);border-radius:28px;background:#fff;color:#171a1d;box-shadow:0 20px 55px rgba(17,20,24,.075)}
+.package-panel:not(.package-services) article::before{content:"";display:block;flex:0 0 auto;width:calc(100% + 56px);aspect-ratio:3/2;margin:-28px -28px 26px;background-color:#111418;background-image:var(--package-image);background-position:center;background-size:cover;background-repeat:no-repeat;border-bottom:1px solid rgba(17,20,24,.08)}
 .package-panel:not(.package-services) article:nth-child(1),.package-panel:not(.package-services) article:nth-child(2),.package-panel:not(.package-services) article:nth-child(3){grid-column:span 4}
 .package-panel[data-panel=nano] article{grid-column:span 6}
-.package-eyebrow{display:block;margin:0 0 8px;color:#a94722;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.package-eyebrow{display:block;margin:0 0 8px;color:#a94722;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;line-height:1.5}
 .package-panel article h3{margin:0;color:#171a1d;font-size:clamp(27px,2.4vw,36px);font-weight:700;line-height:1.35}
-.package-panel article .package-description{margin:18px 0 0;color:#626a70;font-size:14px;line-height:2}
-.package-panel article .quote-note{margin-top:auto;padding-top:24px;color:#7b8084;font-size:12px;line-height:1.7}
-.package-panel article .package-book{margin-top:18px}
+.package-panel article .package-description{margin:14px 0 0;color:#626a70;font-size:14px;line-height:1.9}
+.package-panel article .quote-note{margin:22px 0 0;padding-top:18px;border-top:1px solid rgba(17,20,24,.09);color:#7b8084;font-size:12px;line-height:1.7}
+.package-panel article .package-book{margin-top:14px;align-self:stretch}
 
 /* Explicit package artwork mapping. Never depend on card order. */
-.package-panel article[data-package-id="ppf-standard"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-premium-02-optimized.webp')}
-.package-panel article[data-package-id="ppf-half"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-premium-04-optimized.webp')}
-.package-panel article[data-package-id="ppf-full"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-mercedes-jawhara-optimized.webp')}
-.package-panel article[data-package-id="tint-vnano"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-premium-02-optimized.webp')}
-.package-panel article[data-package-id="tint-apex"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-premium-03-optimized.webp')}
-.package-panel article[data-package-id="tint-c2"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-premium-04-optimized.webp')}
-.package-panel article[data-package-id="nano-g5"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-mercedes-jawhara-optimized.webp')}
-.package-panel article[data-package-id="nano-t3"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-premium-06-optimized.webp')}
+.package-panel article[data-package-id="ppf-standard"]{--package-image:url('images/services/geoshield-package-premium-02-optimized.webp')}
+.package-panel article[data-package-id="ppf-half"]{--package-image:url('images/services/geoshield-package-premium-04-optimized.webp')}
+.package-panel article[data-package-id="ppf-full"]{--package-image:url('images/services/geoshield-package-mercedes-jawhara-optimized.webp')}
+.package-panel article[data-package-id="tint-vnano"]{--package-image:url('images/services/geoshield-package-premium-02-optimized.webp')}
+.package-panel article[data-package-id="tint-apex"]{--package-image:url('images/services/geoshield-package-premium-03-optimized.webp')}
+.package-panel article[data-package-id="tint-c2"]{--package-image:url('images/services/geoshield-package-premium-04-optimized.webp')}
+.package-panel article[data-package-id="nano-g5"]{--package-image:url('images/services/geoshield-package-premium-03-optimized.webp')}
+.package-panel article[data-package-id="nano-t3"]{--package-image:url('images/services/geoshield-package-04-optimized.webp')}
+
+/* Polishing artwork is intentionally unchanged. */
 .package-services .polish{width:100%;max-width:100%;overflow:hidden;padding:285px 36px 36px;border:1px solid rgba(232,98,43,.2);border-radius:28px;background:linear-gradient(to bottom,transparent 55%,#fff 100%),url('images/services/geoshield-service-detailing-optimized.webp') center top/100% auto no-repeat,#fff;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:28px}
 .mini-services{max-width:100%;gap:14px}
 .mini-services>.mini-service-card{min-width:0;overflow:hidden}
@@ -81,16 +84,20 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   .trust-grid>div::after{inset-inline-end:10px;width:38px;height:38px;font-size:18px}
   .package-tabs{max-width:100%;grid-template-columns:repeat(2,minmax(0,1fr));border-radius:18px}
   .package-tabs button{min-height:44px}
-  .package-panel.active{grid-template-columns:1fr;gap:16px}
-  .package-panel:not(.package-services) article:nth-child(n),.package-panel[data-panel=nano] article{grid-column:1;min-height:0;padding:calc(56.25% + 24px) 22px 22px;background-size:100% auto;border-radius:22px}
-  .package-panel article .package-description{margin-top:14px;line-height:1.85}
-  .package-panel article .quote-note{margin-top:24px;padding-top:18px}
-  .package-panel article .package-book{margin-top:14px}
+  .package-panel.active{grid-template-columns:1fr;gap:16px;align-items:start}
+  .package-panel:not(.package-services) article:nth-child(n),.package-panel[data-panel=nano] article{grid-column:1;min-height:0;padding:22px;border-radius:22px}
+  .package-panel:not(.package-services) article::before{width:calc(100% + 44px);aspect-ratio:3/2;margin:-22px -22px 20px}
+  .package-eyebrow{margin-bottom:6px;font-size:10px}
+  .package-panel article h3{font-size:clamp(25px,7.5vw,32px);line-height:1.3}
+  .package-panel article .package-description{margin-top:12px;font-size:13.5px;line-height:1.8}
+  .package-panel article .quote-note{margin-top:18px;padding-top:16px}
+  .package-panel article .package-book{margin-top:12px}
   .package-services .polish{padding:245px 22px 26px;background-size:100% auto;border-radius:22px}
   .work-grid,.service-stack{width:100%;max-width:100%;overflow:hidden}
 }
 @media(max-width:430px){
   .shell{width:calc(100% - 24px)}
-  .package-panel:not(.package-services) article:nth-child(n){padding-top:calc(56.25% + 22px)}
+  .package-panel:not(.package-services) article{padding:20px}
+  .package-panel:not(.package-services) article::before{width:calc(100% + 40px);margin:-20px -20px 18px}
   .trust-grid>div{padding-inline-end:52px}
 }
