@@ -465,6 +465,31 @@
     });
   }));
 
+  const normalizeDigits = value => String(value)
+    .replace(/[٠-٩]/g, digit => '0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(digit)])
+    .replace(/[۰-۹]/g, digit => '0123456789'['۰۱۲۳۴۵۶۷۸۹'.indexOf(digit)]);
+
+  const normalizeSaudiMobile = value => {
+    let normalized = normalizeDigits(value).replace(/[^\d+]/g, '');
+    if (normalized.startsWith('+966')) normalized = `0${normalized.slice(4)}`;
+    else if (normalized.startsWith('966')) normalized = `0${normalized.slice(3)}`;
+    return normalized.slice(0, 10);
+  };
+
+  const phoneInput = $('input[name="phone"]');
+  if (phoneInput) {
+    phoneInput.pattern = '05[0-9]{8}';
+    phoneInput.maxLength = 10;
+    phoneInput.setAttribute('aria-label', 'رقم الجوال السعودي بصيغة 05xxxxxxxx');
+    phoneInput.addEventListener('input', () => {
+      phoneInput.value = normalizeSaudiMobile(phoneInput.value);
+      phoneInput.setCustomValidity('');
+    });
+    phoneInput.addEventListener('invalid', () => {
+      phoneInput.setCustomValidity('أدخل رقم جوال سعودي صحيحًا يبدأ بـ 05 ويتكون من 10 أرقام.');
+    });
+  }
+
   const form = $('#bookingForm');
   form?.addEventListener('submit', event => {
     event.preventDefault();
@@ -479,7 +504,7 @@
       'السلام عليكم، أرغب بحجز موعد لدى جيوشيلد.',
       '',
       `الاسم: ${value('name')}`,
-      `رقم الجوال: ${value('phone')}`,
+      `رقم الجوال: ${normalizeSaudiMobile(value('phone'))}`,
       `السيارة: ${value('car')}`,
       `الخدمة: ${value('service')}`,
       `الفرع: ${branchName}`,
