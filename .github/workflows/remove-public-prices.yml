@@ -22,46 +22,32 @@ jobs:
         run: |
           from pathlib import Path
           import re
-
           root = Path('.')
           index = root / 'index.html'
           script_path = root / 'script.js'
           css_path = root / 'review-fixes.css'
           readme_path = root / 'README.md'
           llms_path = root / 'llms.txt'
-
           html = index.read_text(encoding='utf-8')
           old_intro = 'الأسعار بالريال ولا تشمل ضريبة القيمة المضافة. صغير/كبير حسب حجم السيارة.'
           new_intro = 'اختر الباقة المناسبة ثم احصل على عرض السعر الحالي حسب حجم السيارة والعروض المتاحة.'
           if old_intro not in html:
               raise SystemExit('Package pricing intro not found')
           html = html.replace(old_intro, new_intro, 1)
-
           quote = '<div class="quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>'
           price_pattern = re.compile(r'<div class="prices"><span>صغير <b>[\d,]+</b></span><span>كبير <b>[\d,]+</b></span></div>')
           html, package_count = price_pattern.subn(quote, html)
           if package_count != 8:
               raise SystemExit(f'Expected 8 package price blocks, found {package_count}')
-
-          polish_pattern = re.compile(
-              r'<div class="polish-price">\s*'
-              r'<span><small>للسيارة الصغيرة</small><b>450</b></span>\s*'
-              r'<span><small>للسيارة الكبيرة</small><b>550</b></span>\s*'
-              r'</div>', re.S
-          )
-          html, polish_count = polish_pattern.subn(
-              '<div class="polish-price quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>',
-              html
-          )
+          polish_pattern = re.compile(r'<div class="polish-price">\s*<span><small>للسيارة الصغيرة</small><b>450</b></span>\s*<span><small>للسيارة الكبيرة</small><b>550</b></span>\s*</div>', re.S)
+          html, polish_count = polish_pattern.subn('<div class="polish-price quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>', html)
           if polish_count != 1:
               raise SystemExit(f'Expected one polishing price block, found {polish_count}')
-
           public_prices = ['2,300','2,600','2,400','3,300','3,600','3,700','3,950','3,900','4,200','4,700','5,000','9,500','10,500','11,500','450','550']
           leaked = [value for value in public_prices if value in html]
           if leaked:
               raise SystemExit('Price values remain in index.html: ' + ', '.join(leaked))
           index.write_text(html, encoding='utf-8')
-
           script = script_path.read_text(encoding='utf-8')
           replacements = {
               "action.setAttribute('aria-label', `احجز باقة ${serviceName}`);": "action.setAttribute('aria-label', `احصل على عرض سعر باقة ${serviceName}`);",
@@ -72,45 +58,23 @@ jobs:
               if old not in script:
                   raise SystemExit('Expected script text not found: ' + old)
               script = script.replace(old, new, 1)
-
           polish_anchor = "action.setAttribute('aria-label', 'احصل على عرض سعر خدمة التلميع الكامل');\n    action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احجز الخدمة</span>`;"
           if polish_anchor not in script:
               raise SystemExit('Polishing CTA block not found')
-          script = script.replace(
-              polish_anchor,
-              "action.setAttribute('aria-label', 'احصل على عرض سعر خدمة التلميع الكامل');\n    action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احصل على عرض السعر</span>`;",
-              1
-          )
+          script = script.replace(polish_anchor, "action.setAttribute('aria-label', 'احصل على عرض سعر خدمة التلميع الكامل');\n    action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احصل على عرض السعر</span>`;", 1)
           script_path.write_text(script, encoding='utf-8')
-
           css = css_path.read_text(encoding='utf-8')
           marker = '/* Price-free quote presentation */'
           if marker not in css:
-              css += r'''
-
-/* Price-free quote presentation */
-.quote-note{margin-top:auto;padding:17px 18px;border:1px solid rgba(22,26,29,.11);border-radius:14px;background:linear-gradient(135deg,rgba(232,98,43,.07),rgba(255,255,255,.62));color:#4f555a;font-size:12px;font-weight:650;line-height:1.7;text-align:center}.quote-note span{display:block;letter-spacing:0!important}.package-panel article .quote-note{margin-top:22px}.package-panel article.featured .quote-note{border-color:rgba(232,98,43,.2);background:linear-gradient(135deg,rgba(232,98,43,.1),rgba(255,255,255,.58));color:#3d4246}.package-services .polish-price.quote-note{display:flex;align-items:center;justify-content:center;min-height:86px;margin:0;padding:18px;border:1px solid rgba(255,122,63,.24);background:linear-gradient(135deg,rgba(255,122,63,.12),rgba(255,255,255,.045));color:#e2e5e7;text-align:center}.package-services .polish-price.quote-note span{font-size:13px;font-weight:650;line-height:1.8}.package-book>span:not(.ui-icon){letter-spacing:0!important;word-spacing:normal!important}@media(max-width:760px){.quote-note{padding:15px 14px;font-size:11.5px}.package-services .polish-price.quote-note{min-height:72px;padding:15px}.package-services .polish-price.quote-note span{font-size:12px}}
-'''
+              css += '\n\n/* Price-free quote presentation */\n.quote-note{margin-top:auto;padding:17px 18px;border:1px solid rgba(22,26,29,.11);border-radius:14px;background:linear-gradient(135deg,rgba(232,98,43,.07),rgba(255,255,255,.62));color:#4f555a;font-size:12px;font-weight:650;line-height:1.7;text-align:center}.quote-note span{display:block;letter-spacing:0!important}.package-panel article .quote-note{margin-top:22px}.package-panel article.featured .quote-note{border-color:rgba(232,98,43,.2);background:linear-gradient(135deg,rgba(232,98,43,.1),rgba(255,255,255,.58));color:#3d4246}.package-services .polish-price.quote-note{display:flex;align-items:center;justify-content:center;min-height:86px;margin:0;padding:18px;border:1px solid rgba(255,122,63,.24);background:linear-gradient(135deg,rgba(255,122,63,.12),rgba(255,255,255,.045));color:#e2e5e7;text-align:center}.package-services .polish-price.quote-note span{font-size:13px;font-weight:650;line-height:1.8}.package-book>span:not(.ui-icon){letter-spacing:0!important;word-spacing:normal!important}@media(max-width:760px){.quote-note{padding:15px 14px;font-size:11.5px}.package-services .polish-price.quote-note{min-height:72px;padding:15px}.package-services .polish-price.quote-note span{font-size:12px}}\n'
           css_path.write_text(css, encoding='utf-8')
-
           readme = readme_path.read_text(encoding='utf-8')
-          readme = readme.replace(
-              '- الأسعار المعروضة في الموقع لا تشمل ضريبة القيمة المضافة.\n',
-              '- لا تُعرض أسعار ثابتة في الموقع؛ يتم طلب عرض السعر الحالي حسب حجم السيارة والعروض المتاحة.\n'
-          )
+          readme = readme.replace('- الأسعار المعروضة في الموقع لا تشمل ضريبة القيمة المضافة.\n', '- لا تُعرض أسعار ثابتة في الموقع؛ يتم طلب عرض السعر الحالي حسب حجم السيارة والعروض المتاحة.\n')
           readme_path.write_text(readme, encoding='utf-8')
-
           llms = llms_path.read_text(encoding='utf-8')
-          llms = llms.replace(
-              '- Package prices shown on the website exclude VAT.\n',
-              '- Package prices are not published as fixed values; visitors request the current quote based on vehicle size and active offers.\n'
-          )
-          llms = llms.replace(
-              '- For current prices and offers, use the visible website content as the primary source.\n',
-              '- For current prices and offers, contact the selected branch or use the website quote/booking flow.\n'
-          )
+          llms = llms.replace('- Package prices shown on the website exclude VAT.\n', '- Package prices are not published as fixed values; visitors request the current quote based on vehicle size and active offers.\n')
+          llms = llms.replace('- For current prices and offers, use the visible website content as the primary source.\n', '- For current prices and offers, contact the selected branch or use the website quote/booking flow.\n')
           llms_path.write_text(llms, encoding='utf-8')
-
           print('Public prices removed and quote-request flow enabled.')
 
       - name: Validate JavaScript
