@@ -309,6 +309,7 @@
     Fri: 'الجمعة',
     Sat: 'السبت'
   };
+  const weekdayOrder = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   const officialHours = {
     Sun: [[540, 720], [930, 1350]],
@@ -319,6 +320,33 @@
     Fri: [[960, 1200]],
     Sat: [[540, 720], [930, 1350]]
   };
+
+  const arabicDigits = value => String(value).replace(/\d/g, digit => '٠١٢٣٤٥٦٧٨٩'[Number(digit)]);
+  const formatOpeningTime = minutes => {
+    const hour24 = Math.floor(minutes / 60) % 24;
+    const minute = minutes % 60;
+    const period = hour24 < 12 ? 'ص' : 'م';
+    const hour12 = hour24 % 12 || 12;
+    return `${arabicDigits(hour12)}${minute ? `:${arabicDigits(String(minute).padStart(2, '0'))}` : ''} ${period}`;
+  };
+
+  function getNextOpening(weekday, minutesNow) {
+    const todayPeriods = officialHours[weekday] || [];
+    const laterToday = todayPeriods.find(([start]) => start > minutesNow);
+    if (laterToday) return { label: 'اليوم', start: laterToday[0] };
+
+    const currentIndex = weekdayOrder.indexOf(weekday);
+    for (let offset = 1; offset <= 7; offset += 1) {
+      const nextKey = weekdayOrder[(currentIndex + offset) % weekdayOrder.length];
+      const periods = officialHours[nextKey] || [];
+      if (!periods.length) continue;
+      return {
+        label: offset === 1 ? 'غدًا' : weekdayNames[nextKey],
+        start: periods[0][0]
+      };
+    }
+    return null;
+  }
 
   function updateBranchHoursState() {
     const parts = new Intl.DateTimeFormat('en-US', {
@@ -332,14 +360,22 @@
     const weekday = part('weekday');
     const todayName = weekdayNames[weekday];
     const minutesNow = Number(part('hour')) * 60 + Number(part('minute'));
-    const isOpen = (officialHours[weekday] || []).some(([start, end]) => minutesNow >= start && minutesNow < end);
+    const activePeriod = (officialHours[weekday] || []).find(([start, end]) => minutesNow >= start && minutesNow < end);
+    const isOpen = Boolean(activePeriod);
+    const nextOpening = isOpen ? null : getNextOpening(weekday, minutesNow);
+    const statusText = isOpen
+      ? `مفتوح الآن حتى ${formatOpeningTime(activePeriod[1])}`
+      : nextOpening
+        ? `مغلق الآن • يفتح ${nextOpening.label} ${formatOpeningTime(nextOpening.start)}`
+        : 'مغلق الآن';
 
     $$('.weekly-hours').forEach(hours => {
       const title = $('.hours-title', hours);
       if (title) {
-        title.textContent = `ساعات العمل الرسمية • ${isOpen ? 'مفتوح الآن' : 'مغلق الآن'}`;
+        title.textContent = `ساعات العمل الرسمية • ${statusText}`;
         title.setAttribute('aria-live', 'polite');
       }
+      hours.dataset.open = String(isOpen);
       $$('.hours-row', hours).forEach(row => {
         const day = $('span', row)?.textContent.trim();
         const isToday = day === todayName;
