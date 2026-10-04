@@ -13,15 +13,77 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 .package-book,.service-book,.polish-book{min-height:44px}
 #lightbox button:focus-visible{outline:3px solid #ff7a3f;outline-offset:4px}
 
-/* Trust strip — real visual thumbnails below the hero */
-.trust{overflow:hidden}
+/* Trust strip — cinematic full-card imagery below the hero */
+.trust{position:relative;overflow:hidden}
 .trust-grid{width:100%;max-width:1240px}
-.trust-grid>div{position:relative;overflow:hidden;min-width:0;padding-inline-end:104px}
-.trust-grid>div::after{content:"";position:absolute;inset-inline-end:22px;top:50%;transform:translateY(-50%);width:64px;height:64px;border:1px solid rgba(255,122,63,.32);border-radius:16px;background-position:center;background-size:cover;background-repeat:no-repeat;box-shadow:0 10px 24px rgba(0,0,0,.18),inset 0 0 0 1px rgba(255,255,255,.05)}
-.trust-grid>div:nth-child(1)::after{background-image:linear-gradient(rgba(8,10,12,.06),rgba(8,10,12,.06)),url('images/showcase-1.webp')}
-.trust-grid>div:nth-child(2)::after{background-image:linear-gradient(rgba(8,10,12,.06),rgba(8,10,12,.06)),url('images/showcase-ppf-installation.webp')}
-.trust-grid>div:nth-child(3)::after{background-image:linear-gradient(rgba(8,10,12,.06),rgba(8,10,12,.06)),url('images/service-nano-ceramic.webp')}
-.trust-grid>div:nth-child(4)::after{background-image:linear-gradient(rgba(8,10,12,.06),rgba(8,10,12,.06)),url('images/service-thermal-insulation.webp')}
+.trust-grid>div{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  min-width:0;
+  min-height:190px;
+  padding:28px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  border:1px solid rgba(255,255,255,.17)!important;
+  border-radius:24px;
+  background-color:#15191d;
+  background-image:var(--trust-image)!important;
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  box-shadow:0 18px 42px rgba(0,0,0,.22),inset 0 0 0 1px rgba(255,255,255,.02);
+}
+.trust-grid>div::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  width:auto;
+  height:auto;
+  border:0;
+  border-radius:inherit;
+  background:linear-gradient(180deg,rgba(7,9,11,.18) 0%,rgba(7,9,11,.36) 42%,rgba(7,9,11,.90) 100%);
+  box-shadow:inset 0 -80px 100px rgba(0,0,0,.18);
+  pointer-events:none;
+}
+.trust-grid>div::after{
+  content:"";
+  position:absolute;
+  z-index:1;
+  top:0;
+  inset-inline-end:24px;
+  width:64px;
+  height:3px;
+  transform:none;
+  border:0;
+  border-radius:0 0 999px 999px;
+  background:linear-gradient(90deg,#ff7a3f,#e8622b);
+  box-shadow:0 0 18px rgba(255,122,63,.34);
+  pointer-events:none;
+}
+.trust-grid>div:nth-child(1){--trust-image:url('images/showcase-1.webp');background-position:center 52%}
+.trust-grid>div:nth-child(2){--trust-image:url('images/showcase-ppf-mirror.webp');background-position:center 48%}
+.trust-grid>div:nth-child(3){--trust-image:url('images/showcase-ppf-installation.webp');background-position:center 48%}
+.trust-grid>div:nth-child(4){--trust-image:url('images/services/geoshield-package-03-optimized.webp');background-position:center 54%}
+.trust-grid>div:hover{background-image:var(--trust-image)!important;background-color:#15191d}
+.trust-grid>div>*{position:relative;z-index:2}
+.trust b{
+  color:#fff;
+  font-size:clamp(27px,2.8vw,40px);
+  line-height:1.12;
+  font-weight:700;
+  letter-spacing:-.025em;
+  text-shadow:0 3px 18px rgba(0,0,0,.55);
+}
+.trust span{
+  margin-top:9px;
+  color:rgba(255,255,255,.86)!important;
+  font-size:12.5px;
+  line-height:1.6;
+  text-shadow:0 2px 12px rgba(0,0,0,.62);
+}
 
 /* Core services — artwork is 1920×674 and must never be cropped */
 .service-stack{width:100%;overflow:hidden}
@@ -87,8 +149,10 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   .service-card>img{width:100%;height:auto;aspect-ratio:1920/674;max-height:none;object-fit:contain}
 
   .trust-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  .trust-grid>div{padding-inline-end:66px;min-width:0}
-  .trust-grid>div::after{inset-inline-end:10px;width:46px;height:46px;border-radius:12px}
+  .trust-grid>div{min-width:0;min-height:158px;padding:18px;border-radius:19px}
+  .trust-grid>div::after{inset-inline-end:16px;width:46px;height:3px}
+  .trust b{font-size:clamp(22px,7vw,30px)}
+  .trust span{margin-top:6px;font-size:10.5px;line-height:1.5}
 
   .package-tabs{max-width:100%;grid-template-columns:repeat(2,minmax(0,1fr));border-radius:18px}
   .package-tabs button{min-height:44px}
@@ -106,7 +170,10 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 
 @media(max-width:430px){
   .shell{width:calc(100% - 24px)}
-  .trust-grid>div{padding-inline-end:60px}
+  .trust-grid{gap:9px}
+  .trust-grid>div{min-height:148px;padding:15px}
+  .trust-grid>div::after{inset-inline-end:13px;width:38px}
+  .trust b{font-size:clamp(20px,6.7vw,27px)}
 }
 
 @media(prefers-reduced-motion:reduce){
