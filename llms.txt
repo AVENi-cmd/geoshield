@@ -68,7 +68,7 @@ Saturday: 09:00-12:00, 15:30-22:30
 
 ## Notes
 
-- Package prices shown on the website exclude VAT.
+- Package prices are not published as fixed values; visitors request the current quote based on vehicle size and active offers.
 - Booking requests are prepared in the website and then sent to the selected branch through WhatsApp.
 - The agency statement used on the website is: وكالة جيوشيلد لفرعي الأحساء والخفجي تابعة لمجموعة عواد الظفيري
 - For current prices and offers, use the visible website content as the primary source.

@@ -362,8 +362,8 @@
     const action = document.createElement('button');
     action.type = 'button';
     action.className = 'package-book';
-    action.setAttribute('aria-label', `احجز باقة ${serviceName}`);
-    action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احجز هذه الباقة</span>`;
+    action.setAttribute('aria-label', `احصل على عرض سعر باقة ${serviceName}`);
+    action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احصل على عرض السعر</span>`;
     action.addEventListener('click', () => chooseServiceAndBook(serviceName));
     card.append(action);
   });
@@ -373,8 +373,8 @@
     const action = document.createElement('button');
     action.type = 'button';
     action.className = 'package-book polish-book';
-    action.setAttribute('aria-label', 'احجز خدمة التلميع الكامل');
-    action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احجز الخدمة</span>`;
+    action.setAttribute('aria-label', 'احصل على عرض سعر خدمة التلميع الكامل');
+    action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احصل على عرض السعر</span>`;
     action.addEventListener('click', () => chooseServiceAndBook('تلميع كامل'));
     polish.append(action);
   }
