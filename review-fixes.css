@@ -109,4 +109,39 @@ section,
     min-width:0;
     max-width:100%;
   }
+
+  /* Compact the services intro on phones without changing the desktop design. */
+  .services{
+    padding-top:52px;
+  }
+  .services .heading{
+    margin-bottom:28px;
+  }
+  .services .heading .kicker{
+    margin-bottom:8px;
+  }
+  .services .heading h2{
+    max-width:100%;
+    margin:8px 0 0;
+    font-size:clamp(29px,8.2vw,37px);
+    line-height:1.24;
+    letter-spacing:-.018em;
+    text-wrap:balance;
+  }
+  .services .heading h2 br{
+    display:none;
+  }
+}
+
+@media(max-width:390px){
+  .services{
+    padding-top:46px;
+  }
+  .services .heading{
+    margin-bottom:24px;
+  }
+  .services .heading h2{
+    font-size:30px;
+    line-height:1.22;
+  }
 }
