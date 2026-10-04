@@ -32,7 +32,7 @@ jobs:
           root = Path('.')
           required = [
               'index.html', 'style.css', 'enhancements.css', 'script.js',
-              '404.html', 'sitemap.xml', 'robots.txt', 'llms.txt'
+              '404.html', 'sitemap.xml', 'robots.txt', 'llms.txt', 'README.md'
           ]
           missing = [path for path in required if not (root / path).is_file()]
           if missing:
@@ -42,14 +42,24 @@ jobs:
           error_html = (root / '404.html').read_text(encoding='utf-8')
           script = (root / 'script.js').read_text(encoding='utf-8')
           robots = (root / 'robots.txt').read_text(encoding='utf-8')
+          readme = (root / 'README.md').read_text(encoding='utf-8')
+          llms = (root / 'llms.txt').read_text(encoding='utf-8')
 
+          agency_sentence = 'وكالة جيوشيلد لفرعي الأحساء والخفجي تابعة لمجموعة عواد الظفيري'
           checks = {
               'Arabic RTL document': '<html lang="ar" dir="rtl">' in html,
-              'Group ownership': 'مجموعة عواد الظفيري' in html,
+              'Group ownership on homepage': agency_sentence in html,
+              'Group ownership on 404': agency_sentence in error_html,
+              'Group ownership in README': agency_sentence in readme,
+              'Group ownership in llms.txt': agency_sentence in llms,
+              'No superseded institution wording': 'مؤسسة عواد الظفيري' not in '\n'.join((html, error_html, readme, llms)),
               'Hofuf phone': '055 329 1112' in html and '966553291112' in html,
               'Khafji phone': '053 572 8805' in html and '966535728805' in html,
               'Friday visible hours for both branches': html.count('<span>الجمعة</span><strong>٤ - ٨ م</strong>') == 2,
               'Friday runtime hours': 'Fri: [[960, 1200]]' in script,
+              'Friday JSON-LD hours for both branches': html.count('"dayOfWeek":"Friday","opens":"16:00","closes":"20:00"') == 2,
+              'Friday README hours': '| الجمعة | ٤ - ٨ م | — |' in readme,
+              'Friday llms.txt hours': 'Friday: 16:00-20:00' in llms,
               'Saudi phone validation': 'pattern="05[0-9]{8}" maxlength="10"' in html,
               'Booking section': 'id="booking"' in html and 'id="bookingForm"' in html,
               'FAQ section': 'id="faq"' in html,
@@ -62,6 +72,55 @@ jobs:
           failed = [name for name, ok in checks.items() if not ok]
           if failed:
               raise SystemExit('Critical checks failed: ' + ', '.join(failed))
+
+          package_facts = [
+              ('قياسية C2', '2,300', '2,600'),
+              ('قياسية سيراميك', '2,400', '2,600'),
+              ('قياسية شاملة', '3,300', '3,600'),
+              ('نصفية C2+', '3,700', '3,950'),
+              ('نصفية سيراميك', '3,900', '4,200'),
+              ('نصفية شاملة', '4,700', '5,000'),
+              ('حماية كاملة', '9,500', '10,500'),
+              ('حماية كاملة + السقف', '10,500', '11,500'),
+          ]
+          for package, small, large in package_facts:
+              pattern = (
+                  rf'<small>{re.escape(package)}</small>.*?'
+                  rf'<div class="prices"><span>صغير <b>{re.escape(small)}</b></span>'
+                  rf'<span>كبير <b>{re.escape(large)}</b></span></div>'
+              )
+              if not re.search(pattern, html, flags=re.S):
+                  raise SystemExit(f'Package pricing changed unexpectedly: {package}')
+
+          polish_pattern = r'<div class="polish-price"><b>450</b><small>صغير</small><b>550</b><small>كبير</small></div>'
+          if not re.search(polish_pattern, html):
+              raise SystemExit('Standalone polishing pricing changed unexpectedly')
+
+          required_services = [
+              'قياسية C2', 'قياسية سيراميك', 'قياسية شاملة',
+              'نصفية C2+', 'نصفية سيراميك', 'نصفية شاملة',
+              'حماية كاملة', 'حماية كاملة + السقف', 'تلميع كامل',
+              'PPF', 'نانو سيراميك', 'عازل حراري', 'حماية الزجاج',
+              'رش وحماية أسفل السيارة', 'التلبيس الداخلي'
+          ]
+          missing_services = [service for service in required_services if f'<option>{service}</option>' not in html]
+          if missing_services:
+              raise SystemExit('Booking services missing: ' + ', '.join(missing_services))
+
+          protected_content = [
+              'عيوب الصناعة، الفقاعات، التقشير، الاصفرار والتشقق.',
+              'عيوب الصناعة، الفقاعات، التقشير، الاصفرار والانفصال.',
+              '<h3>نانو سيراميك 9H</h3><strong>3 + 5 سنوات</strong><p>3 سنوات للتطبيق و5 سنوات للطبقات.</p>',
+              '<li><b>7 أيام</b><span>بدون غسيل بعد PPF أو السيراميك.</span></li>',
+              '<li><b>48 ساعة</b><span>بدون فتح النوافذ بعد تركيب العازل الحراري.</span></li>',
+              '<li><b>4 ساعات</b><span>بدون مواد كيميائية أو مطر.</span></li>',
+              '<li><b>4 أسابيع</b><span>فحص مجاني خلالها.</span></li>',
+              '<li><b>6 شهور</b><span>صيانة دورية لحفظ الضمان.</span></li>',
+              'عدم الالتزام بالصيانة الدورية يلغي الضمان.',
+          ]
+          for snippet in protected_content:
+              if snippet not in html:
+                  raise SystemExit(f'Protected warranty/aftercare content changed: {snippet[:55]}')
 
           hero_assets = [
               'images/hero-slider-geoshield-protection.webp',
@@ -82,8 +141,21 @@ jobs:
           )
           if not jsonld_blocks:
               raise SystemExit('Missing JSON-LD structured data')
-          for block in jsonld_blocks:
-              json.loads(block)
+
+          parsed_jsonld = [json.loads(block) for block in jsonld_blocks]
+          graph = parsed_jsonld[0].get('@graph', []) if isinstance(parsed_jsonld[0], dict) else []
+          graph_ids = {item.get('@id') for item in graph if isinstance(item, dict)}
+          required_graph_ids = {
+              'https://aveni-cmd.github.io/geoshield/#organization',
+              'https://aveni-cmd.github.io/geoshield/#awad-group',
+              'https://aveni-cmd.github.io/geoshield/#website',
+              'https://aveni-cmd.github.io/geoshield/#webpage',
+              'https://aveni-cmd.github.io/geoshield/#faq',
+              'https://aveni-cmd.github.io/geoshield/#ahsa',
+              'https://aveni-cmd.github.io/geoshield/#khafji',
+          }
+          if not required_graph_ids.issubset(graph_ids):
+              raise SystemExit('Required structured-data entities are missing')
 
           class AuditParser(HTMLParser):
               def __init__(self):
@@ -141,11 +213,11 @@ jobs:
                   if 'noopener' not in rel.split():
                       raise SystemExit(f"{name}: target=_blank link missing rel=noopener: {href}")
 
-              return parser.assets
+              return parser
 
-          asset_refs = []
-          asset_refs.extend(audit_document('index.html', html))
-          asset_refs.extend(audit_document('404.html', error_html))
+          index_audit = audit_document('index.html', html)
+          error_audit = audit_document('404.html', error_html)
+          asset_refs = index_audit.assets + error_audit.assets
 
           missing_refs = set()
           for ref in asset_refs:
@@ -167,12 +239,41 @@ jobs:
           except ET.ParseError as exc:
               raise SystemExit(f'Invalid sitemap.xml: {exc}')
 
-          namespace = {'sm': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+          namespace = {
+              'sm': 'http://www.sitemaps.org/schemas/sitemap/0.9',
+              'image': 'http://www.google.com/schemas/sitemap-image/1.1',
+          }
           locs = [node.text.strip() for node in sitemap.findall('.//sm:loc', namespace) if node.text]
           homepage = 'https://aveni-cmd.github.io/geoshield/'
           if homepage not in locs:
               raise SystemExit('sitemap.xml does not contain the canonical homepage URL')
           if f'Sitemap: {homepage}sitemap.xml' not in robots:
               raise SystemExit('robots.txt sitemap URL does not match the canonical site URL')
+
+          sitemap_images = [
+              node.text.strip()
+              for node in sitemap.findall('.//image:loc', namespace)
+              if node.text
+          ]
+          if len(sitemap_images) != len(set(sitemap_images)):
+              raise SystemExit('sitemap.xml contains duplicate image URLs')
+
+          sitemap_image_paths = set()
+          for image_url in sitemap_images:
+              if not image_url.startswith(homepage + 'images/'):
+                  raise SystemExit(f'Unexpected image sitemap URL: {image_url}')
+              path = urlsplit(image_url).path[len('/geoshield/'):]
+              sitemap_image_paths.add(path)
+              if not (root / path).is_file():
+                  raise SystemExit(f'Image sitemap references missing file: {path}')
+
+          content_images = {
+              urlsplit(image.get('src', '')).path.lstrip('/')
+              for image in index_audit.images
+              if image.get('src', '').startswith('images/') and image.get('src') != 'images/logo.webp'
+          }
+          missing_from_sitemap = sorted(content_images - sitemap_image_paths)
+          if missing_from_sitemap:
+              raise SystemExit('Content images missing from image sitemap: ' + ', '.join(missing_from_sitemap))
 
           print('All GeoShield site quality checks passed.')
