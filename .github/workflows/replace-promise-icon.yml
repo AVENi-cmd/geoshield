@@ -24,10 +24,8 @@ jobs:
 
           path = Path('script.js')
           text = path.read_text(encoding='utf-8')
-          old = '''    '<svg viewBox="0 0 24 24"><path d="M12 3v18M5 7l14 10M19 7 5 17"/><circle cx="12" cy="12" r="9"/></svg>',
-'''
-          new = '''    '<svg viewBox="0 0 24 24"><path d="M4 5h13v10H4z"/><path d="M7 8h7M7 11h5"/><circle cx="16.5" cy="15.5" r="3.5"/><path d="m16.5 13.8.55 1.1 1.2.18-.87.85.2 1.2-1.08-.57-1.08.57.2-1.2-.87-.85 1.2-.18.55-1.1Z"/><path d="m14.8 18.4-.8 2.6 2.5-1.2 2.5 1.2-.8-2.6"/></svg>',
-'''
+          old = "    '<svg viewBox=\"0 0 24 24\"><path d=\"M12 3v18M5 7l14 10M19 7 5 17\"/><circle cx=\"12\" cy=\"12\" r=\"9\"/></svg>',"
+          new = "    '<svg viewBox=\"0 0 24 24\"><path d=\"M4 5h13v10H4z\"/><path d=\"M7 8h7M7 11h5\"/><circle cx=\"16.5\" cy=\"15.5\" r=\"3.5\"/><path d=\"m16.5 13.8.55 1.1 1.2.18-.87.85.2 1.2-1.08-.57-1.08.57.2-1.2-.87-.85 1.2-.18.55-1.1Z\"/><path d=\"m14.8 18.4-.8 2.6 2.5-1.2 2.5 1.2-.8-2.6\"/></svg>',"
           if old not in text:
               raise SystemExit('Target quality icon not found')
           text = text.replace(old, new, 1)
