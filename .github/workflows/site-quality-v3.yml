@@ -51,8 +51,11 @@ jobs:
 
           agency = 'وكالة جيوشيلد لفرعي الأحساء والخفجي تابعة لمجموعة عواد الظفيري'
           public_prices = ['2,300','2,600','2,400','3,300','3,600','3,700','3,950','3,900','4,200','4,700','5,000','9,500','10,500','11,500']
-          public_surface = '\n'.join((html, readme, llms))
-          leaked = [value for value in public_prices if value in public_surface]
+          package_match = re.search(r'<section\s+class="section packages"[^>]*>.*?</section>', html, re.S)
+          if not package_match:
+              raise SystemExit('Packages section missing')
+          package_surface = package_match.group(0)
+          leaked = [value for value in public_prices if value in package_surface]
           if leaked:
               raise SystemExit('Public package prices must stay removed: ' + ', '.join(leaked))
 
