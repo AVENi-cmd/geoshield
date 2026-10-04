@@ -5,6 +5,7 @@
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const saveData = navigator.connection?.saveData === true;
 
   const serviceIcons = [
     '<svg viewBox="0 0 24 24"><path d="M4 15c3-1 5-3 6-7 3 1 5 3 6 6 1 3 0 5-2 6-3 1-7-1-10-5Z"/><path d="M8 17c2-1 4-3 5-6"/></svg>',
@@ -127,7 +128,7 @@
     dots.append(button);
   });
 
-  const heroCanRun = () => !reduceMotion && !document.hidden && heroPauseReasons.size === 0 && slides.length > 1;
+  const heroCanRun = () => !reduceMotion && !saveData && !document.hidden && heroPauseReasons.size === 0 && slides.length > 1;
 
   function stopHero() {
     clearTimeout(timer);
@@ -555,7 +556,7 @@
     lightbox.setAttribute('aria-label', `عرض الصورة ${lightboxIndex + 1} من ${workItems.length}: ${image.alt}`);
     if (lightboxCounter) lightboxCounter.textContent = `${lightboxIndex + 1} / ${workItems.length}`;
 
-    [-1, 1].forEach(offset => {
+    if (!saveData) [-1, 1].forEach(offset => {
       const neighbour = $('img', workItems[(lightboxIndex + offset + workItems.length) % workItems.length]);
       if (!neighbour?.src) return;
       const preload = new Image();
