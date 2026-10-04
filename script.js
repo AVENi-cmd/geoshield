@@ -24,6 +24,8 @@
   const uiIcons = {
     previous: '<svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>',
     next: '<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>',
+    pause: '<svg viewBox="0 0 24 24"><path d="M9 7v10M15 7v10"/></svg>',
+    play: '<svg viewBox="0 0 24 24"><path d="m9 7 8 5-8 5V7Z"/></svg>',
     phone: '<svg viewBox="0 0 24 24"><path d="M7.2 3.8 9.8 7l-2 2.2a15.8 15.8 0 0 0 7 7l2.2-2 3.2 2.6c.4.3.5.9.2 1.3-1 1.5-2.4 2.2-4 2-6.5-.9-11.6-6-12.5-12.5-.2-1.6.5-3 2-4 .4-.3 1-.2 1.3.2Z"/></svg>',
     message: '<svg viewBox="0 0 24 24"><path d="M5 5h14v11H9l-4 3V5Z"/><path d="M8 9h8M8 12h5"/></svg>',
     map: '<svg viewBox="0 0 24 24"><path d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11Z"/><circle cx="12" cy="10" r="2"/></svg>',
@@ -102,6 +104,8 @@
   let current = Math.max(0, slides.findIndex(slide => slide.classList.contains('active')));
   let timer;
   let touchStartX = 0;
+  let userPaused = false;
+  let heroPauseControl = null;
 
   hero?.setAttribute('role', 'region');
   hero?.setAttribute('aria-roledescription', 'carousel');
@@ -128,7 +132,30 @@
     dots.append(button);
   });
 
-  const heroCanRun = () => !reduceMotion && !saveData && !document.hidden && heroPauseReasons.size === 0 && slides.length > 1;
+  if (hero && slides.length > 1 && !reduceMotion && !saveData) {
+    if (!$('#gs-hero-pause-style')) {
+      const pauseStyle = document.createElement('style');
+      pauseStyle.id = 'gs-hero-pause-style';
+      pauseStyle.textContent = '.hero-pause-control{position:absolute;z-index:8;bottom:14px;right:clamp(14px,2.4vw,38px);width:42px;height:42px;display:grid;place-items:center;padding:0;border:1px solid rgba(255,255,255,.22);border-radius:12px;background:rgba(8,10,12,.58);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}.hero-pause-control:hover{background:rgba(232,98,43,.9);border-color:#e8622b;color:#090a0b}.hero-pause-control:active{transform:scale(.96)}.hero-pause-control:focus-visible{outline:2px solid #ff7a3f;outline-offset:3px}.hero-pause-control svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}@media(max-width:760px){.hero-pause-control{right:max(10px,env(safe-area-inset-right));bottom:10px;width:38px;height:38px;border-radius:11px}}@media(prefers-reduced-transparency:reduce){.hero-pause-control{backdrop-filter:none;-webkit-backdrop-filter:none;background:#101214}}';
+      document.head.append(pauseStyle);
+    }
+
+    heroPauseControl = document.createElement('button');
+    heroPauseControl.type = 'button';
+    heroPauseControl.className = 'hero-pause-control';
+    heroPauseControl.setAttribute('aria-pressed', 'false');
+    hero.append(heroPauseControl);
+  }
+
+  const heroCanRun = () => !reduceMotion && !saveData && !userPaused && !document.hidden && heroPauseReasons.size === 0 && slides.length > 1;
+
+  function syncHeroPauseControl() {
+    if (!heroPauseControl) return;
+    heroPauseControl.setAttribute('aria-pressed', String(userPaused));
+    heroPauseControl.setAttribute('aria-label', userPaused ? 'تشغيل العرض التلقائي' : 'إيقاف العرض التلقائي');
+    heroPauseControl.title = userPaused ? 'تشغيل العرض التلقائي' : 'إيقاف العرض التلقائي';
+    heroPauseControl.innerHTML = userPaused ? uiIcons.play : uiIcons.pause;
+  }
 
   function stopHero() {
     clearTimeout(timer);
@@ -180,6 +207,18 @@
     restartProgress();
     scheduleHero();
   }
+
+  heroPauseControl?.addEventListener('click', () => {
+    userPaused = !userPaused;
+    syncHeroPauseControl();
+    if (heroCanRun()) {
+      restartProgress();
+      scheduleHero();
+    } else {
+      stopHero();
+    }
+  });
+  syncHeroPauseControl();
 
   previousArrow?.addEventListener('click', () => goToSlide(current - 1));
   nextArrow?.addEventListener('click', () => goToSlide(current + 1));
