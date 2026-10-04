@@ -500,11 +500,41 @@
   const lightboxImage = lightbox ? $('img', lightbox) : null;
   const lightboxClose = lightbox ? $('button', lightbox) : null;
   const workItems = $$('.work-item');
+  let lightboxPrevious = null;
+  let lightboxNext = null;
+  let lightboxCounter = null;
   let lightboxIndex = 0;
   let lightboxTouchStartX = 0;
   let lightboxTouchStartY = 0;
   let lastFocus = null;
   let previousBodyOverflow = '';
+
+  if (lightbox && workItems.length > 1) {
+    if (!$('#gs-lightbox-controls-style')) {
+      const controlsStyle = document.createElement('style');
+      controlsStyle.id = 'gs-lightbox-controls-style';
+      controlsStyle.textContent = '#lightbox .lightbox-nav{position:absolute;z-index:2;top:50%;width:48px;height:48px;display:grid;place-items:center;transform:translateY(-50%);border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(17,19,21,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}#lightbox .lightbox-nav:hover{background:rgba(232,98,43,.9);border-color:#e8622b;color:#0b0c0d}#lightbox .lightbox-nav:active{transform:translateY(-50%) scale(.96)}#lightbox .lightbox-nav:focus-visible{outline:2px solid #ff7a3f;outline-offset:3px}#lightbox .lightbox-nav.previous{right:max(20px,env(safe-area-inset-right));left:auto}#lightbox .lightbox-nav.next{left:max(20px,env(safe-area-inset-left));right:auto}#lightbox .lightbox-nav svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}#lightbox .lightbox-counter{position:absolute;z-index:2;bottom:max(20px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);min-width:62px;padding:6px 12px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(17,19,21,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#d7dadd;font:600 11px/1.2 system-ui;letter-spacing:.08em;text-align:center;direction:ltr}#lightbox>button:not(.lightbox-nav){top:max(18px,env(safe-area-inset-top));left:max(18px,env(safe-area-inset-left))}@media(max-width:760px){#lightbox .lightbox-nav{width:44px;height:44px;border-radius:12px;top:auto;bottom:max(18px,env(safe-area-inset-bottom));transform:none}#lightbox .lightbox-nav:active{transform:scale(.96)}#lightbox .lightbox-nav.previous{right:max(16px,env(safe-area-inset-right))}#lightbox .lightbox-nav.next{left:max(16px,env(safe-area-inset-left))}#lightbox .lightbox-counter{bottom:calc(max(18px,env(safe-area-inset-bottom)) + 7px)}}';
+      document.head.append(controlsStyle);
+    }
+
+    lightboxPrevious = document.createElement('button');
+    lightboxPrevious.type = 'button';
+    lightboxPrevious.className = 'lightbox-nav previous';
+    lightboxPrevious.setAttribute('aria-label', 'الصورة السابقة');
+    lightboxPrevious.innerHTML = uiIcons.previous;
+
+    lightboxNext = document.createElement('button');
+    lightboxNext.type = 'button';
+    lightboxNext.className = 'lightbox-nav next';
+    lightboxNext.setAttribute('aria-label', 'الصورة التالية');
+    lightboxNext.innerHTML = uiIcons.next;
+
+    lightboxCounter = document.createElement('span');
+    lightboxCounter.className = 'lightbox-counter';
+    lightboxCounter.setAttribute('aria-hidden', 'true');
+
+    lightbox.append(lightboxPrevious, lightboxNext, lightboxCounter);
+  }
 
   function showLightboxItem(index) {
     if (!lightbox || !lightboxImage || !workItems.length) return;
@@ -514,6 +544,7 @@
     lightboxImage.src = image.src;
     lightboxImage.alt = image.alt;
     lightbox.setAttribute('aria-label', `عرض الصورة ${lightboxIndex + 1} من ${workItems.length}: ${image.alt}`);
+    if (lightboxCounter) lightboxCounter.textContent = `${lightboxIndex + 1} / ${workItems.length}`;
 
     [-1, 1].forEach(offset => {
       const neighbour = $('img', workItems[(lightboxIndex + offset + workItems.length) % workItems.length]);
@@ -543,6 +574,8 @@
   }));
 
   lightboxClose?.addEventListener('click', closeLightbox);
+  lightboxPrevious?.addEventListener('click', () => showLightboxItem(lightboxIndex - 1));
+  lightboxNext?.addEventListener('click', () => showLightboxItem(lightboxIndex + 1));
   lightbox?.addEventListener('click', event => {
     if (event.target === lightbox) closeLightbox();
   });
@@ -575,8 +608,15 @@
       return;
     }
     if (event.key === 'Tab' && lightboxOpen) {
+      const focusable = [lightboxClose, lightboxPrevious, lightboxNext].filter(Boolean);
+      if (!focusable.length) return;
       event.preventDefault();
-      lightboxClose?.focus();
+      const activeIndex = focusable.indexOf(document.activeElement);
+      const step = event.shiftKey ? -1 : 1;
+      const nextIndex = activeIndex < 0
+        ? 0
+        : (activeIndex + step + focusable.length) % focusable.length;
+      focusable[nextIndex].focus();
     }
   });
 
