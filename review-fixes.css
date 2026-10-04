@@ -64,9 +64,10 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   pointer-events:none;
 }
 .trust-grid>div:nth-child(1){--trust-image:url('images/showcase-1.webp');background-position:center 52%}
-.trust-grid>div:nth-child(2){--trust-image:url('images/showcase-ppf-mirror.webp');background-position:center 48%}
-.trust-grid>div:nth-child(3){--trust-image:url('images/showcase-ppf-installation.webp');background-position:center 48%}
+.trust-grid>div:nth-child(2){--trust-image:url('images/showcase-ppf-mirror.webp');background-position:24% 50%;background-size:auto 100%}
+.trust-grid>div:nth-child(3){--trust-image:url('images/showcase-ppf-installation.webp');background-position:18% 50%;background-size:auto 100%}
 .trust-grid>div:nth-child(4){--trust-image:url('images/services/geoshield-package-03-optimized.webp');background-position:center 54%}
+.trust-grid>div:nth-child(2)::before,.trust-grid>div:nth-child(3)::before{background:linear-gradient(180deg,rgba(7,9,11,.08) 0%,rgba(7,9,11,.22) 44%,rgba(7,9,11,.84) 100%)}
 .trust-grid>div:hover{background-image:var(--trust-image)!important;background-color:#15191d}
 .trust-grid>div>*{position:relative;z-index:2}
 .trust b{
@@ -151,6 +152,8 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   .trust-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .trust-grid>div{min-width:0;min-height:158px;padding:18px;border-radius:19px}
   .trust-grid>div::after{inset-inline-end:16px;width:46px;height:3px}
+  .trust-grid>div:nth-child(2){background-position:20% 50%;background-size:auto 100%}
+  .trust-grid>div:nth-child(3){background-position:14% 50%;background-size:auto 100%}
   .trust b{font-size:clamp(22px,7vw,30px)}
   .trust span{margin-top:6px;font-size:10.5px;line-height:1.5}
 
@@ -173,6 +176,8 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   .trust-grid{gap:9px}
   .trust-grid>div{min-height:148px;padding:15px}
   .trust-grid>div::after{inset-inline-end:13px;width:38px}
+  .trust-grid>div:nth-child(2){background-position:18% 50%}
+  .trust-grid>div:nth-child(3){background-position:12% 50%}
   .trust b{font-size:clamp(20px,6.7vw,27px)}
 }
 
