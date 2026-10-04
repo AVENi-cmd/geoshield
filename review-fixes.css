@@ -5,6 +5,14 @@
 main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-services,.booking-grid{min-width:0;max-width:100%}
 .shell{width:min(100% - 40px,1240px);margin-inline:auto}
 
+/* Keyboard and accessibility hardening */
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{outline:3px solid #ff7a3f;outline-offset:3px}
+:where(input,select,textarea):focus-visible{outline-offset:1px}
+.work-item:focus-visible{border-radius:var(--r);box-shadow:0 0 0 4px rgba(255,122,63,.2)}
+.package-tabs button:focus-visible,.package-book:focus-visible,.service-book:focus-visible,.polish-book:focus-visible{position:relative;z-index:2}
+.package-book,.service-book,.polish-book{min-height:44px}
+#lightbox button:focus-visible{outline:3px solid #ff7a3f;outline-offset:4px}
+
 /* Trust strip — real visual thumbnails below the hero */
 .trust{overflow:hidden}
 .trust-grid{width:100%;max-width:1240px}
@@ -99,4 +107,14 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 @media(max-width:430px){
   .shell{width:calc(100% - 24px)}
   .trust-grid>div{padding-inline-end:60px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
+@media(forced-colors:active){
+  :where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{outline:2px solid Highlight}
+  .package-tabs button.active,.package-tabs button[aria-selected=true]{forced-color-adjust:auto;border:1px solid ButtonText}
+  .package-panel:not(.package-services) article{border:1px solid CanvasText}
 }
