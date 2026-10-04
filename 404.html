@@ -29,11 +29,16 @@
     .mark{direction:ltr;align-self:center;color:rgba(255,255,255,.045);font:700 clamp(120px,22vw,250px)/.8 system-ui;letter-spacing:-.08em;user-select:none}
     .links{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
     .links a{padding:20px 24px;color:#b8bcc0;text-decoration:none;font-size:12px;font-weight:600;text-align:center;border-inline-start:1px solid var(--line);transition:background .2s,color .2s}.links a:last-child{border-inline-start:0}.links a:hover{background:rgba(255,255,255,.035);color:#fff}
-    .support{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:18px 24px;border-top:1px solid var(--line);background:rgba(255,255,255,.018)}
-    .support a{min-height:44px;padding:0 16px;border:1px solid rgba(255,255,255,.12);border-radius:11px;display:flex;align-items:center;justify-content:center;color:#d9dcde;text-decoration:none;font-size:12px;font-weight:600;transition:background .2s,border-color .2s,color .2s}.support a:hover{background:rgba(232,98,43,.08);border-color:rgba(232,98,43,.35);color:#fff}
+    .support{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px 24px;border-top:1px solid var(--line);background:rgba(255,255,255,.018)}
+    .support-branch{padding:14px;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(255,255,255,.018)}
+    .support-title{margin:0 0 10px;color:#aeb2b6;font-size:11px;font-weight:600}
+    .support-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .support a{min-height:44px;padding:0 12px;border:1px solid rgba(255,255,255,.12);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#d9dcde;text-decoration:none;font-size:11px;font-weight:600;transition:background .2s,border-color .2s,color .2s}.support a:hover{background:rgba(232,98,43,.08);border-color:rgba(232,98,43,.35);color:#fff}
+    .support a[href^="tel:"]{direction:ltr;unicode-bidi:isolate}
     .ownership{margin:0;padding:14px 24px;border-top:1px solid var(--line);color:#6f757b;font-size:10px;line-height:1.7;text-align:center}.ownership strong{color:#aeb2b6;font-weight:600}
     a:focus-visible{outline:2px solid var(--brand2);outline-offset:4px}
     @media(max-width:720px){main{border-radius:20px}.top{padding:18px 20px}.brand img{width:125px}.content{grid-template-columns:1fr;padding:42px 24px 34px;gap:30px}.mark{display:none}.actions{display:grid;grid-template-columns:1fr}.button{width:100%}.links{grid-template-columns:1fr}.links a{border-inline-start:0;border-top:1px solid var(--line);padding:17px 20px}.links a:first-child{border-top:0}.support{grid-template-columns:1fr;padding:16px 18px}.ownership{padding-inline:18px}}
+    @media(max-width:390px){.support-actions{grid-template-columns:1fr}}
     @media(prefers-reduced-motion:reduce){.button,.links a,.support a{transition:none}}
   </style>
 </head>
@@ -65,10 +70,22 @@
       <a href="/geoshield/#warranty">الضمان</a>
     </nav>
 
-    <div class="support" aria-label="تواصل مباشر مع الفروع">
-      <a href="https://wa.me/966553291112" target="_blank" rel="noopener" aria-label="مراسلة فرع الأحساء - الهفوف عبر واتساب">واتساب فرع الأحساء</a>
-      <a href="https://wa.me/966535728805" target="_blank" rel="noopener" aria-label="مراسلة فرع الخفجي عبر واتساب">واتساب فرع الخفجي</a>
-    </div>
+    <section class="support" aria-label="تواصل مباشر مع الفروع">
+      <div class="support-branch">
+        <h2 class="support-title">فرع الأحساء - الهفوف</h2>
+        <div class="support-actions">
+          <a href="tel:+966553291112" aria-label="اتصال بفرع الأحساء - الهفوف">055 329 1112</a>
+          <a href="https://wa.me/966553291112" target="_blank" rel="noopener" aria-label="مراسلة فرع الأحساء - الهفوف عبر واتساب">واتساب</a>
+        </div>
+      </div>
+      <div class="support-branch">
+        <h2 class="support-title">فرع الخفجي</h2>
+        <div class="support-actions">
+          <a href="tel:+966535728805" aria-label="اتصال بفرع الخفجي">053 572 8805</a>
+          <a href="https://wa.me/966535728805" target="_blank" rel="noopener" aria-label="مراسلة فرع الخفجي عبر واتساب">واتساب</a>
+        </div>
+      </div>
+    </section>
 
     <p class="ownership">وكالة جيوشيلد لفرعي الأحساء والخفجي تابعة <strong>لمجموعة عواد الظفيري</strong></p>
   </main>
