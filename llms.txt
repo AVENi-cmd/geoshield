@@ -42,7 +42,7 @@ Monday: 09:00-12:00, 15:30-22:30
 Tuesday: 09:00-12:00, 15:30-22:30
 Wednesday: 09:00-12:00, 15:30-22:30
 Thursday: 09:00-12:00, 15:30-22:30
-Friday: 16:00-20:00
+Friday: 16:00-22:00
 Saturday: 09:00-12:00, 15:30-22:30
 
 ## Warranty and aftercare
