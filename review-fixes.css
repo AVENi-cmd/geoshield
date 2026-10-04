@@ -52,10 +52,61 @@
   text-align:right;
 }
 
+/* Mobile Safari root-scroll hardening.
+   body overflow-x alone does not reliably constrain the root scrolling element
+   on iOS, which can let the whole page drift sideways while vertically scrolling. */
+html,
+body{
+  width:100%;
+  max-width:100%;
+  overflow-x:clip;
+  overscroll-behavior-x:none;
+}
+
+/* Keep layout containers from contributing min-content width to the document. */
+main,
+header,
+footer,
+.announce,
+.mobile-bar,
+section,
+.shell,
+.split,
+.service-stack,
+.service-card,
+.work-grid,
+.why-grid,
+.warranty-grid,
+.aftercare,
+.package-panel,
+.package-services,
+.branch-layout,
+.branch-cards,
+.booking-grid,
+.booking-form{
+  min-width:0;
+  max-width:100%;
+}
+
+@supports not (overflow:clip){
+  html,
+  body{overflow-x:hidden}
+}
+
 @media(max-width:760px){
   .package-panel[data-panel="nano"] article h3{
     direction:ltr;
     unicode-bidi:isolate;
     text-align:right;
+  }
+
+  .warranty-grid>article,
+  .aftercare>li,
+  .why-grid>article,
+  .branch-card,
+  .service-card,
+  .booking-form{
+    min-width:0;
+    max-width:100%;
   }
 }
