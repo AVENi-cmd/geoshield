@@ -2,6 +2,11 @@
 
 /* GeoShield final QA corrections — intentionally small and isolated. */
 
+/* Remove the four additional-service cards from the rendered site. */
+.mini-services{
+  display:none!important;
+}
+
 /* Keep the +5000 card on one fixed image in every state. */
 .trust-grid>div:nth-child(1),
 .trust-grid>div:nth-child(1):hover{
