@@ -5,15 +5,15 @@
 main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-services,.booking-grid{min-width:0;max-width:100%}
 .shell{width:min(100% - 40px,1240px);margin-inline:auto}
 
-/* Trust strip visual markers */
+/* Trust strip — real visual thumbnails below the hero */
 .trust{overflow:hidden}
 .trust-grid{width:100%;max-width:1240px}
-.trust-grid>div{position:relative;overflow:hidden;min-width:0;padding-inline-end:92px}
-.trust-grid>div::after{position:absolute;inset-inline-end:24px;top:50%;transform:translateY(-50%);width:52px;height:52px;display:grid;place-items:center;border:1px solid rgba(255,122,63,.42);border-radius:15px;background:linear-gradient(145deg,rgba(255,122,63,.16),rgba(232,98,43,.05));color:#ff7a3f;font-size:23px;font-weight:700;line-height:1;box-shadow:inset 0 0 18px rgba(232,98,43,.08)}
-.trust-grid>div:nth-child(1)::after{content:"◆"}
-.trust-grid>div:nth-child(2)::after{content:"◇"}
-.trust-grid>div:nth-child(3)::after{content:"↻"}
-.trust-grid>div:nth-child(4)::after{content:"✓"}
+.trust-grid>div{position:relative;overflow:hidden;min-width:0;padding-inline-end:104px}
+.trust-grid>div::after{content:"";position:absolute;inset-inline-end:22px;top:50%;transform:translateY(-50%);width:64px;height:64px;border:1px solid rgba(255,122,63,.32);border-radius:16px;background-position:center;background-size:cover;background-repeat:no-repeat;box-shadow:0 10px 24px rgba(0,0,0,.18),inset 0 0 0 1px rgba(255,255,255,.05)}
+.trust-grid>div:nth-child(1)::after{background-image:linear-gradient(rgba(8,10,12,.06),rgba(8,10,12,.06)),url('images/showcase-1.webp')}
+.trust-grid>div:nth-child(2)::after{background-image:linear-gradient(rgba(8,10,12,.06),rgba(8,10,12,.06)),url('images/showcase-ppf-installation.webp')}
+.trust-grid>div:nth-child(3)::after{background-image:linear-gradient(rgba(8,10,12,.06),rgba(8,10,12,.06)),url('images/service-nano-ceramic.webp')}
+.trust-grid>div:nth-child(4)::after{background-image:linear-gradient(rgba(8,10,12,.06),rgba(8,10,12,.06)),url('images/service-thermal-insulation.webp')}
 
 /* Core services — artwork is 1920×674 and must never be cropped */
 .service-stack{width:100%;overflow:hidden}
@@ -79,8 +79,8 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   .service-card>img{width:100%;height:auto;aspect-ratio:1920/674;max-height:none;object-fit:contain}
 
   .trust-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  .trust-grid>div{padding-inline-end:58px;min-width:0}
-  .trust-grid>div::after{inset-inline-end:10px;width:38px;height:38px;font-size:18px}
+  .trust-grid>div{padding-inline-end:66px;min-width:0}
+  .trust-grid>div::after{inset-inline-end:10px;width:46px;height:46px;border-radius:12px}
 
   .package-tabs{max-width:100%;grid-template-columns:repeat(2,minmax(0,1fr));border-radius:18px}
   .package-tabs button{min-height:44px}
@@ -98,5 +98,5 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 
 @media(max-width:430px){
   .shell{width:calc(100% - 24px)}
-  .trust-grid>div{padding-inline-end:52px}
+  .trust-grid>div{padding-inline-end:60px}
 }
