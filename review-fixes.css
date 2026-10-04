@@ -143,7 +143,8 @@ section,
     display:none;
   }
 
-  /* Mobile work gallery — one calm horizontal showcase instead of a long image stack. */
+  /* Mobile work gallery — equal cinematic cards in one horizontal rail.
+     The full uncropped image remains available in the existing lightbox on tap. */
   .work.section{
     padding-top:58px;
     padding-bottom:58px;
@@ -161,7 +162,7 @@ section,
     gap:12px!important;
     overflow-x:auto!important;
     overflow-y:hidden!important;
-    align-items:flex-start!important;
+    align-items:stretch!important;
     scroll-snap-type:x mandatory!important;
     scroll-padding-inline:0;
     overscroll-behavior-inline:contain;
@@ -173,12 +174,15 @@ section,
     display:none;
   }
   .work-item,
-  .work-item.wide{
+  .work-item.wide,
+  .work-item:first-child{
     display:block!important;
-    flex:0 0 78%!important;
+    flex:0 0 82%!important;
     width:auto!important;
     max-width:none!important;
+    aspect-ratio:3/2!important;
     margin:0!important;
+    padding:0!important;
     border:1px solid rgba(255,255,255,.11)!important;
     border-radius:18px!important;
     overflow:hidden!important;
@@ -188,18 +192,23 @@ section,
     scroll-snap-stop:normal;
     touch-action:pan-x pan-y;
   }
-  .work-item:first-child{
-    flex-basis:92%!important;
-  }
   .work-item img,
   .work-item.wide img{
     display:block!important;
     width:100%!important;
-    height:auto!important;
+    height:100%!important;
     max-width:100%!important;
-    object-fit:contain!important;
+    object-fit:cover!important;
+    object-position:center!important;
     transform:none!important;
     background:#15191d;
+  }
+  /* Slight subject-aware positioning for the two taller source photos. */
+  .work-item:nth-child(3) img{
+    object-position:center 48%!important;
+  }
+  .work-item:nth-child(5) img{
+    object-position:center 44%!important;
   }
 }
 
@@ -219,11 +228,9 @@ section,
     gap:10px!important;
   }
   .work-item,
-  .work-item.wide{
-    flex-basis:82%!important;
-    border-radius:16px!important;
-  }
+  .work-item.wide,
   .work-item:first-child{
-    flex-basis:94%!important;
+    flex-basis:84%!important;
+    border-radius:16px!important;
   }
 }
