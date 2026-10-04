@@ -293,6 +293,26 @@
     setTimeout(() => bookingServiceSelect.focus({ preventScroll: true }), reduceMotion ? 0 : 450);
   }
 
+  const serviceBookingMap = new Map([
+    ['أفلام حماية PPF', 'PPF'],
+    ['العازل الحراري', 'عازل حراري'],
+    ['نانو سيراميك', 'نانو سيراميك']
+  ]);
+
+  $$('.service-card').forEach(card => {
+    const title = $('h3', card)?.textContent.trim();
+    const serviceName = serviceBookingMap.get(title);
+    const copy = card.querySelector(':scope > div');
+    if (!serviceName || !copy || !bookingServiceValues.has(serviceName) || copy.querySelector('.service-book')) return;
+    const action = document.createElement('button');
+    action.type = 'button';
+    action.className = 'package-book service-book';
+    action.setAttribute('aria-label', `احجز خدمة ${title}`);
+    action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احجز الخدمة</span>`;
+    action.addEventListener('click', () => chooseServiceAndBook(serviceName));
+    copy.append(action);
+  });
+
   $$('.package-panel article').forEach(card => {
     if (card.querySelector('.package-book')) return;
     const serviceName = $('small', card)?.textContent.trim();
