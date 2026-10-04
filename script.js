@@ -355,14 +355,22 @@
     copy.append(action);
   });
 
+  const packageBookingByPanel = new Map([
+    ['standard', 'PPF'],
+    ['half', 'عازل حراري'],
+    ['full', 'نانو سيراميك']
+  ]);
+
   $$('.package-panel article').forEach(card => {
     if (card.querySelector('.package-book')) return;
-    const serviceName = $('small', card)?.textContent.trim();
+    const panel = card.closest('.package-panel');
+    const serviceName = card.dataset.bookingService || packageBookingByPanel.get(panel?.dataset.panel) || $('small', card)?.textContent.trim();
     if (!serviceName || !bookingServiceValues.has(serviceName)) return;
+    const visibleLabel = card.dataset.packageLabel || $('h3', card)?.textContent.trim() || serviceName;
     const action = document.createElement('button');
     action.type = 'button';
     action.className = 'package-book';
-    action.setAttribute('aria-label', `احصل على عرض سعر باقة ${serviceName}`);
+    action.setAttribute('aria-label', `احصل على عرض سعر ${visibleLabel}`);
     action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احصل على عرض السعر</span>`;
     action.addEventListener('click', () => chooseServiceAndBook(serviceName));
     card.append(action);
@@ -558,6 +566,8 @@
   let lastFocus = null;
   let previousBodyOverflow = '';
 
+  if (lightbox) lightbox.inert = true;
+
   if (lightbox && workItems.length > 1) {
     if (!$('#gs-lightbox-controls-style')) {
       const controlsStyle = document.createElement('style');
@@ -607,6 +617,7 @@
     if (!lightbox?.classList.contains('open')) return;
     lightbox.classList.remove('open');
     lightbox.setAttribute('aria-hidden', 'true');
+    lightbox.inert = true;
     document.body.style.overflow = previousBodyOverflow;
     lastFocus?.focus();
   }
@@ -616,6 +627,7 @@
     lastFocus = item;
     previousBodyOverflow = document.body.style.overflow;
     showLightboxItem(index);
+    lightbox.inert = false;
     lightbox.classList.add('open');
     lightbox.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
