@@ -110,23 +110,34 @@ section,
     max-width:100%;
   }
 
-  /* Compact the services intro on phones without changing the desktop design. */
+  /* Compact the services intro on phones and keep the requested wording/lines exact. */
   .services{
-    padding-top:52px;
+    padding-top:48px;
   }
   .services .heading{
-    margin-bottom:28px;
+    margin-bottom:26px;
   }
   .services .heading .kicker{
-    margin-bottom:8px;
+    margin-bottom:7px;
   }
   .services .heading h2{
     max-width:100%;
-    margin:8px 0 0;
-    font-size:clamp(29px,8.2vw,37px);
-    line-height:1.24;
-    letter-spacing:-.018em;
-    text-wrap:balance;
+    margin:6px 0 0;
+    font-size:0!important;
+    line-height:1;
+    letter-spacing:0;
+    text-align:right;
+  }
+  .services .heading h2::after{
+    content:"ثلاث طبقات من الحماية\Aهدف واحد :\Aالحفاظ على سيارتك .";
+    display:block;
+    white-space:pre-line;
+    color:#101214;
+    font-family:"IBM Plex Sans Arabic","Noto Sans Arabic",system-ui,sans-serif;
+    font-size:clamp(28px,7.6vw,33px);
+    font-weight:600;
+    line-height:1.3;
+    letter-spacing:-.012em;
   }
   .services .heading h2 br{
     display:none;
@@ -135,13 +146,13 @@ section,
 
 @media(max-width:390px){
   .services{
-    padding-top:46px;
+    padding-top:44px;
   }
   .services .heading{
-    margin-bottom:24px;
+    margin-bottom:22px;
   }
-  .services .heading h2{
-    font-size:30px;
-    line-height:1.22;
+  .services .heading h2::after{
+    font-size:28px;
+    line-height:1.28;
   }
 }
