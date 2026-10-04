@@ -436,12 +436,13 @@
       : nextOpening
         ? `مغلق الآن • يفتح ${nextOpening.label} ${formatOpeningTime(nextOpening.start)}`
         : 'مغلق الآن';
+    const titleText = `ساعات العمل الرسمية • ${statusText}`;
 
     $$('.weekly-hours').forEach(hours => {
       const title = $('.hours-title', hours);
       if (title) {
-        title.textContent = `ساعات العمل الرسمية • ${statusText}`;
-        title.setAttribute('aria-live', 'polite');
+        if (title.textContent !== titleText) title.textContent = titleText;
+        if (!title.hasAttribute('aria-live')) title.setAttribute('aria-live', 'polite');
       }
       hours.dataset.open = String(isOpen);
       $$('.hours-row', hours).forEach(row => {
@@ -456,6 +457,9 @@
 
   updateBranchHoursState();
   setInterval(updateBranchHoursState, 60000);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) updateBranchHoursState();
+  });
 
   const quickCall = $('.mobile-bar a[href^="tel:"]');
   const quickWhatsApp = $('.mobile-bar a[href*="wa.me"]');
@@ -495,8 +499,20 @@
   const lightbox = $('#lightbox');
   const lightboxImage = lightbox ? $('img', lightbox) : null;
   const lightboxClose = lightbox ? $('button', lightbox) : null;
+  const workItems = $$('.work-item');
+  let lightboxIndex = 0;
   let lastFocus = null;
   let previousBodyOverflow = '';
+
+  function showLightboxItem(index) {
+    if (!lightbox || !lightboxImage || !workItems.length) return;
+    lightboxIndex = (index + workItems.length) % workItems.length;
+    const image = $('img', workItems[lightboxIndex]);
+    if (!image) return;
+    lightboxImage.src = image.src;
+    lightboxImage.alt = image.alt;
+    lightbox.setAttribute('aria-label', `عرض الصورة ${lightboxIndex + 1} من ${workItems.length}: ${image.alt}`);
+  }
 
   function closeLightbox() {
     if (!lightbox?.classList.contains('open')) return;
@@ -506,13 +522,11 @@
     lastFocus?.focus();
   }
 
-  $$('.work-item').forEach(item => item.addEventListener('click', () => {
-    const image = $('img', item);
-    if (!lightbox || !lightboxImage || !image) return;
+  workItems.forEach((item, index) => item.addEventListener('click', () => {
+    if (!lightbox || !lightboxImage) return;
     lastFocus = item;
     previousBodyOverflow = document.body.style.overflow;
-    lightboxImage.src = image.src;
-    lightboxImage.alt = image.alt;
+    showLightboxItem(index);
     lightbox.classList.add('open');
     lightbox.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -525,11 +539,18 @@
   });
 
   addEventListener('keydown', event => {
+    const lightboxOpen = lightbox?.classList.contains('open');
     if (event.key === 'Escape') {
-      if (lightbox?.classList.contains('open')) closeLightbox();
+      if (lightboxOpen) closeLightbox();
       else closeMenu(true);
+      return;
     }
-    if (event.key === 'Tab' && lightbox?.classList.contains('open')) {
+    if (lightboxOpen && (event.key === 'ArrowRight' || event.key === 'ArrowLeft')) {
+      event.preventDefault();
+      showLightboxItem(lightboxIndex + (event.key === 'ArrowRight' ? -1 : 1));
+      return;
+    }
+    if (event.key === 'Tab' && lightboxOpen) {
       event.preventDefault();
       lightboxClose?.focus();
     }
