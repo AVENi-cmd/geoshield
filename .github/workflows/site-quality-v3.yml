@@ -34,10 +34,26 @@ jobs:
           import json, re
 
           root = Path('.')
-          required = ['index.html','style.css','enhancements.css','refinements.css','review-fixes.css','script.js','404.html','sitemap.xml','robots.txt','llms.txt','README.md']
+          required = [
+              'index.html','style.css','enhancements.css','refinements.css',
+              'review-fixes-base.css','review-fixes.css','script.js','404.html',
+              'sitemap.xml','robots.txt','llms.txt','README.md','images/favicon.svg'
+          ]
           missing = [p for p in required if not (root / p).is_file()]
           if missing:
               raise SystemExit('Missing required files: ' + ', '.join(missing))
+
+          # Prevent accidental publication of local secrets, private keys, and backup files.
+          forbidden_names = {'.env', '.env.local', '.env.production', '.env.development'}
+          forbidden_suffixes = {'.pem', '.key', '.p12', '.pfx', '.bak', '.backup'}
+          sensitive = []
+          for path in root.rglob('*'):
+              if not path.is_file() or '.git' in path.parts:
+                  continue
+              if path.name in forbidden_names or path.suffix.lower() in forbidden_suffixes:
+                  sensitive.append(path.as_posix())
+          if sensitive:
+              raise SystemExit('Sensitive/backup files must not be published: ' + ', '.join(sorted(sensitive)))
 
           html = (root / 'index.html').read_text(encoding='utf-8')
           script = (root / 'script.js').read_text(encoding='utf-8')
@@ -73,6 +89,7 @@ jobs:
               'Quote notes': html.count('class="quote-note"') == 8 and 'class="polish-price quote-note"' in html,
               'Quote CTA': 'احصل على عرض السعر' in script,
               'Canonical': '<link rel="canonical" href="https://aveni-cmd.github.io/geoshield/">' in html,
+              'Favicon': '<link rel="icon" type="image/svg+xml" href="images/favicon.svg">' in html,
               'FAQ': 'id="faq"' in html,
               'Booking': 'id="booking"' in html and 'id="bookingForm"' in html,
               'Aftercare heading': 'توصيات ما بعد التركيب' in html,
@@ -81,6 +98,7 @@ jobs:
               'No superseded institution wording': 'مؤسسة عواد الظفيري' not in '\n'.join((html, readme, llms, error_html)),
               'No branch photography': 'branch-photo' not in html and 'branch-image' not in html,
               'No legacy additional-service cards': 'mini-service-card' not in html and 'mini-services' not in html,
+              'No legacy card hiding workaround': '.mini-services' not in review_css,
           }
           failed = [name for name, ok in checks.items() if not ok]
           if failed:
@@ -122,12 +140,18 @@ jobs:
 
           class Audit(HTMLParser):
               def __init__(self):
-                  super().__init__(); self.ids=[]; self.anchors=[]; self.images=[]; self.assets=[]; self.h1=0
+                  super().__init__()
+                  self.ids=[]; self.anchors=[]; self.images=[]; self.assets=[]; self.h1=0
+                  self.blank_without_noopener=[]
               def handle_starttag(self, tag, attrs):
                   a = dict(attrs)
                   if a.get('id'): self.ids.append(a['id'])
                   if tag == 'h1': self.h1 += 1
-                  if tag == 'a' and a.get('href','').startswith('#') and len(a['href']) > 1: self.anchors.append(a['href'][1:])
+                  if tag == 'a':
+                      href = a.get('href','')
+                      if href.startswith('#') and len(href) > 1: self.anchors.append(href[1:])
+                      if a.get('target') == '_blank' and 'noopener' not in a.get('rel','').split():
+                          self.blank_without_noopener.append(href)
                   if tag == 'img' and a.get('src'): self.images.append(a); self.assets.append(a['src'])
                   elif tag == 'script' and a.get('src'): self.assets.append(a['src'])
                   elif tag == 'link' and a.get('href'): self.assets.append(a['href'])
@@ -137,6 +161,8 @@ jobs:
           if dupes: raise SystemExit('Duplicate IDs: ' + ', '.join(dupes))
           broken = sorted(set(audit.anchors) - set(audit.ids))
           if broken: raise SystemExit('Broken internal anchors: ' + ', '.join(broken))
+          if audit.blank_without_noopener:
+              raise SystemExit('target=_blank links missing rel=noopener: ' + ', '.join(audit.blank_without_noopener))
           if audit.h1 != 1: raise SystemExit(f'Expected one H1, found {audit.h1}')
           for image in audit.images:
               if not image.get('alt','').strip(): raise SystemExit('Image missing alt: ' + image.get('src',''))
