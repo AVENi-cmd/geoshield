@@ -328,45 +328,40 @@
   const bookingServiceSelect = $('select[name="service"]');
   const bookingServiceValues = new Set(bookingServiceSelect ? [...bookingServiceSelect.options].map(option => option.value || option.textContent.trim()) : []);
 
-  function chooseServiceAndBook(serviceName) {
-    if (!bookingServiceSelect || !bookingSection || !bookingServiceValues.has(serviceName)) return;
-    bookingServiceSelect.value = serviceName;
+  function chooseServiceAndBook(serviceName = '') {
+    if (!bookingServiceSelect || !bookingSection) return;
+    if (serviceName && bookingServiceValues.has(serviceName)) bookingServiceSelect.value = serviceName;
     bookingSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
     setTimeout(() => bookingServiceSelect.focus({ preventScroll: true }), reduceMotion ? 0 : 450);
   }
 
-  const serviceBookingMap = new Map([
-    ['أفلام حماية PPF', 'PPF'],
-    ['العازل الحراري', 'عازل حراري'],
-    ['نانو سيراميك', 'نانو سيراميك']
-  ]);
-
   $$('.service-card').forEach(card => {
     const title = $('h3', card)?.textContent.trim();
-    const serviceName = serviceBookingMap.get(title);
     const copy = card.querySelector(':scope > div');
-    if (!serviceName || !copy || !bookingServiceValues.has(serviceName) || copy.querySelector('.service-book')) return;
+    if (!title || !copy || copy.querySelector('.service-book')) return;
     const action = document.createElement('button');
     action.type = 'button';
     action.className = 'package-book service-book';
     action.setAttribute('aria-label', `احجز خدمة ${title}`);
     action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احجز الخدمة</span>`;
-    action.addEventListener('click', () => chooseServiceAndBook(serviceName));
+    action.addEventListener('click', () => chooseServiceAndBook());
     copy.append(action);
   });
 
   const packageBookingByPanel = new Map([
-    ['standard', 'PPF'],
-    ['half', 'عازل حراري'],
-    ['full', 'نانو سيراميك']
+    ['standard', ['حماية قياسية', 'حماية نصفية', 'حماية كاملة']],
+    ['half', ['تظليل v-nano', 'تظليل apex', 'تظليل c2']],
+    ['full', ['نانو جرافيني g5 (اربع طبقات)', 'نانو سيراميك t3 (اربع طبقات)']]
   ]);
 
   $$('.package-panel article').forEach(card => {
     if (card.querySelector('.package-book')) return;
     const panel = card.closest('.package-panel');
-    const serviceName = card.dataset.bookingService || packageBookingByPanel.get(panel?.dataset.panel) || $('small', card)?.textContent.trim();
+    const panelCards = panel ? $$('article', panel) : [];
+    const cardIndex = panelCards.indexOf(card);
+    const serviceName = card.dataset.bookingService || packageBookingByPanel.get(panel?.dataset.panel)?.[cardIndex] || '';
     if (!serviceName || !bookingServiceValues.has(serviceName)) return;
-    const visibleLabel = card.dataset.packageLabel || $('h3', card)?.textContent.trim() || serviceName;
+    const visibleLabel = card.dataset.packageLabel || serviceName;
     const action = document.createElement('button');
     action.type = 'button';
     action.className = 'package-book';
