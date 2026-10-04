@@ -330,11 +330,22 @@
 
   $$('.branch-card').forEach(card => {
     const phone = $('.branch-phone', card);
+    const actions = $('.actions', card);
     const whatsApp = $('.actions a[href*="wa.me"]', card);
     const map = $('.actions a[href*="maps.app.goo.gl"]', card);
+    const branchKey = card.dataset.branchCard;
     if (phone && !phone.querySelector('.ui-icon')) phone.insertAdjacentHTML('afterbegin', iconSpan(uiIcons.phone, 'ui-icon branch-phone-icon'));
     if (whatsApp && !whatsApp.querySelector('.ui-icon')) whatsApp.insertAdjacentHTML('afterbegin', iconSpan(uiIcons.message));
     if (map && !map.querySelector('.ui-icon')) map.insertAdjacentHTML('afterbegin', iconSpan(uiIcons.map));
+    if (actions && branchKey && branches[branchKey] && !actions.querySelector('.branch-book')) {
+      const book = document.createElement('button');
+      book.type = 'button';
+      book.className = 'button ghost branch-book';
+      book.dataset.bookBranch = branchKey;
+      book.setAttribute('aria-label', `احجز موعدًا في ${branches[branchKey].title}`);
+      book.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احجز في هذا الفرع</span>`;
+      actions.append(book);
+    }
   });
 
   const weekdayNames = {
@@ -451,6 +462,15 @@
 
   branchSelect?.addEventListener('change', () => syncQuickContact(branchSelect.value));
   syncQuickContact(branchSelect?.value || 'hofuf');
+
+  $$('[data-book-branch]').forEach(button => button.addEventListener('click', () => {
+    const key = button.dataset.bookBranch;
+    if (!branchSelect || !bookingSection || !branches[key]) return;
+    branchSelect.value = key;
+    syncQuickContact(key);
+    bookingSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    setTimeout(() => branchSelect.focus({ preventScroll: true }), reduceMotion ? 0 : 450);
+  }));
 
   const lightbox = $('#lightbox');
   const lightboxImage = lightbox ? $('img', lightbox) : null;
