@@ -100,6 +100,7 @@
   let timer;
   let touchStartX = 0;
 
+  hero?.setAttribute('role', 'region');
   hero?.setAttribute('aria-roledescription', 'carousel');
   if (previousArrow) previousArrow.innerHTML = uiIcons.previous;
   if (nextArrow) nextArrow.innerHTML = uiIcons.next;
@@ -278,7 +279,43 @@
 
   const packageTabs = $$('.package-tabs button');
   const packagePanels = $$('.package-panel');
+  $('.package-tabs')?.setAttribute('aria-orientation', 'horizontal');
   setupTabs(packageTabs, packagePanels, button => `package-${button.dataset.package}`, panel => `package-${panel.dataset.panel}`);
+
+  const bookingSection = $('#booking');
+  const bookingServiceSelect = $('select[name="service"]');
+  const bookingServiceValues = new Set(bookingServiceSelect ? [...bookingServiceSelect.options].map(option => option.value || option.textContent.trim()) : []);
+
+  function chooseServiceAndBook(serviceName) {
+    if (!bookingServiceSelect || !bookingSection || !bookingServiceValues.has(serviceName)) return;
+    bookingServiceSelect.value = serviceName;
+    bookingSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    setTimeout(() => bookingServiceSelect.focus({ preventScroll: true }), reduceMotion ? 0 : 450);
+  }
+
+  $$('.package-panel article').forEach(card => {
+    if (card.querySelector('.package-book')) return;
+    const serviceName = $('small', card)?.textContent.trim();
+    if (!serviceName || !bookingServiceValues.has(serviceName)) return;
+    const action = document.createElement('button');
+    action.type = 'button';
+    action.className = 'package-book';
+    action.setAttribute('aria-label', `احجز باقة ${serviceName}`);
+    action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احجز هذه الباقة</span>`;
+    action.addEventListener('click', () => chooseServiceAndBook(serviceName));
+    card.append(action);
+  });
+
+  const polish = $('.polish');
+  if (polish && bookingServiceValues.has('تلميع كامل') && !polish.querySelector('.package-book')) {
+    const action = document.createElement('button');
+    action.type = 'button';
+    action.className = 'package-book polish-book';
+    action.setAttribute('aria-label', 'احجز خدمة التلميع الكامل');
+    action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احجز الخدمة</span>`;
+    action.addEventListener('click', () => chooseServiceAndBook('تلميع كامل'));
+    polish.append(action);
+  }
 
   const branches = {
     hofuf: {
