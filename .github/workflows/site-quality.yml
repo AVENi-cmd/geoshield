@@ -37,7 +37,7 @@ jobs:
 
           root = Path('.')
           required = [
-              'index.html', 'style.css', 'enhancements.css', 'script.js',
+              'index.html', 'style.css', 'enhancements.css', 'refinements.css', 'script.js',
               '404.html', 'sitemap.xml', 'robots.txt', 'llms.txt', 'README.md'
           ]
           missing = [path for path in required if not (root / path).is_file()]
@@ -74,11 +74,13 @@ jobs:
               'No superseded institution wording': 'مؤسسة عواد الظفيري' not in '\n'.join((html, error_html, readme, llms)),
               'Hofuf phone': '055 329 1112' in html and '966553291112' in html,
               'Khafji phone': '053 572 8805' in html and '966535728805' in html,
-              'Friday visible hours for both branches': html.count('<span>الجمعة</span><strong>٤ - ٨ م</strong>') == 2,
-              'Friday runtime hours': 'Fri: [[960, 1200]]' in script,
-              'Friday JSON-LD hours for both branches': html.count('"dayOfWeek":"Friday","opens":"16:00","closes":"20:00"') == 2,
-              'Friday README hours': '| الجمعة | ٤ - ٨ م | — |' in readme,
-              'Friday llms.txt hours': 'Friday: 16:00-20:00' in llms,
+              'Friday visible hours for both branches': html.count('<span>الجمعة</span><strong>٤:٠٠ - ١٠:٠٠ م</strong>') == 2,
+              'Friday runtime hours': 'Fri: [[960, 1320]]' in script,
+              'Friday JSON-LD hours for both branches': html.count('"dayOfWeek":"Friday","opens":"16:00","closes":"22:00"') == 2,
+              'Friday README hours': '| الجمعة | ٤:٠٠ - ١٠:٠٠ م | — |' in readme,
+              'Friday llms.txt hours': 'Friday: 16:00-22:00' in llms,
+              'Refinement stylesheet linked': '<link rel="stylesheet" href="refinements.css">' in html,
+              'Aftercare heading present': 'توصيات ما بعد التركيب' in html,
               'Saudi phone validation': 'pattern="05[0-9]{8}" maxlength="10"' in html,
               'Booking section': 'id="booking"' in html and 'id="bookingForm"' in html,
               'FAQ section': 'id="faq"' in html,
