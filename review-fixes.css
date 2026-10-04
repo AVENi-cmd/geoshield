@@ -41,7 +41,7 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 .package-panel{width:100%;min-width:0}
 .package-panel.active{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:20px}
 .package-panel[hidden]{display:none!important}
-.package-panel:not(.package-services) article{position:relative;overflow:hidden;display:flex;flex-direction:column;width:100%;min-width:0;min-height:610px;padding:250px 28px 28px;border:1px solid rgba(17,20,24,.11);border-radius:28px;background-color:#fff;background-position:center top;background-size:100% auto;background-repeat:no-repeat;color:#171a1d;box-shadow:0 20px 55px rgba(17,20,24,.075)}
+.package-panel:not(.package-services) article{position:relative;overflow:hidden;display:flex;flex-direction:column;width:100%;min-width:0;min-height:610px;padding:calc(56.25% + 28px) 28px 28px;border:1px solid rgba(17,20,24,.11);border-radius:28px;background-color:#fff;background-position:center top;background-size:100% auto;background-repeat:no-repeat;color:#171a1d;box-shadow:0 20px 55px rgba(17,20,24,.075)}
 .package-panel:not(.package-services) article:nth-child(1),.package-panel:not(.package-services) article:nth-child(2),.package-panel:not(.package-services) article:nth-child(3){grid-column:span 4}
 .package-panel[data-panel=nano] article{grid-column:span 6}
 .package-eyebrow{display:block;margin:0 0 8px;color:#a94722;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
@@ -51,9 +51,9 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 .package-panel article .package-book{margin-top:18px}
 
 /* Explicit package artwork mapping. Never depend on card order. */
-.package-panel article[data-package-id="ppf-standard"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-02-optimized.webp')}
-.package-panel article[data-package-id="ppf-half"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-03-optimized.webp')}
-.package-panel article[data-package-id="ppf-full"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-04-optimized.webp')}
+.package-panel article[data-package-id="ppf-standard"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-premium-02-optimized.webp')}
+.package-panel article[data-package-id="ppf-half"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-premium-04-optimized.webp')}
+.package-panel article[data-package-id="ppf-full"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-mercedes-jawhara-optimized.webp')}
 .package-panel article[data-package-id="tint-vnano"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-premium-02-optimized.webp')}
 .package-panel article[data-package-id="tint-apex"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-premium-03-optimized.webp')}
 .package-panel article[data-package-id="tint-c2"]{background-image:linear-gradient(to bottom,transparent 62%,#fff 100%),url('images/services/geoshield-package-premium-04-optimized.webp')}
@@ -82,12 +82,15 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   .package-tabs{max-width:100%;grid-template-columns:repeat(2,minmax(0,1fr));border-radius:18px}
   .package-tabs button{min-height:44px}
   .package-panel.active{grid-template-columns:1fr;gap:16px}
-  .package-panel:not(.package-services) article:nth-child(n),.package-panel[data-panel=nano] article{grid-column:1;min-height:560px;padding:245px 22px 24px;background-size:100% auto;border-radius:22px}
+  .package-panel:not(.package-services) article:nth-child(n),.package-panel[data-panel=nano] article{grid-column:1;min-height:0;padding:calc(56.25% + 24px) 22px 22px;background-size:100% auto;border-radius:22px}
+  .package-panel article .package-description{margin-top:14px;line-height:1.85}
+  .package-panel article .quote-note{margin-top:24px;padding-top:18px}
+  .package-panel article .package-book{margin-top:14px}
   .package-services .polish{padding:245px 22px 26px;background-size:100% auto;border-radius:22px}
   .work-grid,.service-stack{width:100%;max-width:100%;overflow:hidden}
 }
 @media(max-width:430px){
   .shell{width:calc(100% - 24px)}
-  .package-panel:not(.package-services) article:nth-child(n){min-height:530px;padding-top:230px}
+  .package-panel:not(.package-services) article:nth-child(n){padding-top:calc(56.25% + 22px)}
   .trust-grid>div{padding-inline-end:52px}
 }
