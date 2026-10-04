@@ -1,0 +1,146 @@
+name: Site quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Check JavaScript syntax
+        run: node --check script.js
+
+      - name: Validate critical site data and price-free UI
+        shell: python
+        run: |
+          from pathlib import Path
+          from html.parser import HTMLParser
+          from urllib.parse import urlsplit
+          import json
+          import re
+
+          root = Path('.')
+          required = ['index.html','style.css','enhancements.css','refinements.css','review-fixes.css','script.js','404.html','sitemap.xml','robots.txt','llms.txt','README.md']
+          missing = [p for p in required if not (root / p).is_file()]
+          if missing:
+              raise SystemExit('Missing required files: ' + ', '.join(missing))
+
+          html = (root / 'index.html').read_text(encoding='utf-8')
+          script = (root / 'script.js').read_text(encoding='utf-8')
+          readme = (root / 'README.md').read_text(encoding='utf-8')
+          llms = (root / 'llms.txt').read_text(encoding='utf-8')
+          error_html = (root / '404.html').read_text(encoding='utf-8')
+
+          def visible_text(source):
+              return re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', source)).strip()
+
+          agency = 'وكالة جيوشيلد لفرعي الأحساء والخفجي تابعة لمجموعة عواد الظفيري'
+          public_prices = ['2,300','2,600','2,400','3,300','3,600','3,700','3,950','3,900','4,200','4,700','5,000','9,500','10,500','11,500']
+          public_surface = '\n'.join((html, readme, llms))
+          leaked = [value for value in public_prices if value in public_surface]
+          if leaked:
+              raise SystemExit('Public package prices must stay removed: ' + ', '.join(leaked))
+
+          checks = {
+              'Arabic RTL': '<html lang="ar" dir="rtl">' in html,
+              'Group ownership homepage': agency in visible_text(html),
+              'Group ownership 404': agency in visible_text(error_html),
+              'No superseded institution wording': 'مؤسسة عواد الظفيري' not in '\n'.join((html, readme, llms, error_html)),
+              'Hofuf phone': '055 329 1112' in html and '966553291112' in html,
+              'Khafji phone': '053 572 8805' in html and '966535728805' in html,
+              'Friday visible hours': html.count('<span>الجمعة</span><strong>٤:٠٠ م - ١٠:٠٠ م</strong>') == 2,
+              'Friday runtime hours': 'Fri: [[960, 1320]]' in script,
+              'Friday JSON-LD': html.count('"dayOfWeek":"Friday","opens":"16:00","closes":"22:00"') == 2,
+              'Friday README': '| الجمعة | ٤:٠٠ م - ١٠:٠٠ م | — |' in readme,
+              'Friday llms': 'Friday: 16:00-22:00' in llms,
+              'Standalone services tab': 'data-package="services">خدمات منفردة</button>' in html,
+              'Quote notes': html.count('class="quote-note"') == 8 and 'class="polish-price quote-note"' in html,
+              'Quote CTA': 'احصل على عرض السعر' in script,
+              'No VAT pricing sentence': 'الأسعار بالريال ولا تشمل ضريبة القيمة المضافة' not in html,
+              'Price-free README policy': 'لا تُعرض أسعار ثابتة في الموقع' in readme,
+              'Price-free llms policy': 'Package prices are not published as fixed values' in llms,
+              'Modern mini service cards': html.count('class="mini-service-card"') == 4,
+              'Aftercare heading': 'توصيات ما بعد التركيب' in html,
+              'Phone validation': 'pattern="05[0-9]{8}" maxlength="10"' in html,
+              'Canonical': '<link rel="canonical" href="https://aveni-cmd.github.io/geoshield/">' in html,
+              'FAQ': 'id="faq"' in html,
+              'Booking': 'id="booking"' in html and 'id="bookingForm"' in html,
+              'No branch photography': 'branch-photo' not in html and 'branch-image' not in html,
+              '404 noindex': '<meta name="robots" content="noindex,follow">' in error_html,
+          }
+          failed = [name for name, ok in checks.items() if not ok]
+          if failed:
+              raise SystemExit('Critical checks failed: ' + ', '.join(failed))
+
+          protected = [
+              'قياسية C2','قياسية سيراميك','قياسية شاملة','نصفية C2+','نصفية سيراميك','نصفية شاملة','حماية كاملة','حماية كاملة + السقف',
+              'عيوب الصناعة، الفقاعات، التقشير، الاصفرار والتشقق.',
+              'عيوب الصناعة، الفقاعات، التقشير، الاصفرار والانفصال.',
+              '<h3>نانو سيراميك 9H</h3><strong>3 + 5 سنوات</strong><p>3 سنوات للتطبيق و5 سنوات للطبقات.</p>',
+              '<li><b>7 أيام</b><span>بدون غسيل بعد PPF أو السيراميك.</span></li>',
+              '<li><b>48 ساعة</b><span>بدون فتح النوافذ بعد تركيب العازل الحراري.</span></li>',
+              '<li><b>4 ساعات</b><span>بدون مواد كيميائية أو مطر.</span></li>',
+              '<li><b>4 أسابيع</b><span>فحص مجاني خلالها.</span></li>',
+              '<li><b>6 شهور</b><span>صيانة دورية لحفظ الضمان.</span></li>',
+              'عدم الالتزام بالصيانة الدورية يلغي الضمان.',
+          ]
+          for snippet in protected:
+              if snippet not in html:
+                  raise SystemExit('Protected package/warranty content changed: ' + snippet)
+
+          hero_assets = ['images/hero-slider-geoshield-protection.webp','images/hero-slider-geoshield-installments.webp','images/hero-slider-geoshield-ppf.webp']
+          positions = [html.find(asset) for asset in hero_assets]
+          if any(p < 0 for p in positions) or positions != sorted(positions):
+              raise SystemExit('Hero slide order changed unexpectedly')
+          if 'hero-slider-geoshield-installments.webp" width="1920" height="768" loading="eager" fetchpriority="high"' not in html:
+              raise SystemExit('Installments hero priority changed unexpectedly')
+
+          jsonld = re.findall(r'<script\s+type="application/ld\+json">\s*(.*?)\s*</script>', html, re.S)
+          if not jsonld:
+              raise SystemExit('Missing JSON-LD')
+          for block in jsonld:
+              json.loads(block)
+
+          class Audit(HTMLParser):
+              def __init__(self):
+                  super().__init__(); self.ids=[]; self.anchors=[]; self.images=[]; self.assets=[]; self.h1=0
+              def handle_starttag(self, tag, attrs):
+                  a = dict(attrs)
+                  if a.get('id'): self.ids.append(a['id'])
+                  if tag == 'h1': self.h1 += 1
+                  if tag == 'a' and a.get('href','').startswith('#') and len(a['href']) > 1: self.anchors.append(a['href'][1:])
+                  if tag == 'img' and a.get('src'): self.images.append(a); self.assets.append(a['src'])
+                  elif tag == 'script' and a.get('src'): self.assets.append(a['src'])
+                  elif tag == 'link' and a.get('href'): self.assets.append(a['href'])
+
+          audit = Audit(); audit.feed(html)
+          dupes = sorted({x for x in audit.ids if audit.ids.count(x) > 1})
+          if dupes: raise SystemExit('Duplicate IDs: ' + ', '.join(dupes))
+          broken = sorted(set(audit.anchors) - set(audit.ids))
+          if broken: raise SystemExit('Broken internal anchors: ' + ', '.join(broken))
+          if audit.h1 != 1: raise SystemExit(f'Expected one H1, found {audit.h1}')
+          for image in audit.images:
+              if not image.get('alt','').strip(): raise SystemExit('Image missing alt: ' + image.get('src',''))
+              if not image.get('width') or not image.get('height'): raise SystemExit('Image missing dimensions: ' + image.get('src',''))
+          for ref in audit.assets:
+              if ref.startswith(('http://','https://','//','data:')): continue
+              path = urlsplit(ref).path.lstrip('/')
+              if path.startswith('geoshield/'): path = path[len('geoshield/'):]
+              if path and not (root / path).is_file(): raise SystemExit('Broken local reference: ' + path)
+
+          print('All GeoShield price-free site quality checks passed.')
