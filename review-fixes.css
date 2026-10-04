@@ -21,9 +21,6 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 .trust-grid>div:nth-child(2)::after{content:"◇"}
 .trust-grid>div:nth-child(3)::after{content:"↻"}
 .trust-grid>div:nth-child(4)::after{content:"✓"}
-/* Temporary compatibility rule until the legacy 10,000+ text is migrated in HTML. */
-.trust-grid>div:first-child>b{font-size:0}
-.trust-grid>div:first-child>b::before{content:"+5,000";font-size:clamp(28px,3vw,48px);font-weight:700;line-height:1}
 
 /* Core service artwork uses a 1920×674 canvas; never crop it. */
 .service-stack{width:100%;overflow:hidden}
