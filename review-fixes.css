@@ -142,6 +142,65 @@ section,
   .services .heading h2 br{
     display:none;
   }
+
+  /* Mobile work gallery — one calm horizontal showcase instead of a long image stack. */
+  .work.section{
+    padding-top:58px;
+    padding-bottom:58px;
+  }
+  .work .heading{
+    margin-bottom:26px;
+  }
+  .work-grid{
+    display:flex!important;
+    columns:auto!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    padding:0 0 10px!important;
+    gap:12px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    align-items:flex-start!important;
+    scroll-snap-type:x mandatory!important;
+    scroll-padding-inline:0;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    touch-action:pan-x pan-y;
+  }
+  .work-grid::-webkit-scrollbar{
+    display:none;
+  }
+  .work-item,
+  .work-item.wide{
+    display:block!important;
+    flex:0 0 78%!important;
+    width:auto!important;
+    max-width:none!important;
+    margin:0!important;
+    border:1px solid rgba(255,255,255,.11)!important;
+    border-radius:18px!important;
+    overflow:hidden!important;
+    background:#15191d;
+    box-shadow:0 16px 34px rgba(0,0,0,.2);
+    scroll-snap-align:start;
+    scroll-snap-stop:normal;
+    touch-action:pan-x pan-y;
+  }
+  .work-item:first-child{
+    flex-basis:92%!important;
+  }
+  .work-item img,
+  .work-item.wide img{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    max-width:100%!important;
+    object-fit:contain!important;
+    transform:none!important;
+    background:#15191d;
+  }
 }
 
 @media(max-width:390px){
@@ -154,5 +213,17 @@ section,
   .services .heading h2::after{
     font-size:28px;
     line-height:1.28;
+  }
+
+  .work-grid{
+    gap:10px!important;
+  }
+  .work-item,
+  .work-item.wide{
+    flex-basis:82%!important;
+    border-radius:16px!important;
+  }
+  .work-item:first-child{
+    flex-basis:94%!important;
   }
 }
