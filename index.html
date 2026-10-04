@@ -287,64 +287,73 @@
       <div class="shell">
         <div class="heading">
           <span class="kicker">الباقات</span>
-          <h2>اختر مستوى الحماية المناسب.</h2>
-          <p>اختر الباقة المناسبة ثم احصل على عرض السعر الحالي حسب حجم السيارة والعروض المتاحة.</p>
+          <h2>حماية بمستوى مختلف.</h2>
+          <p>اختر الخدمة المناسبة ثم احصل على عرض السعر الحالي حسب حجم السيارة والعروض المتاحة.</p>
         </div>
         <div class="package-tabs" role="tablist" aria-label="فئات باقات الحماية والخدمات">
-          <button class="active" type="button" role="tab" aria-selected="true" data-package="standard">حماية قياسية</button>
-          <button type="button" role="tab" aria-selected="false" data-package="half">حماية نصفية</button>
-          <button type="button" role="tab" aria-selected="false" data-package="full">حماية كاملة</button>
-          <button type="button" role="tab" aria-selected="false" data-package="services">خدمات منفردة</button>
+          <button class="active" type="button" role="tab" aria-selected="true" data-package="ppf">حماية PPF</button>
+          <button type="button" role="tab" aria-selected="false" data-package="tint">العازل الحراري</button>
+          <button type="button" role="tab" aria-selected="false" data-package="nano">نانو سيراميك</button>
+          <button type="button" role="tab" aria-selected="false" data-package="services">التلميع</button>
         </div>
 
-        <div class="package-panel active" data-panel="standard">
-          <article>
-            <small>قياسية C2</small><h3>حماية أساسية متوازنة</h3>
-            <ul><li>عازل C2</li><li>نانو داخلي</li><li>ضمان بلا حدود</li><li>صيانة 6 شهور</li></ul>
+        <div class="package-panel active" data-panel="ppf">
+          <article data-package-id="ppf-standard" data-booking-service="حماية قياسية" data-package-label="الحماية القياسية">
+            <span class="package-eyebrow">PPF PREMIUM</span>
+            <h3>الحماية القياسية</h3>
+            <p class="package-description">حماية ذكية واقتصادية للأجزاء الأكثر عرضة للأتربة والحصى المتطاير أثناء القيادة اليومية والسفر.</p>
             <div class="quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>
           </article>
-          <article class="featured">
-            <i>موصى بها</i><small>قياسية سيراميك</small><h3>لمعان وحماية سيراميكية</h3>
-            <ul><li>نانو سيراميك 4 طبقات</li><li>نانو داخلي</li><li>ضمان 5 سنوات</li><li>صيانة</li></ul>
+          <article class="featured" data-package-id="ppf-half" data-booking-service="حماية نصفية" data-package-label="الحماية النصفية">
+            <span class="package-eyebrow">PPF PREMIUM</span>
+            <h3>الحماية النصفية</h3>
+            <p class="package-description">تغطية أوسع لواجهة السيارة ومناطق الصدمات والاحتكاك أثناء الوقوف والزحام.</p>
             <div class="quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>
           </article>
-          <article>
-            <small>قياسية شاملة</small><h3>العازل والسيراميك معًا</h3>
-            <ul><li>عازل C2</li><li>سيراميك 4 طبقات</li><li>نانو داخلي + بلاستيك دواسات</li><li>ضمان + صيانة</li></ul>
-            <div class="quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>
-          </article>
-        </div>
-
-        <div class="package-panel" data-panel="half">
-          <article>
-            <small>نصفية C2+</small><h3>حماية نصفية عملية</h3>
-            <ul><li>عازل C2</li><li>نانو داخلي</li><li>طبقة نانو خارجي</li><li>ضمان + صيانة</li></ul>
-            <div class="quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>
-          </article>
-          <article class="featured">
-            <small>نصفية سيراميك</small><h3>حماية سيراميكية موسعة</h3>
-            <ul><li>سيراميك 4 طبقات</li><li>بلاستيك دواسات</li><li>ضمان 5 سنوات</li><li>صيانة</li></ul>
-            <div class="quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>
-          </article>
-          <article>
-            <small>نصفية شاملة</small><h3>تجهيز متكامل</h3>
-            <ul><li>C2 + سيراميك 4 طبقات</li><li>نانو داخلي</li><li>حماية زجاجية</li><li>ضمان + صيانة</li></ul>
+          <article data-package-id="ppf-full" data-booking-service="حماية كاملة" data-package-label="الحماية الكاملة">
+            <span class="package-eyebrow">PPF PREMIUM</span>
+            <h3>الحماية الكاملة</h3>
+            <p class="package-description">أقصى مستوى من التغطية للحفاظ على طلاء السيارة ولمعانها.</p>
             <div class="quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>
           </article>
         </div>
 
-        <div class="package-panel" data-panel="full">
-          <article class="featured">
-            <small>حماية كاملة</small><h3>حماية شاملة للسيارة</h3>
-            <ul><li>C2</li><li>نانو داخلي</li><li>حماية زجاجية</li><li>ضمان بلا حدود + صيانة</li></ul>
+        <div class="package-panel" data-panel="tint">
+          <article data-package-id="tint-vnano" data-booking-service="تظليل v-nano" data-package-label="تظليل V-NANO">
+            <span class="package-eyebrow">THERMAL INSULATION</span>
+            <h3>V-NANO Premium</h3>
+            <p class="package-description">عازل حراري متطور يساعد على حماية المقصورة وتقليل أثر الحرارة.</p>
             <div class="quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>
           </article>
-          <article>
-            <small>حماية كاملة + السقف</small><h3>أعلى مستوى حماية</h3>
-            <ul><li>جميع مزايا الحماية الكاملة</li><li>حماية السقف</li></ul>
+          <article class="featured" data-package-id="tint-apex" data-booking-service="تظليل apex" data-package-label="تظليل APEX">
+            <span class="package-eyebrow">THERMAL INSULATION</span>
+            <h3>APEX Premium</h3>
+            <p class="package-description">الفئة الأعلى لمن يبحث عن مستوى متقدم من الأداء الحراري.</p>
+            <div class="quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>
+          </article>
+          <article data-package-id="tint-c2" data-booking-service="تظليل c2" data-package-label="تظليل C2">
+            <span class="package-eyebrow">THERMAL INSULATION</span>
+            <h3>C2 Premium</h3>
+            <p class="package-description">عزل حراري بقيمة متوازنة للاستخدام اليومي.</p>
             <div class="quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>
           </article>
         </div>
+
+        <div class="package-panel" data-panel="nano">
+          <article class="featured" data-package-id="nano-g5" data-booking-service="نانو جرافيني g5 (اربع طبقات)" data-package-label="نانو جرافيني G5">
+            <span class="package-eyebrow">NANO GRAPHENE</span>
+            <h3>G5 Premium · 4 طبقات</h3>
+            <p class="package-description">تقنية نانو جرافين متقدمة تمنح سطح السيارة لمعانًا وحماية إضافية.</p>
+            <div class="quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>
+          </article>
+          <article data-package-id="nano-t3" data-booking-service="نانو سيراميك t3 (اربع طبقات)" data-package-label="نانو سيراميك T3">
+            <span class="package-eyebrow">NANO CERAMIC</span>
+            <h3>T3 Premium · 4 طبقات</h3>
+            <p class="package-description">حماية سيراميكية متكاملة للحفاظ على بريق السيارة وسهولة العناية.</p>
+            <div class="quote-note"><span>السعر حسب حجم السيارة والعروض الحالية</span></div>
+          </article>
+        </div>
+
         <div class="package-panel package-services" data-panel="services">
           <div class="polish">
             <div class="polish-copy"><span>خدمة منفردة</span><h3>تلميع كامل داخلي وخارجي</h3><p>يشمل واكس نانو مجانًا.</p></div>
