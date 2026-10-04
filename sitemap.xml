@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://aveni-cmd.github.io/geoshield/</loc>
     <lastmod>2026-10-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image><image:loc>https://aveni-cmd.github.io/geoshield/images/hero-slider-geoshield-protection.webp</image:loc><image:title>حلول حماية السيارات من جيوشيلد</image:title></image:image>
+    <image:image><image:loc>https://aveni-cmd.github.io/geoshield/images/hero-slider-geoshield-installments.webp</image:loc><image:title>خيارات الدفع والتقسيط لدى جيوشيلد</image:title></image:image>
+    <image:image><image:loc>https://aveni-cmd.github.io/geoshield/images/hero-slider-geoshield-ppf.webp</image:loc><image:title>أفلام حماية الطلاء PPF من جيوشيلد</image:title></image:image>
+    <image:image><image:loc>https://aveni-cmd.github.io/geoshield/images/hero-geoshield.webp</image:loc><image:title>مركز جيوشيلد للعناية والحماية</image:title></image:image>
+    <image:image><image:loc>https://aveni-cmd.github.io/geoshield/images/service-ppf-protection.webp</image:loc><image:title>تركيب أفلام حماية PPF</image:title></image:image>
+    <image:image><image:loc>https://aveni-cmd.github.io/geoshield/images/service-thermal-insulation.webp</image:loc><image:title>تركيب العازل الحراري للسيارة</image:title></image:image>
+    <image:image><image:loc>https://aveni-cmd.github.io/geoshield/images/service-nano-ceramic.webp</image:loc><image:title>تطبيق النانو سيراميك للسيارة</image:title></image:image>
+    <image:image><image:loc>https://aveni-cmd.github.io/geoshield/images/showcase-1.webp</image:loc><image:title>أعمال جيوشيلد للعناية بالسيارات</image:title></image:image>
+    <image:image><image:loc>https://aveni-cmd.github.io/geoshield/images/showcase-ppf-installation.webp</image:loc><image:title>تركيب فيلم حماية PPF</image:title></image:image>
+    <image:image><image:loc>https://aveni-cmd.github.io/geoshield/images/showcase-ppf-mirror.webp</image:loc><image:title>حماية PPF لمرآة السيارة</image:title></image:image>
+    <image:image><image:loc>https://aveni-cmd.github.io/geoshield/images/showcase-2.webp</image:loc><image:title>تفاصيل سيارة داخل مركز جيوشيلد</image:title></image:image>
+    <image:image><image:loc>https://aveni-cmd.github.io/geoshield/images/showcase-ppf-side-installation.webp</image:loc><image:title>تركيب PPF على جانب السيارة</image:title></image:image>
+    <image:image><image:loc>https://aveni-cmd.github.io/geoshield/images/showcase-premium-detailing.webp</image:loc><image:title>العناية الاحترافية والتفاصيل النهائية للسيارة</image:title></image:image>
   </url>
 </urlset>
