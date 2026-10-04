@@ -17,7 +17,7 @@
   const promiseIcons = [
     '<svg viewBox="0 0 24 24"><path d="M12 3 4 7v5c0 5 3.4 8 8 9 4.6-1 8-4 8-9V7l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>',
     '<svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/><path d="M7 3 4 6M17 3l3 3"/></svg>',
-    '<svg viewBox="0 0 24 24"><path d="M12 3v18M5 7l14 10M19 7 5 17"/><circle cx="12" cy="12" r="9"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M4 5h13v10H4z"/><path d="M7 8h7M7 11h5"/><circle cx="16.5" cy="15.5" r="3.5"/><path d="m16.5 13.8.55 1.1 1.2.18-.87.85.2 1.2-1.08-.57-1.08.57.2-1.2-.87-.85 1.2-.18.55-1.1Z"/><path d="m14.8 18.4-.8 2.6 2.5-1.2 2.5 1.2-.8-2.6"/></svg>',
     '<svg viewBox="0 0 24 24"><path d="M7 20v-9M17 20v-9M4 11h16l-2-6H6l-2 6Z"/><path d="M9 8h6M10 20h4"/></svg>'
   ];
 
