@@ -501,6 +501,8 @@
   const lightboxClose = lightbox ? $('button', lightbox) : null;
   const workItems = $$('.work-item');
   let lightboxIndex = 0;
+  let lightboxTouchStartX = 0;
+  let lightboxTouchStartY = 0;
   let lastFocus = null;
   let previousBodyOverflow = '';
 
@@ -512,6 +514,13 @@
     lightboxImage.src = image.src;
     lightboxImage.alt = image.alt;
     lightbox.setAttribute('aria-label', `عرض الصورة ${lightboxIndex + 1} من ${workItems.length}: ${image.alt}`);
+
+    [-1, 1].forEach(offset => {
+      const neighbour = $('img', workItems[(lightboxIndex + offset + workItems.length) % workItems.length]);
+      if (!neighbour?.src) return;
+      const preload = new Image();
+      preload.src = neighbour.src;
+    });
   }
 
   function closeLightbox() {
@@ -537,6 +546,21 @@
   lightbox?.addEventListener('click', event => {
     if (event.target === lightbox) closeLightbox();
   });
+
+  lightbox?.addEventListener('touchstart', event => {
+    if (event.touches.length !== 1) return;
+    lightboxTouchStartX = event.touches[0].clientX;
+    lightboxTouchStartY = event.touches[0].clientY;
+  }, { passive: true });
+
+  lightbox?.addEventListener('touchend', event => {
+    if (!lightbox.classList.contains('open') || event.changedTouches.length !== 1) return;
+    const distanceX = event.changedTouches[0].clientX - lightboxTouchStartX;
+    const distanceY = event.changedTouches[0].clientY - lightboxTouchStartY;
+    if (Math.abs(distanceX) > 56 && Math.abs(distanceX) > Math.abs(distanceY) * 1.2) {
+      showLightboxItem(lightboxIndex + (distanceX > 0 ? -1 : 1));
+    }
+  }, { passive: true });
 
   addEventListener('keydown', event => {
     const lightboxOpen = lightbox?.classList.contains('open');
