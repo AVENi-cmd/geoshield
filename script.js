@@ -75,13 +75,15 @@
   if ('IntersectionObserver' in window) {
     const navLinks = $$('#nav a[href^="#"]');
     const sections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+    const sectionVisibility = new Map(sections.map(section => [section, 0]));
     const navObserver = new IntersectionObserver(entries => {
-      const visible = entries
-        .filter(entry => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      entries.forEach(entry => sectionVisibility.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0));
+      const visible = [...sectionVisibility.entries()]
+        .filter(([, ratio]) => ratio > 0)
+        .sort((a, b) => b[1] - a[1])[0]?.[0];
       if (!visible) return;
       navLinks.forEach(link => {
-        const active = link.getAttribute('href') === `#${visible.target.id}`;
+        const active = link.getAttribute('href') === `#${visible.id}`;
         if (active) link.setAttribute('aria-current', 'location');
         else link.removeAttribute('aria-current');
       });
@@ -455,11 +457,18 @@
     });
   }
 
-  updateBranchHoursState();
-  setInterval(updateBranchHoursState, 60000);
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) updateBranchHoursState();
-  });
+  let branchHoursTimer = null;
+  function startBranchHoursClock() {
+    updateBranchHoursState();
+    if (branchHoursTimer) clearInterval(branchHoursTimer);
+    branchHoursTimer = setInterval(updateBranchHoursState, 60000);
+  }
+  function stopBranchHoursClock() {
+    if (!branchHoursTimer) return;
+    clearInterval(branchHoursTimer);
+    branchHoursTimer = null;
+  }
+  startBranchHoursClock();
 
   const quickCall = $('.mobile-bar a[href^="tel:"]');
   const quickWhatsApp = $('.mobile-bar a[href*="wa.me"]');
@@ -632,9 +641,10 @@
     .replace(/[۰-۹]/g, digit => '0123456789'['۰۱۲۳۴۵۶۷۸۹'.indexOf(digit)]);
 
   const normalizeSaudiMobile = value => {
-    let normalized = normalizeDigits(value).replace(/[^\d+]/g, '');
-    if (normalized.startsWith('+966')) normalized = `0${normalized.slice(4)}`;
+    let normalized = normalizeDigits(value).replace(/\D/g, '');
+    if (normalized.startsWith('00966')) normalized = `0${normalized.slice(5)}`;
     else if (normalized.startsWith('966')) normalized = `0${normalized.slice(3)}`;
+    else if (normalized.length === 9 && normalized.startsWith('5')) normalized = `0${normalized}`;
     return normalized.slice(0, 10);
   };
 
@@ -678,7 +688,8 @@
   });
 
   const dateInput = $('input[type="date"]');
-  if (dateInput) {
+  function syncBookingMinDate() {
+    if (!dateInput) return;
     const parts = new Intl.DateTimeFormat('en-US', {
       timeZone: 'Asia/Riyadh',
       year: 'numeric',
@@ -688,4 +699,14 @@
     const part = type => parts.find(item => item.type === type)?.value || '';
     dateInput.min = `${part('year')}-${part('month')}-${part('day')}`;
   }
+  syncBookingMinDate();
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      stopBranchHoursClock();
+      return;
+    }
+    startBranchHoursClock();
+    syncBookingMinDate();
+  });
 })();
