@@ -1,0 +1,106 @@
+name: Site quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check JavaScript syntax
+        run: node --check script.js
+
+      - name: Validate critical site data and markup
+        shell: python
+        run: |
+          from pathlib import Path
+          from html.parser import HTMLParser
+          import json
+          import re
+          import sys
+
+          root = Path('.')
+          required = [
+              'index.html', 'style.css', 'enhancements.css', 'script.js',
+              '404.html', 'sitemap.xml', 'robots.txt', 'llms.txt'
+          ]
+          missing = [path for path in required if not (root / path).is_file()]
+          if missing:
+              raise SystemExit(f"Missing required files: {', '.join(missing)}")
+
+          html = (root / 'index.html').read_text(encoding='utf-8')
+          script = (root / 'script.js').read_text(encoding='utf-8')
+
+          checks = {
+              'Arabic RTL document': '<html lang="ar" dir="rtl">' in html,
+              'Group ownership': 'مجموعة عواد الظفيري' in html,
+              'Hofuf phone': '055 329 1112' in html and '966553291112' in html,
+              'Khafji phone': '053 572 8805' in html and '966535728805' in html,
+              'Friday visible hours for both branches': html.count('<span>الجمعة</span><strong>٤ - ٨ م</strong>') == 2,
+              'Friday runtime hours': 'Fri: [[960, 1200]]' in script,
+              'Saudi phone validation': 'pattern="05[0-9]{8}" maxlength="10"' in html,
+              'Booking section': 'id="booking"' in html and 'id="bookingForm"' in html,
+              'FAQ section': 'id="faq"' in html,
+              'No branch photography': 'branch-photo' not in html and 'branch-image' not in html,
+          }
+
+          failed = [name for name, ok in checks.items() if not ok]
+          if failed:
+              raise SystemExit('Critical checks failed: ' + ', '.join(failed))
+
+          hero_assets = [
+              'images/hero-slider-geoshield-protection.webp',
+              'images/hero-slider-geoshield-installments.webp',
+              'images/hero-slider-geoshield-ppf.webp',
+          ]
+          positions = [html.find(asset) for asset in hero_assets]
+          if any(pos < 0 for pos in positions) or positions != sorted(positions):
+              raise SystemExit('Hero slide order changed unexpectedly')
+
+          if 'hero-slider-geoshield-installments.webp" width="1920" height="768" loading="eager" fetchpriority="high"' not in html:
+              raise SystemExit('Default installments hero must remain high priority')
+
+          jsonld_blocks = re.findall(
+              r'<script\s+type="application/ld\+json">\s*(.*?)\s*</script>',
+              html,
+              flags=re.S,
+          )
+          if not jsonld_blocks:
+              raise SystemExit('Missing JSON-LD structured data')
+          for block in jsonld_blocks:
+              json.loads(block)
+
+          class ReferenceParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.refs = []
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  key = 'src' if tag in {'img', 'script'} else 'href' if tag == 'link' else None
+                  if key and attrs.get(key):
+                      self.refs.append(attrs[key])
+
+          parser = ReferenceParser()
+          parser.feed(html)
+          local_refs = []
+          for ref in parser.refs:
+              if ref.startswith(('http://', 'https://', '//', '#', 'data:')):
+                  continue
+              ref = ref.split('?', 1)[0].split('#', 1)[0]
+              if ref:
+                  local_refs.append(ref)
+
+          missing_refs = sorted({ref for ref in local_refs if not (root / ref).is_file()})
+          if missing_refs:
+              raise SystemExit('Broken local references: ' + ', '.join(missing_refs))
+
+          print('All GeoShield site quality checks passed.')
