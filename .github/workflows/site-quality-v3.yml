@@ -80,6 +80,7 @@ jobs:
               '404 noindex': '<meta name="robots" content="noindex,follow">' in error_html,
               'No superseded institution wording': 'مؤسسة عواد الظفيري' not in '\n'.join((html, readme, llms, error_html)),
               'No branch photography': 'branch-photo' not in html and 'branch-image' not in html,
+              'No legacy additional-service cards': 'mini-service-card' not in html and 'mini-services' not in html,
           }
           failed = [name for name, ok in checks.items() if not ok]
           if failed:
