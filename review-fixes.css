@@ -94,12 +94,6 @@ section,
 }
 
 @media(max-width:760px){
-  .package-panel[data-panel="nano"] article h3{
-    direction:ltr;
-    unicode-bidi:isolate;
-    text-align:right;
-  }
-
   .warranty-grid>article,
   .aftercare>li,
   .why-grid>article,
