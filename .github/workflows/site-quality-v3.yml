@@ -45,6 +45,7 @@ jobs:
           readme = (root / 'README.md').read_text(encoding='utf-8')
           llms = (root / 'llms.txt').read_text(encoding='utf-8')
           error_html = (root / '404.html').read_text(encoding='utf-8')
+          review_css = (root / 'review-fixes.css').read_text(encoding='utf-8')
 
           def visible_text(source):
               return re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', source)).strip()
@@ -59,6 +60,18 @@ jobs:
           if leaked:
               raise SystemExit('Public package prices must stay removed: ' + ', '.join(leaked))
 
+          package_ids = [
+              'ppf-standard','ppf-half','ppf-full',
+              'tint-vnano','tint-apex','tint-c2',
+              'nano-g5','nano-t3',
+          ]
+          booking_services = [
+              'حماية كاملة','حماية نصفية','حماية قياسية',
+              'تظليل apex','تظليل v-nano','تظليل c2',
+              'نانو جرافيني g5 (اربع طبقات)','نانو سيراميك t3 (اربع طبقات)',
+              'تلميع داخلي','تلميع خارجي','تلميع كامل',
+          ]
+
           checks = {
               'Arabic RTL': '<html lang="ar" dir="rtl">' in html,
               'Group ownership homepage': agency in visible_text(html),
@@ -72,7 +85,12 @@ jobs:
               'Friday JSON-LD': html.count('"dayOfWeek":"Friday","opens":"16:00","closes":"20:00"') == 2,
               'Friday README': '| الجمعة | ٤:٠٠ م - ٨:٠٠ م | — |' in readme,
               'Friday llms': 'Friday: 16:00-20:00' in llms,
-              'Standalone services tab': 'data-package="services">خدمات منفردة</button>' in html,
+              'Package tabs': all(token in html for token in ['data-package="ppf">حماية PPF</button>','data-package="tint">العازل الحراري</button>','data-package="nano">نانو سيراميك</button>','data-package="services">التلميع</button>']),
+              'Stable package ids': all(f'data-package-id="{package_id}"' in html for package_id in package_ids),
+              'Explicit package booking mapping': all(f'data-booking-service="{service}"' in html for service in booking_services[:8]),
+              'Booking service choices': all(f'<option>{service}</option>' in html for service in booking_services),
+              'Semantic package text': all(text in html for text in ['الحماية القياسية','الحماية النصفية','الحماية الكاملة','V-NANO Premium','APEX Premium','C2 Premium','G5 Premium · 4 طبقات','T3 Premium · 4 طبقات']),
+              'No CSS-generated package copy': all(token not in review_css for token in ['PPF Premium\\A','V-NANO\\A','Nano Graphene G5\\A','article::before{content:']),
               'Quote notes': html.count('class="quote-note"') == 8 and 'class="polish-price quote-note"' in html,
               'Quote CTA': 'احصل على عرض السعر' in script,
               'No VAT pricing sentence': 'الأسعار بالريال ولا تشمل ضريبة القيمة المضافة' not in html,
@@ -92,7 +110,6 @@ jobs:
               raise SystemExit('Critical checks failed: ' + ', '.join(failed))
 
           protected = [
-              'قياسية C2','قياسية سيراميك','قياسية شاملة','نصفية C2+','نصفية سيراميك','نصفية شاملة','حماية كاملة','حماية كاملة + السقف',
               'عيوب الصناعة، الفقاعات، التقشير، الاصفرار والتشقق.',
               'عيوب الصناعة، الفقاعات، التقشير، الاصفرار والانفصال.',
               '<h3>نانو سيراميك 9H</h3><strong>3 + 5 سنوات</strong><p>3 سنوات للتطبيق و5 سنوات للطبقات.</p>',
@@ -105,7 +122,7 @@ jobs:
           ]
           for snippet in protected:
               if snippet not in html:
-                  raise SystemExit('Protected package/warranty content changed: ' + snippet)
+                  raise SystemExit('Protected warranty/aftercare content changed: ' + snippet)
 
           hero_assets = ['images/hero-slider-geoshield-protection.webp','images/hero-slider-geoshield-installments.webp','images/hero-slider-geoshield-ppf.webp']
           positions = [html.find(asset) for asset in hero_assets]
@@ -147,4 +164,4 @@ jobs:
               if path.startswith('geoshield/'): path = path[len('geoshield/'):]
               if path and not (root / path).is_file(): raise SystemExit('Broken local reference: ' + path)
 
-          print('All GeoShield price-free site quality checks passed.')
+          print('All GeoShield semantic package and site quality checks passed.')
