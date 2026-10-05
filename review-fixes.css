@@ -352,3 +352,115 @@ main .hero::after{
     rgba(10,10,10,0.85) 100%
   );
 }
+
+/* Typography refinement: preserve package, header and footer typography.
+   Keep the existing font family; loaded 400/500/600/700 weights only. */
+main > section:not(.packages) :is(h1,h2,h3,h4) {
+  letter-spacing:0;
+  line-height:1.4;
+  font-weight:600;
+}
+main > .intro h1 {
+  font-size:clamp(34px,calc(28px + 1.7vw),52px);
+  font-weight:700;
+  line-height:1.3;
+}
+main > section:not(.packages) h2 {
+  font-size:clamp(28px,calc(22px + 1.8vw),44px);
+  line-height:1.4;
+}
+main > section:not(.packages) h3 {
+  font-size:clamp(20px,calc(18px + .4vw),24px);
+}
+main > :is(.services,.branches) h3 {
+  font-size:clamp(24px,calc(21px + .8vw),32px);
+}
+main > section:not(.packages) h4 {
+  font-size:18px;
+}
+main > section:not(.packages) p,
+main > .branches .branch-address {
+  font-size:clamp(15px,calc(14px + .2vw),17px);
+  font-weight:400;
+  line-height:1.85;
+  letter-spacing:0;
+}
+main > section:not(.packages) .kicker {
+  font-size:12px;
+  font-weight:600;
+  line-height:1.6;
+  letter-spacing:0;
+}
+main > section:not(.packages) :is(.button,.service-book) {
+  font-size:14px;
+  font-weight:600;
+  line-height:1.5;
+}
+main > .trust b {
+  font-size:clamp(22px,calc(18px + 1.3vw),36px);
+  line-height:1.3;
+  letter-spacing:0;
+}
+main > .trust span {
+  font-size:13px;
+  font-weight:500;
+  line-height:1.65;
+}
+main > .services .service-card > div > span {
+  font-size:12px;
+  font-weight:500;
+  line-height:1.6;
+}
+main > .warranty .warranty-grid strong {
+  font-size:clamp(28px,calc(24px + .7vw),34px);
+  font-weight:700;
+  line-height:1.4;
+  letter-spacing:0;
+}
+main > .warranty .aftercare b {
+  font-size:20px;
+  font-weight:600;
+  line-height:1.5;
+}
+main > .warranty .aftercare span {
+  font-size:15px;
+  line-height:1.8;
+}
+main > .branches .branch-phone {
+  font-size:clamp(22px,calc(19px + .6vw),28px);
+  font-weight:600;
+  line-height:1.5;
+}
+main > .branches .weekly-hours :is(.hours-title,.hours-row span,.hours-row strong) {
+  font-size:13px;
+  line-height:1.75;
+}
+main > .booking .booking-form label {
+  font-size:14px;
+  font-weight:500;
+  line-height:1.7;
+}
+main > .booking .booking-form :is(input,select,textarea) {
+  font-size:16px;
+  font-weight:400;
+  line-height:1.65;
+  letter-spacing:0;
+}
+main > .booking .booking-points span {
+  font-size:12px;
+  line-height:1.6;
+}
+main > .faq summary {
+  font-size:clamp(17px,calc(16px + .2vw),19px);
+  font-weight:600;
+  line-height:1.7;
+  letter-spacing:0;
+}
+@media(max-width:760px) {
+  /* Render the real heading instead of duplicating its text in a pseudo-element. */
+  main > .services .heading h2 {
+    font-size:clamp(28px,calc(22px + 1.8vw),44px)!important;
+  }
+  main > .services .heading h2::after {content:none}
+  main > .services .heading h2 br {display:initial}
+}
