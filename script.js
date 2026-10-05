@@ -627,12 +627,8 @@
     lastFocus?.focus();
   }
 
-  workItems.forEach((item, index) => item.addEventListener('click', event => {
+  workItems.forEach((item, index) => item.addEventListener('click', () => {
     if (!lightbox || !lightboxImage) return;
-
-    if (event.detail !== 0) {
-      // Pointer activation follows the normal path; keyboard activation (detail === 0) remains supported.
-    }
 
     lastFocus = item;
     previousBodyOverflow = document.body.style.overflow;
