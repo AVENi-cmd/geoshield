@@ -560,7 +560,8 @@
   const lightbox = $('#lightbox');
   const lightboxImage = lightbox ? $('img', lightbox) : null;
   const lightboxClose = lightbox ? $('button', lightbox) : null;
-  const workItems = $$('.work-item');
+  const workSection = $('#work');
+  const workItems = workSection ? $$('.work-item', workSection) : [];
   let lightboxPrevious = null;
   let lightboxNext = null;
   let lightboxCounter = null;
@@ -626,8 +627,14 @@
     lastFocus?.focus();
   }
 
-  workItems.forEach((item, index) => item.addEventListener('click', () => {
+  workItems.forEach((item, index) => item.addEventListener('click', event => {
     if (!lightbox || !lightboxImage) return;
+
+    if (event.detail !== 0) {
+      const rect = workSection.getBoundingClientRect();
+      if (event.clientY < rect.top || event.clientY > rect.bottom) return;
+    }
+
     lastFocus = item;
     previousBodyOverflow = document.body.style.overflow;
     showLightboxItem(index);
