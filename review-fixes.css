@@ -257,3 +257,44 @@ main .service-card > img{
 main .work .work-grid .work-item{
   border-radius:12px!important;
 }
+
+/* More breathing room without changing package structure or banner sizing. */
+main > section.section:not(.packages){
+  padding-block:clamp(100px,9vw,120px);
+}
+main .why-grid,
+main .warranty-grid,
+main .aftercare,
+main .branch-cards,
+main .trust-grid{
+  gap:24px;
+}
+main .work .work-grid{
+  column-gap:24px;
+}
+main .work .work-grid .work-item{
+  margin-bottom:24px!important;
+}
+main .why-grid article{padding:36px}
+main .warranty-grid article{padding:43.2px}
+main .aftercare > li{padding:30px}
+main .branch-card{padding:clamp(33.6px,4.8vw,55.2px)}
+main .trust-grid > div{padding:33.6px}
+main .booking-form{padding:43.2px}
+
+@media(max-width:760px){
+  main .why-grid article{padding:28.8px}
+  main .warranty-grid article{padding:33.6px 28.8px}
+  main .aftercare > li{padding:25.2px 24px}
+  main .branch-card{padding:30px 25.2px}
+  main .trust-grid > div{padding:21.6px}
+  main .booking-form{padding:28.8px 21.6px}
+  main .work .work-grid{gap:24px!important}
+  main .work .work-grid .work-item{margin-bottom:0!important}
+}
+@media(max-width:430px){
+  main .trust-grid > div{padding:18px}
+}
+@media(max-width:390px){
+  main .booking-form{padding-inline:16.8px}
+}
