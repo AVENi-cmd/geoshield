@@ -107,7 +107,7 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 .package-panel[hidden]{display:none!important}
 .package-panel:not(.package-services) article{position:relative;overflow:hidden;display:flex;flex-direction:column;width:100%;min-width:0;min-height:560px;padding:0 28px 28px;border:1px solid rgba(17,20,24,.11);border-radius:28px;background:#fff;color:#171a1d;box-shadow:0 20px 55px rgba(17,20,24,.075)}
 .package-panel:not(.package-services) article:nth-child(1),.package-panel:not(.package-services) article:nth-child(2),.package-panel:not(.package-services) article:nth-child(3){grid-column:span 4}
-.package-panel[data-panel=nano] article{grid-column:span 6}
+.package-panel:not(.package-services)[data-panel=nano] article{grid-column:span 6}
 
 .package-panel:not(.package-services) article::before{content:"";display:block;width:calc(100% + 56px);margin:0 -28px 26px;aspect-ratio:16/9;background-position:center;background-size:cover;background-repeat:no-repeat;border-bottom:1px solid rgba(17,20,24,.08);flex:0 0 auto}
 .package-eyebrow{display:block;margin:0 0 8px;color:#a94722;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
