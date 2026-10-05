@@ -298,3 +298,47 @@ main .booking-form{padding:43.2px}
 @media(max-width:390px){
   main .booking-form{padding-inline:16.8px}
 }
+
+/* Soft depth; hover lift is limited to precise pointers and normal motion. */
+main .why-grid article,
+main .warranty-grid article,
+main .aftercare > li,
+main .branch-card,
+main .branch-card:focus-within,
+main .trust-grid > div,
+main .booking-form,
+main .work .work-grid .work-item{
+  box-shadow:0 8px 32px rgba(0,0,0,0.35);
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  main .why-grid article,
+  main .warranty-grid article,
+  main .aftercare > li,
+  main .branch-card,
+  main .trust-grid > div,
+  main .booking-form,
+  main .work .work-grid .work-item{
+    transition:transform .3s ease,box-shadow .3s ease;
+  }
+  main .why-grid article:hover,
+  main .warranty-grid article:hover,
+  main .aftercare > li:hover,
+  main .branch-card:hover,
+  main .trust-grid > div:hover,
+  main .booking-form:hover,
+  main .work .work-grid .work-item:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 40px rgba(0,0,0,0.5);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  main .why-grid article:hover,
+  main .warranty-grid article:hover,
+  main .aftercare > li:hover,
+  main .branch-card:hover,
+  main .trust-grid > div:hover,
+  main .booking-form:hover,
+  main .work .work-grid .work-item:hover{
+    transform:none;
+  }
+}
