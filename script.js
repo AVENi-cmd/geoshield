@@ -631,8 +631,7 @@
     if (!lightbox || !lightboxImage) return;
 
     if (event.detail !== 0) {
-      const rect = workSection.getBoundingClientRect();
-      if (event.clientY < rect.top || event.clientY > rect.bottom) return;
+      // Pointer activation follows the normal path; keyboard activation (detail === 0) remains supported.
     }
 
     lastFocus = item;
