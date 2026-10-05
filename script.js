@@ -493,8 +493,8 @@
   }
   startBranchHoursClock();
 
-  const quickCall = $('.mobile-bar a[href^="tel:"]');
-  const quickWhatsApp = $('.mobile-bar a[href*="wa.me"]');
+  const quickCall = $('.mobile-bar [data-contact-mode="call"]');
+  const quickWhatsApp = $('.mobile-bar [data-contact-mode="whatsapp"]');
   const quickBooking = $('.mobile-bar a[href="#booking"]');
   const branchSelect = $('select[name="branch"]');
 
@@ -502,28 +502,57 @@
   if (quickWhatsApp && !quickWhatsApp.querySelector('.mobile-action-icon')) quickWhatsApp.insertAdjacentHTML('afterbegin', iconSpan(uiIcons.message, 'mobile-action-icon'));
   if (quickBooking && !quickBooking.querySelector('.mobile-action-icon')) quickBooking.insertAdjacentHTML('afterbegin', iconSpan(uiIcons.calendar, 'mobile-action-icon'));
 
-  function syncQuickContact(key) {
-    const branch = branches[key] || branches.hofuf;
-    if (quickCall) {
-      quickCall.href = `tel:+${branch.phone}`;
-      quickCall.setAttribute('aria-label', `الاتصال بـ${branch.title}`);
-      quickCall.title = `الاتصال بـ${branch.title}`;
-    }
-    if (quickWhatsApp) {
-      quickWhatsApp.href = `https://wa.me/${branch.phone}`;
-      quickWhatsApp.setAttribute('aria-label', `مراسلة ${branch.title} عبر واتساب`);
-      quickWhatsApp.title = `مراسلة ${branch.title} عبر واتساب`;
-    }
-  }
+  const contactSheet = $('#branch-contact-sheet');
+  const contactDescription = $('#branch-contact-description');
+  const contactLinks = $$('[data-contact-branch]', contactSheet || document);
+  let contactOpener = null;
+  let contactPreviousOverflow = '';
 
-  branchSelect?.addEventListener('change', () => syncQuickContact(branchSelect.value));
-  syncQuickContact(branchSelect?.value || 'hofuf');
+  [quickCall, quickWhatsApp].filter(Boolean).forEach(trigger => {
+    trigger.addEventListener('click', event => {
+      // The anchor falls back to the branch section when dialog is unsupported.
+      if (!contactSheet || typeof contactSheet.showModal !== 'function') return;
+      event.preventDefault();
+      if (contactSheet.open) return;
+      const isWhatsApp = trigger.dataset.contactMode === 'whatsapp';
+      contactDescription.textContent = isWhatsApp ? 'اختر الفرع للتواصل عبر واتساب' : 'اختر الفرع للاتصال';
+      contactLinks.forEach(link => {
+        const branch = branches[link.dataset.contactBranch];
+        link.href = isWhatsApp ? `https://wa.me/${branch.phone}` : `tel:+${branch.phone}`;
+        if (isWhatsApp) {
+          link.target = '_blank';
+          link.rel = 'noopener';
+        } else {
+          link.removeAttribute('target');
+          link.removeAttribute('rel');
+        }
+        $('.branch-contact-icon', link).innerHTML = isWhatsApp ? uiIcons.message : uiIcons.phone;
+      });
+      contactOpener = trigger;
+      contactPreviousOverflow = document.body.style.overflow;
+      contactSheet.showModal();
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  $('.branch-contact-close')?.addEventListener('click', () => contactSheet.close());
+  contactLinks.forEach(link => link.addEventListener('click', () => contactSheet.close()));
+  contactSheet?.addEventListener('click', event => {
+    const rect = contactSheet.getBoundingClientRect();
+    if (event.target === contactSheet && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) contactSheet.close();
+  });
+  contactSheet?.addEventListener('close', () => {
+    document.body.style.overflow = contactPreviousOverflow;
+    contactOpener?.focus({ preventScroll:true });
+    contactOpener = null;
+  });
+  matchMedia('(max-width:760px)').addEventListener('change', event => {
+    if (!event.matches && contactSheet?.open) contactSheet.close();
+  });
 
   $$('[data-book-branch]').forEach(button => button.addEventListener('click', () => {
     const key = button.dataset.bookBranch;
     if (!branchSelect || !bookingSection || !branches[key]) return;
     branchSelect.value = key;
-    syncQuickContact(key);
     bookingSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
     setTimeout(() => branchSelect.focus({ preventScroll: true }), reduceMotion ? 0 : 450);
   }));
@@ -632,6 +661,7 @@
   }, { passive: true });
 
   addEventListener('keydown', event => {
+    if (contactSheet?.open) return;
     const lightboxOpen = lightbox?.classList.contains('open');
     if (event.key === 'Escape') {
       if (lightboxOpen) closeLightbox();
