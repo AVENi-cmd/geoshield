@@ -84,7 +84,7 @@ jobs:
               'Stable package ids': all(f'data-package-id="{x}"' in html for x in package_ids),
               'Package booking mapping': all(f'data-booking-service="{x}"' in html for x in booking_services[:8]),
               'Booking choices': all(f'<option>{x}</option>' in html for x in booking_services),
-              'Package semantics': all(x in html for x in ['الحماية القياسية','الحماية النصفية','الحماية الكاملة','V-NANO Premium','APEX Premium','C2 Premium','G5 Premium · 4 طبقات','T3 Premium · 4 طبقات']),
+              'Package semantics': all(x in html for x in ['الحماية القياسية','الحماية النصفية','الحماية الكاملة','V-NANO Premium','APEX Premium','C2 Premium','G5 Premium (4 Layers)','T3 Premium (4 Layers)']),
               'No generated package copy': all(x not in review_css for x in ['content:"PPF Premium','content:"V-NANO','content:"Nano Graphene G5','content:"Nano Ceramic T3']),
               'Quote notes': html.count('class="quote-note"') == 8 and 'class="polish-price quote-note"' in html,
               'Quote CTA': 'احصل على عرض السعر' in script,
