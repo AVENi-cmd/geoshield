@@ -132,8 +132,6 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 
 /* Detailing image is intentionally unchanged */
 .package-services .polish{grid-column:1/-1;width:100%;max-width:100%;overflow:hidden;padding:285px 36px 36px;border:1px solid rgba(232,98,43,.2);border-radius:28px;background:linear-gradient(to bottom,transparent 55%,#fff 100%),url('images/services/geoshield-service-detailing-optimized.webp') center top/100% auto no-repeat,#fff;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:28px}
-.mini-services{max-width:100%;gap:14px}
-.mini-services>.mini-service-card{min-width:0;overflow:hidden}
 
 @media(max-width:900px){
   .shell{width:min(100% - 32px,1240px)}

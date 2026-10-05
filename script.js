@@ -7,13 +7,6 @@
   const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
   const saveData = navigator.connection?.saveData === true;
 
-  const serviceIcons = [
-    '<svg viewBox="0 0 24 24"><path d="M4 15c3-1 5-3 6-7 3 1 5 3 6 6 1 3 0 5-2 6-3 1-7-1-10-5Z"/><path d="M8 17c2-1 4-3 5-6"/></svg>',
-    '<svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M8 5v14M16 5v14M4 10h16"/></svg>',
-    '<svg viewBox="0 0 24 24"><path d="M12 3 4 7v5c0 5 3.4 8 8 9 4.6-1 8-4 8-9V7l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>',
-    '<svg viewBox="0 0 24 24"><path d="M5 16h14l-1.5-5h-11L5 16Z"/><path d="M7 16v2M17 16v2M8 11l1-3h6l1 3"/></svg>'
-  ];
-
   const promiseIcons = [
     '<svg viewBox="0 0 24 24"><path d="M12 3 4 7v5c0 5 3.4 8 8 9 4.6-1 8-4 8-9V7l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>',
     '<svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/><path d="M7 3 4 6M17 3l3 3"/></svg>',
@@ -33,10 +26,6 @@
   };
 
   const iconSpan = (icon, className = 'ui-icon') => `<span class="${className}" aria-hidden="true">${icon}</span>`;
-
-  $$('.mini-services > div').forEach((item, index) => {
-    if (!item.querySelector('.gs-icon')) item.insertAdjacentHTML('afterbegin', `<span class="gs-icon" aria-hidden="true">${serviceIcons[index % serviceIcons.length]}</span>`);
-  });
 
   $$('.why-grid article').forEach((item, index) => {
     if (!item.querySelector('.why-icon')) item.insertAdjacentHTML('afterbegin', `<span class="why-icon" aria-hidden="true">${promiseIcons[index % promiseIcons.length]}</span>`);
@@ -348,18 +337,9 @@
     copy.append(action);
   });
 
-  const packageBookingByPanel = new Map([
-    ['standard', ['حماية قياسية', 'حماية نصفية', 'حماية كاملة']],
-    ['half', ['تظليل v-nano', 'تظليل apex', 'تظليل c2']],
-    ['full', ['نانو جرافيني g5 (اربع طبقات)', 'نانو سيراميك t3 (اربع طبقات)']]
-  ]);
-
   $$('.package-panel article').forEach(card => {
     if (card.querySelector('.package-book')) return;
-    const panel = card.closest('.package-panel');
-    const panelCards = panel ? $$('article', panel) : [];
-    const cardIndex = panelCards.indexOf(card);
-    const serviceName = card.dataset.bookingService || packageBookingByPanel.get(panel?.dataset.panel)?.[cardIndex] || '';
+    const serviceName = card.dataset.bookingService || '';
     if (!serviceName || !bookingServiceValues.has(serviceName)) return;
     const visibleLabel = card.dataset.packageLabel || serviceName;
     const action = document.createElement('button');
