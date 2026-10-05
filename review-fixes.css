@@ -234,3 +234,26 @@ main .aftercare > li,
 main .branch-card{
   background:#1E1A17;
 }
+
+/* Softer component edges, scoped away from the header, footer, and packages. */
+main .why-grid article,
+main .warranty-grid article,
+main .aftercare > li,
+main .branch-card,
+main .trust-grid > div,
+main .booking-form{
+  border-radius:16px;
+}
+main > section:not(.packages) .button,
+main .service-book,
+main .hero .hero-arrow,
+main .hero .hero-pause-control{
+  border-radius:8px;
+}
+main .feature-image,
+main .service-card > img{
+  border-radius:12px;
+}
+main .work .work-grid .work-item{
+  border-radius:12px!important;
+}
