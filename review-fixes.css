@@ -226,3 +226,129 @@ section,
     border-radius:16px!important;
   }
 }
+
+/* Warming enhancement — dark cards only; preserve image and light package surfaces. */
+main .why-grid article,
+main .warranty-grid article,
+main .aftercare > li,
+main .branch-card{
+  background:#1E1A17;
+}
+
+/* Softer component edges, scoped away from the header, footer, and packages. */
+main .why-grid article,
+main .warranty-grid article,
+main .aftercare > li,
+main .branch-card,
+main .trust-grid > div,
+main .booking-form{
+  border-radius:16px;
+}
+main > section:not(.packages) .button,
+main .service-book,
+main .hero .hero-arrow,
+main .hero .hero-pause-control{
+  border-radius:8px;
+}
+main .feature-image,
+main .service-card > img{
+  border-radius:12px;
+}
+main .work .work-grid .work-item{
+  border-radius:12px!important;
+}
+
+/* More breathing room without changing package structure or banner sizing. */
+main > section.section:not(.packages){
+  padding-block:clamp(100px,9vw,120px);
+}
+main .why-grid,
+main .warranty-grid,
+main .aftercare,
+main .branch-cards,
+main .trust-grid{
+  gap:24px;
+}
+main .work .work-grid{
+  column-gap:24px;
+}
+main .work .work-grid .work-item{
+  margin-bottom:24px!important;
+}
+main .why-grid article{padding:36px}
+main .warranty-grid article{padding:43.2px}
+main .aftercare > li{padding:30px}
+main .branch-card{padding:clamp(33.6px,4.8vw,55.2px)}
+main .trust-grid > div{padding:33.6px}
+main .booking-form{padding:43.2px}
+
+@media(max-width:760px){
+  main .why-grid article{padding:28.8px}
+  main .warranty-grid article{padding:33.6px 28.8px}
+  main .aftercare > li{padding:25.2px 24px}
+  main .branch-card{padding:30px 25.2px}
+  main .trust-grid > div{padding:21.6px}
+  main .booking-form{padding:28.8px 21.6px}
+  main .work .work-grid{gap:24px!important}
+  main .work .work-grid .work-item{margin-bottom:0!important}
+}
+@media(max-width:430px){
+  main .trust-grid > div{padding:18px}
+}
+@media(max-width:390px){
+  main .booking-form{padding-inline:16.8px}
+}
+
+/* Soft depth; hover lift is limited to precise pointers and normal motion. */
+main .why-grid article,
+main .warranty-grid article,
+main .aftercare > li,
+main .branch-card,
+main .branch-card:focus-within,
+main .trust-grid > div,
+main .booking-form,
+main .work .work-grid .work-item{
+  box-shadow:0 8px 32px rgba(0,0,0,0.35);
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  main .why-grid article,
+  main .warranty-grid article,
+  main .aftercare > li,
+  main .branch-card,
+  main .trust-grid > div,
+  main .booking-form,
+  main .work .work-grid .work-item{
+    transition:transform .3s ease,box-shadow .3s ease;
+  }
+  main .why-grid article:hover,
+  main .warranty-grid article:hover,
+  main .aftercare > li:hover,
+  main .branch-card:hover,
+  main .trust-grid > div:hover,
+  main .booking-form:hover,
+  main .work .work-grid .work-item:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 40px rgba(0,0,0,0.5);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  main .why-grid article:hover,
+  main .warranty-grid article:hover,
+  main .aftercare > li:hover,
+  main .branch-card:hover,
+  main .trust-grid > div:hover,
+  main .booking-form:hover,
+  main .work .work-grid .work-item:hover{
+    transform:none;
+  }
+}
+
+/* Warm the existing hero overlay; keep all banners and controls intact. */
+main .hero::after{
+  background:linear-gradient(
+    180deg,
+    rgba(232,93,38,0.10) 0%,
+    rgba(10,10,10,0.4) 50%,
+    rgba(10,10,10,0.85) 100%
+  );
+}
