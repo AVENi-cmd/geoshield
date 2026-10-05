@@ -226,3 +226,11 @@ section,
     border-radius:16px!important;
   }
 }
+
+/* Warming enhancement — dark cards only; preserve image and light package surfaces. */
+main .why-grid article,
+main .warranty-grid article,
+main .aftercare > li,
+main .branch-card{
+  background:#1E1A17;
+}
