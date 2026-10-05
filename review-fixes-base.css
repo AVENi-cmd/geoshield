@@ -68,7 +68,7 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 .trust-grid>div:nth-child(3){--trust-image:url('images/showcase-ppf-installation.webp');background-position:18% 50%;background-size:auto 100%}
 .trust-grid>div:nth-child(4){--trust-image:url('images/services/geoshield-package-03-optimized.webp');background-position:center 54%}
 .trust-grid>div:nth-child(2)::before,.trust-grid>div:nth-child(3)::before{background:linear-gradient(180deg,rgba(7,9,11,.08) 0%,rgba(7,9,11,.22) 44%,rgba(7,9,11,.84) 100%)}
-.trust-grid>div:hover{background-image:var(--trust-image)!important;background-color:#15191d}
+@media(hover:hover) and (pointer:fine){.trust-grid>div:hover{background-image:var(--trust-image)!important;background-color:#15191d}}
 .trust-grid>div>*{position:relative;z-index:2}
 .trust b{
   color:#fff;

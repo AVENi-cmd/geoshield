@@ -1,8 +1,7 @@
 /* GeoShield final QA corrections — intentionally small and isolated. */
 
 /* Keep the +5000 card on one fixed image in every state. */
-.trust-grid>div:nth-child(1),
-.trust-grid>div:nth-child(1):hover{
+.trust-grid>div:nth-child(1){
   --trust-image:url('images/showcase-1.webp');
   background-color:#15191d!important;
   background-image:url('images/showcase-1.webp')!important;
@@ -10,15 +9,27 @@
   background-size:cover!important;
   background-repeat:no-repeat!important;
 }
+@media(hover:hover) and (pointer:fine){
+  .trust-grid>div:nth-child(1):hover{
+    --trust-image:url('images/showcase-1.webp');
+    background-color:#15191d!important;
+    background-image:url('images/showcase-1.webp')!important;
+    background-position:center 52%!important;
+    background-size:cover!important;
+    background-repeat:no-repeat!important;
+  }
+}
 
 /* Do not animate/replace full trust-card backgrounds on hover. */
 .trust-grid>div{
   transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s!important;
 }
-.trust-grid>div:hover{
-  background-color:#15191d!important;
-  background-image:var(--trust-image)!important;
-  background-repeat:no-repeat!important;
+@media(hover:hover) and (pointer:fine){
+  .trust-grid>div:hover{
+    background-color:#15191d!important;
+    background-image:var(--trust-image)!important;
+    background-repeat:no-repeat!important;
+  }
 }
 
 /* The presentation layer makes every package card white, so featured-card CTA
@@ -331,7 +342,7 @@ main .work .work-grid .work-item{
     box-shadow:0 12px 40px rgba(0,0,0,0.5);
   }
 }
-@media(prefers-reduced-motion:reduce){
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:reduce){
   main .why-grid article:hover,
   main .warranty-grid article:hover,
   main .aftercare > li:hover,
