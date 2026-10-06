@@ -785,3 +785,9 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
 
 /* Neutral campaign photo for the American-materials trust card. */
 .trust-grid>div:nth-child(4){--trust-image:url('images/trust-nano-refresh.webp')}
+
+/* Match refreshed service artwork to its native 16:9 canvas without letterboxing. */
+.services .service-card>img[src$="-refresh.webp"]{
+  aspect-ratio:16/9;
+  background:#0A0A0A;
+}
