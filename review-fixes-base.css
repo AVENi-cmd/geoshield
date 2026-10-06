@@ -26,7 +26,7 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   display:flex;
   flex-direction:column;
   justify-content:flex-end;
-  border:1px solid rgba(255,255,255,.17)!important;
+  border:1px solid rgba(232,98,43,.18)!important;
   border-radius:24px;
   background-color:#15191d;
   background-image:var(--trust-image)!important;
