@@ -46,14 +46,14 @@
 }
 .package-panel:not(.package-services) article .package-book .ui-icon,
 .package-panel:not(.package-services) article.featured .package-book .ui-icon{
-  color:#e8622b!important;
+  color:#F5A623!important;
 }
 .package-panel:not(.package-services) article .package-book:hover,
 .package-panel:not(.package-services) article .package-book:focus-visible,
 .package-panel:not(.package-services) article.featured .package-book:hover,
 .package-panel:not(.package-services) article.featured .package-book:focus-visible{
-  color:#a94722!important;
-  border-top-color:rgba(232,98,43,.38)!important;
+  color:#D97706!important;
+  border-top-color:rgba(245,166,35,.38)!important;
 }
 
 /* Keep mixed Arabic/Latin nano titles together so the 4 stays beside طبقات. */
@@ -360,7 +360,7 @@ main .work .work-grid .work-item{
 main .hero::after{
   background:linear-gradient(
     180deg,
-    rgba(232,93,38,0.10) 0%,
+    rgba(245,166,35,0.10) 0%,
     rgba(10,10,10,0.4) 50%,
     rgba(10,10,10,0.85) 100%
   );
@@ -619,7 +619,7 @@ main > .warranty .aftercare > li{
   grid-template-columns:40px minmax(0,1fr);
   column-gap:16px;
   align-content:start;
-  border-color:rgba(232,93,38,.18);
+  border-color:rgba(245,166,35,.18);
   background-image:linear-gradient(145deg,rgba(255,255,255,.025),rgba(255,255,255,0) 65%);
   box-shadow:0 8px 24px rgba(0,0,0,.24);
 }
@@ -631,7 +631,7 @@ main > .warranty .aftercare > li::before{
   left:auto;
   width:2px;
   height:auto;
-  background:#E85D26;
+  background:#F5A623;
   opacity:.65;
 }
 main > .warranty .warranty-grid > article::after{content:none}
@@ -641,10 +641,10 @@ main > .warranty .care-icon{
   width:40px;
   height:40px;
   margin:0;
-  border:1px solid rgba(232,93,38,.16);
+  border:1px solid rgba(245,166,35,.16);
   border-radius:10px;
-  background:rgba(232,93,38,.045);
-  color:#E85D26;
+  background:rgba(245,166,35,.045);
+  color:#F5A623;
   align-self:start;
 }
 main > .warranty .care-icon svg{
@@ -666,7 +666,7 @@ main > .warranty .warranty-grid strong{
   margin:24px 0 16px;
   padding-bottom:16px;
   border-bottom:1px solid rgba(255,255,255,.08);
-  color:#E85D26;
+  color:#F5A623;
 }
 main > .warranty .aftercare .care-icon{grid-row:1/3}
 main > .warranty .aftercare b{grid-column:2;margin:0 0 8px}
@@ -679,7 +679,7 @@ main > .warranty .aftercare > li > span:not(.care-icon){grid-column:2}
   main > .warranty .warranty-grid > article:hover,
   main > .warranty .aftercare > li:hover{
     transform:translateY(-3px);
-    border-color:rgba(232,93,38,.32);
+    border-color:rgba(245,166,35,.32);
     box-shadow:0 12px 28px rgba(0,0,0,.32);
   }
 }
@@ -697,7 +697,7 @@ main > .why .why-grid > article{
   grid-template-columns:40px minmax(0,1fr);
   column-gap:16px;
   align-content:start;
-  border-color:rgba(232,93,38,.18);
+  border-color:rgba(245,166,35,.18);
   background-image:linear-gradient(145deg,rgba(255,255,255,.025),rgba(255,255,255,0) 65%);
   box-shadow:0 8px 24px rgba(0,0,0,.24);
 }
@@ -708,7 +708,7 @@ main > .why .why-grid > article::before{
   right:0;
   bottom:28px;
   width:2px;
-  background:#E85D26;
+  background:#F5A623;
   opacity:.65;
   pointer-events:none;
 }
@@ -719,10 +719,10 @@ main > .why .why-icon{
   width:40px;
   height:40px;
   margin:0;
-  border:1px solid rgba(232,93,38,.16);
+  border:1px solid rgba(245,166,35,.16);
   border-radius:10px;
-  background:rgba(232,93,38,.045);
-  color:#E85D26;
+  background:rgba(245,166,35,.045);
+  color:#F5A623;
 }
 main > .why .why-icon svg{width:24px;height:24px;stroke-width:1.5}
 main > .why .why-grid b{
@@ -730,7 +730,7 @@ main > .why .why-grid b{
   grid-row:1;
   align-self:center;
   justify-self:end;
-  color:#E85D26;
+  color:#F5A623;
   font-variant-numeric:tabular-nums;
 }
 main > .why .why-grid h3{
@@ -747,7 +747,29 @@ main > .why .why-grid p{grid-column:1/-1;margin-top:0}
   }
   main > .why .why-grid > article:hover{
     transform:translateY(-3px);
-    border-color:rgba(232,93,38,.32);
+    border-color:rgba(245,166,35,.32);
     box-shadow:0 12px 28px rgba(0,0,0,.32);
   }
+}
+
+/* Trial palette: use existing dark text where amber cannot meet 4.5:1. */
+main > :is(.services,.packages,.booking,.faq) .kicker,
+main > .services .service-card > div > span,
+main > .packages .package-eyebrow,
+main > .packages .package-panel small,
+main > .faq summary:hover,
+main > .faq details[open] summary::after{
+  color:#101214;
+}
+main > .packages .package-panel:not(.package-services) article .package-book:hover,
+main > .packages .package-panel:not(.package-services) article .package-book:focus-visible{
+  color:#101214!important;
+}
+/* Keep primary button labels readable in both normal and hover states. */
+.button.primary,.primary,.mobile-bar a:last-child{color:#090a0b}
+main > .services .service-book,
+main > .services .service-book span{color:#101214}
+main > .packages .package-book .ui-icon{color:#D97706!important}
+main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,textarea):focus-visible{
+  outline-color:#D97706;
 }

@@ -6,12 +6,12 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 .shell{width:min(100% - 40px,1240px);margin-inline:auto}
 
 /* Keyboard and accessibility hardening */
-:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{outline:3px solid #ff7a3f;outline-offset:3px}
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{outline:3px solid #FBBF24;outline-offset:3px}
 :where(input,select,textarea):focus-visible{outline-offset:1px}
-.work-item:focus-visible{border-radius:var(--r);box-shadow:0 0 0 4px rgba(255,122,63,.2)}
+.work-item:focus-visible{border-radius:var(--r);box-shadow:0 0 0 4px rgba(251,191,36,.2)}
 .package-tabs button:focus-visible,.package-book:focus-visible,.service-book:focus-visible,.polish-book:focus-visible{position:relative;z-index:2}
 .package-book,.service-book,.polish-book{min-height:44px}
-#lightbox button:focus-visible{outline:3px solid #ff7a3f;outline-offset:4px}
+#lightbox button:focus-visible{outline:3px solid #FBBF24;outline-offset:4px}
 
 /* Trust strip — cinematic full-card imagery below the hero */
 .trust{position:relative;overflow:hidden}
@@ -26,7 +26,7 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   display:flex;
   flex-direction:column;
   justify-content:flex-end;
-  border:1px solid rgba(232,98,43,.18)!important;
+  border:1px solid rgba(245,166,35,.18)!important;
   border-radius:24px;
   background-color:#15191d;
   --trust-overlay:linear-gradient(180deg,rgba(7,9,11,.18) 0%,rgba(7,9,11,.36) 42%,rgba(7,9,11,.90) 100%);
@@ -49,11 +49,11 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   border:0;
   border-radius:0 0 999px 999px;
   background-color:transparent;
-  background-image:linear-gradient(90deg,#ff7a3f,#e8622b);
+  background-image:linear-gradient(90deg,#FBBF24,#F5A623);
   background-position:center;
   background-size:cover;
   background-repeat:no-repeat;
-  box-shadow:0 0 18px rgba(255,122,63,.34);
+  box-shadow:0 0 18px rgba(251,191,36,.34);
   pointer-events:none;
 }
 .trust-grid>div:nth-child(1){--trust-image:url('images/showcase-1.webp');background-position:center,center 52%}
@@ -85,7 +85,7 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 .service-card>img{display:block;width:100%;height:auto;aspect-ratio:1920/674;object-fit:contain;object-position:center;border-radius:var(--r-lg);background:#111418}
 
 /* Packages */
-.packages{--pkg-orange:#e8622b;--pkg-orange2:#ff7a3f;position:relative;overflow:hidden;background:linear-gradient(180deg,#f5f4f0 0%,#eceae4 100%)}
+.packages{--pkg-orange:#F5A623;--pkg-orange2:#FBBF24;position:relative;overflow:hidden;background:linear-gradient(180deg,#f5f4f0 0%,#eceae4 100%)}
 .packages .shell{position:relative;z-index:1;overflow:hidden}
 .packages .heading{max-width:900px;margin-bottom:34px}
 .packages .heading h2{font-size:clamp(42px,5.5vw,78px);line-height:1.12;letter-spacing:-.035em;color:#15181b}
@@ -103,7 +103,7 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 .package-panel:not(.package-services)[data-panel=nano] article{grid-column:span 6}
 
 .package-panel:not(.package-services) article::before{content:"";display:block;width:calc(100% + 56px);margin:0 -28px 26px;aspect-ratio:16/9;background-position:center;background-size:cover;background-repeat:no-repeat;border-bottom:1px solid rgba(17,20,24,.08);flex:0 0 auto}
-.package-eyebrow{display:block;margin:0 0 8px;color:#a94722;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.package-eyebrow{display:block;margin:0 0 8px;color:#D97706;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
 .package-panel article h3{margin:0;color:#171a1d;font-size:clamp(27px,2.4vw,36px);font-weight:700;line-height:1.35}
 .package-panel article .package-description{margin:18px 0 0;color:#626a70;font-size:14px;line-height:2}
 .package-panel article .quote-note{margin-top:auto;padding-top:24px;color:#7b8084;font-size:12px;line-height:1.7}
@@ -124,7 +124,7 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 .package-panel article[data-package-id="nano-t3"]::before{background-image:url('images/services/geoshield-package-04-optimized.webp')}
 
 /* Detailing card — image is a real element so content always flows below it. */
-.package-services .polish{grid-column:1/-1;width:100%;max-width:100%;overflow:hidden;padding:24px;border:1px solid rgba(232,98,43,.2);border-radius:28px;background-color:#fff;background-image:none;display:flex;flex-direction:column;gap:24px}
+.package-services .polish{grid-column:1/-1;width:100%;max-width:100%;overflow:hidden;padding:24px;border:1px solid rgba(245,166,35,.2);border-radius:28px;background-color:#fff;background-image:none;display:flex;flex-direction:column;gap:24px}
 .package-services .polish-image{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:16px}
 
 @media(max-width:900px){
