@@ -773,3 +773,19 @@ main > .packages .package-book .ui-icon{color:#D97706!important}
 main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,textarea):focus-visible{
   outline-color:#D97706;
 }
+
+/* Responsive campaign artwork; preserve the existing sticky header. */
+.hero.hero-refreshed{background:#0A0A0A}
+.hero-refreshed .hero-slide picture{display:block;width:100%;height:100%}
+.hero-refreshed .hero-slide img{background:#0A0A0A}
+.hero.hero-refreshed::after{background:none}
+@media(max-width:760px){
+  .hero-refreshed .hero-track{aspect-ratio:4/5;max-height:none}
+}
+
+
+/* Match refreshed service artwork to its native 16:9 canvas without letterboxing. */
+.services .service-card>img[src$="-refresh.webp"]{
+  aspect-ratio:16/9;
+  background:#0A0A0A;
+}
