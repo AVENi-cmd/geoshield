@@ -29,29 +29,14 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   border:1px solid rgba(232,98,43,.18)!important;
   border-radius:24px;
   background-color:#15191d;
-  background-image:var(--trust-image)!important;
-  background-position:center;
-  background-size:cover;
-  background-repeat:no-repeat;
+  --trust-overlay:linear-gradient(180deg,rgba(7,9,11,.18) 0%,rgba(7,9,11,.36) 42%,rgba(7,9,11,.90) 100%);
+  background-image:var(--trust-overlay),var(--trust-image)!important;
+  background-position:center,center;
+  background-size:cover,cover;
+  background-repeat:no-repeat,no-repeat;
   box-shadow:0 18px 42px rgba(0,0,0,.22),inset 0 0 0 1px rgba(255,255,255,.02);
 }
-.trust-grid>div::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:-1;
-  width:auto;
-  height:auto;
-  border:0;
-  border-radius:inherit;
-  background-color:transparent;
-  background-image:linear-gradient(180deg,rgba(7,9,11,.18) 0%,rgba(7,9,11,.36) 42%,rgba(7,9,11,.90) 100%);
-  background-position:center;
-  background-size:cover;
-  background-repeat:no-repeat;
-  box-shadow:inset 0 -80px 100px rgba(0,0,0,.18);
-  pointer-events:none;
-}
+.trust-grid>div::before{content:none}
 .trust-grid>div::after{
   content:"";
   position:absolute;
@@ -71,12 +56,12 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   box-shadow:0 0 18px rgba(255,122,63,.34);
   pointer-events:none;
 }
-.trust-grid>div:nth-child(1){--trust-image:url('images/showcase-1.webp');background-position:center 52%}
-.trust-grid>div:nth-child(2){--trust-image:url('images/showcase-ppf-mirror.webp');background-position:24% 50%;background-size:cover}
-.trust-grid>div:nth-child(3){--trust-image:url('images/showcase-ppf-installation.webp');background-position:18% 50%;background-size:auto 100%}
-.trust-grid>div:nth-child(4){--trust-image:url('images/services/geoshield-package-03-optimized.webp');background-position:center 54%}
-.trust-grid>div:nth-child(2)::before,.trust-grid>div:nth-child(3)::before{background-color:transparent;background-image:linear-gradient(180deg,rgba(7,9,11,.08) 0%,rgba(7,9,11,.22) 44%,rgba(7,9,11,.84) 100%);background-position:center;background-size:cover;background-repeat:no-repeat}
-@media(hover:hover) and (pointer:fine){.trust-grid>div:hover{background-image:var(--trust-image)!important;background-color:#15191d}}
+.trust-grid>div:nth-child(1){--trust-image:url('images/showcase-1.webp');background-position:center,center 52%}
+.trust-grid>div:nth-child(2){--trust-image:url('images/showcase-ppf-mirror.webp');background-position:center,24% 50%;background-size:cover,cover}
+.trust-grid>div:nth-child(3){--trust-image:url('images/showcase-ppf-installation.webp');background-position:center,18% 50%;background-size:cover,auto 100%}
+.trust-grid>div:nth-child(4){--trust-image:url('images/services/geoshield-package-03-optimized.webp');background-position:center,center 54%}
+.trust-grid>div:nth-child(2),.trust-grid>div:nth-child(3){--trust-overlay:linear-gradient(180deg,rgba(7,9,11,.08) 0%,rgba(7,9,11,.22) 44%,rgba(7,9,11,.84) 100%)}
+@media(hover:hover) and (pointer:fine){.trust-grid>div:hover{background-image:var(--trust-overlay),var(--trust-image)!important;background-color:#15191d}}
 .trust-grid>div>*{position:relative;z-index:2}
 .trust b{
   color:#fff;
@@ -158,8 +143,8 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   .trust-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .trust-grid>div{min-width:0;min-height:158px;padding:18px;border-radius:19px}
   .trust-grid>div::after{inset-inline-end:16px;width:46px;height:3px}
-  .trust-grid>div:nth-child(2){background-position:20% 50%;background-size:cover}
-  .trust-grid>div:nth-child(3){background-position:14% 50%;background-size:auto 100%}
+  .trust-grid>div:nth-child(2){background-position:center,20% 50%;background-size:cover,cover}
+  .trust-grid>div:nth-child(3){background-position:center,14% 50%;background-size:cover,auto 100%}
   .trust b{font-size:clamp(22px,7vw,30px)}
   .trust span{margin-top:6px;font-size:10.5px;line-height:1.5}
 
@@ -182,8 +167,8 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
   .trust-grid{gap:9px}
   .trust-grid>div{min-height:148px;padding:15px}
   .trust-grid>div::after{inset-inline-end:13px;width:38px}
-  .trust-grid>div:nth-child(2){background-position:18% 50%;background-size:cover}
-  .trust-grid>div:nth-child(3){background-position:12% 50%}
+  .trust-grid>div:nth-child(2){background-position:center,18% 50%;background-size:cover,cover}
+  .trust-grid>div:nth-child(3){background-position:center,12% 50%}
   .trust b{font-size:clamp(20px,6.7vw,27px)}
 }
 
