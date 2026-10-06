@@ -687,3 +687,67 @@ main > .warranty .aftercare > li > span:not(.care-icon){grid-column:2}
   main > .warranty .warranty-grid > article,
   main > .warranty .aftercare > li{column-gap:14px}
 }
+
+/* Carry the warranty card language into the GeoShield promise. */
+main > .why .why-grid > article,
+main > .branches .branch-card{background-color:#15191d}
+main > .why .why-grid > article{
+  position:relative;
+  display:grid;
+  grid-template-columns:40px minmax(0,1fr);
+  column-gap:16px;
+  align-content:start;
+  border-color:rgba(232,93,38,.18);
+  background-image:linear-gradient(145deg,rgba(255,255,255,.025),rgba(255,255,255,0) 65%);
+  box-shadow:0 8px 24px rgba(0,0,0,.24);
+}
+main > .why .why-grid > article::before{
+  content:"";
+  position:absolute;
+  top:28px;
+  right:0;
+  bottom:28px;
+  width:2px;
+  background:#E85D26;
+  opacity:.65;
+  pointer-events:none;
+}
+main > .why .why-grid > article::after{content:none}
+main > .why .why-icon{
+  display:grid;
+  place-items:center;
+  width:40px;
+  height:40px;
+  margin:0;
+  border:1px solid rgba(232,93,38,.16);
+  border-radius:10px;
+  background:rgba(232,93,38,.045);
+  color:#E85D26;
+}
+main > .why .why-icon svg{width:24px;height:24px;stroke-width:1.5}
+main > .why .why-grid b{
+  grid-column:2;
+  grid-row:1;
+  align-self:center;
+  justify-self:end;
+  color:#E85D26;
+  font-variant-numeric:tabular-nums;
+}
+main > .why .why-grid h3{
+  grid-column:1/-1;
+  margin-top:24px;
+  margin-bottom:16px;
+  padding-bottom:16px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+main > .why .why-grid p{grid-column:1/-1;margin-top:0}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  main > .why .why-grid > article{
+    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+  }
+  main > .why .why-grid > article:hover{
+    transform:translateY(-3px);
+    border-color:rgba(232,93,38,.32);
+    box-shadow:0 12px 28px rgba(0,0,0,.32);
+  }
+}
