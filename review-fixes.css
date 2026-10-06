@@ -4,19 +4,19 @@
 .trust-grid>div:nth-child(1){
   --trust-image:url('images/showcase-1.webp');
   background-color:#15191d!important;
-  background-image:url('images/showcase-1.webp')!important;
-  background-position:center 52%!important;
-  background-size:cover!important;
-  background-repeat:no-repeat!important;
+  background-image:var(--trust-overlay),var(--trust-image)!important;
+  background-position:center,center 52%!important;
+  background-size:cover,cover!important;
+  background-repeat:no-repeat,no-repeat!important;
 }
 @media(hover:hover) and (pointer:fine){
   .trust-grid>div:nth-child(1):hover{
     --trust-image:url('images/showcase-1.webp');
     background-color:#15191d!important;
-    background-image:url('images/showcase-1.webp')!important;
-    background-position:center 52%!important;
-    background-size:cover!important;
-    background-repeat:no-repeat!important;
+    background-image:var(--trust-overlay),var(--trust-image)!important;
+    background-position:center,center 52%!important;
+    background-size:cover,cover!important;
+    background-repeat:no-repeat,no-repeat!important;
   }
 }
 
@@ -29,8 +29,8 @@
 @media(hover:hover) and (pointer:fine){
   .trust-grid>div:hover{
     background-color:#15191d!important;
-    background-image:var(--trust-image)!important;
-    background-repeat:no-repeat!important;
+    background-image:var(--trust-overlay),var(--trust-image)!important;
+    background-repeat:no-repeat,no-repeat!important;
   }
 }
 
@@ -593,5 +593,15 @@ main > .faq summary {
 @media(min-width:761px){
   .packages .heading h2{
     font-size:clamp(36px,2.8vw,40px);
+  }
+}
+
+/* Preserve the trust overlay depth on the shared background surface. */
+main .trust-grid > div{
+  box-shadow:0 8px 32px rgba(0,0,0,.35),inset 0 -80px 100px rgba(0,0,0,.18);
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  main .trust-grid > div:hover{
+    box-shadow:0 12px 40px rgba(0,0,0,.5),inset 0 -80px 100px rgba(0,0,0,.18);
   }
 }
