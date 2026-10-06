@@ -2,7 +2,7 @@
 
 /* Keep the +5000 card on one fixed image in every state. */
 .trust-grid>div:nth-child(1){
-  --trust-image:url('images/trust-ppf-refresh.webp');
+  --trust-image:url('images/showcase-1.webp');
   background-color:#15191d!important;
   background-image:var(--trust-overlay),var(--trust-image)!important;
   background-position:center,center 52%!important;
@@ -11,7 +11,7 @@
 }
 @media(hover:hover) and (pointer:fine){
   .trust-grid>div:nth-child(1):hover{
-    --trust-image:url('images/trust-ppf-refresh.webp');
+    --trust-image:url('images/showcase-1.webp');
     background-color:#15191d!important;
     background-image:var(--trust-overlay),var(--trust-image)!important;
     background-position:center,center 52%!important;
@@ -783,8 +783,6 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
   .hero-refreshed .hero-track{aspect-ratio:4/5;max-height:none}
 }
 
-/* Neutral campaign photo for the American-materials trust card. */
-.trust-grid>div:nth-child(4){--trust-image:url('images/trust-nano-refresh.webp')}
 
 /* Match refreshed service artwork to its native 16:9 canvas without letterboxing. */
 .services .service-card>img[src$="-refresh.webp"]{
