@@ -127,7 +127,7 @@ section,
     max-width:100%;
     margin:6px 0 0;
     font-size:0!important;
-    line-height:1;
+    line-height:1.4;
     letter-spacing:0;
     text-align:right;
   }
@@ -536,4 +536,52 @@ main > .faq summary {
 @media(prefers-reduced-motion:no-preference) {
   .branch-contact-sheet[open] {animation:branch-contact-enter .22s ease-out}
   @keyframes branch-contact-enter {from {transform:translateY(100%)} to {transform:translateY(0)}}
+}
+
+
+/* Center service CTA content on touch-sized layouts. */
+@media(max-width:760px){
+  .service-book{
+    justify-content:center;
+    gap:8px;
+  }
+}
+
+
+/* Desktop/tablet work gallery — six equal cards in a 3 × 2 grid. */
+@media(min-width:761px){
+  .work-grid{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    columns:auto!important;
+    gap:24px!important;
+    overflow:visible!important;
+  }
+  .work-item,
+  .work-item.wide,
+  .work-item:first-child{
+    width:100%!important;
+    max-width:none!important;
+    aspect-ratio:3/2!important;
+    margin:0!important;
+    grid-row:auto!important;
+    overflow:hidden!important;
+  }
+  .work-item img,
+  .work-item.wide img{
+    width:100%!important;
+    height:100%!important;
+    object-fit:cover!important;
+    object-position:center!important;
+  }
+}
+
+
+/* Keep the standalone detailing card compact on tablet/desktop. */
+@media(min-width:761px){
+  .package-services .polish{
+    width:100%;
+    max-width:680px;
+    margin-inline:auto;
+  }
 }
