@@ -585,3 +585,11 @@ main > .faq summary {
     margin-inline:auto;
   }
 }
+
+
+/* Keep the packages section heading compact on tablet/desktop only. */
+@media(min-width:761px){
+  .packages .heading h2{
+    font-size:clamp(36px,2.8vw,40px);
+  }
+}
