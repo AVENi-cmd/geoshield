@@ -23,6 +23,7 @@
 /* Do not animate/replace full trust-card backgrounds on hover. */
 .trust-grid>div{
   background-clip:padding-box;
+  clip-path:inset(0 round 16px);
   transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s!important;
 }
 @media(hover:hover) and (pointer:fine){
