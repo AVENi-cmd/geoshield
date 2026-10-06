@@ -575,3 +575,13 @@ main > .faq summary {
     object-position:center!important;
   }
 }
+
+
+/* Keep the standalone detailing card compact on tablet/desktop. */
+@media(min-width:761px){
+  .package-services .polish{
+    width:100%;
+    max-width:680px;
+    margin-inline:auto;
+  }
+}
