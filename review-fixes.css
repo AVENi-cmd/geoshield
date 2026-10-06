@@ -605,3 +605,9 @@ main .trust-grid > div{
     box-shadow:0 12px 40px rgba(0,0,0,.5),inset 0 -80px 100px rgba(0,0,0,.18);
   }
 }
+
+/* Align warranty and aftercare surfaces with the trust cards. */
+main > .warranty .warranty-grid > article,
+main > .warranty .aftercare > li{
+  background-color:#15191d;
+}
