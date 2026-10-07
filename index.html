@@ -192,23 +192,43 @@
           <article class="service-interactive-panel active" id="service-panel-ppf" role="tabpanel" aria-labelledby="service-tab-ppf" data-service-panel="ppf">
             <div class="service-interactive-visual" aria-hidden="true">
               <svg class="service-interactive-svg service-interactive-svg-ppf" viewBox="0 0 720 320" focusable="false">
-                <defs>
-                  <linearGradient id="ppf-surface" x1="0" x2="1" y1="0" y2="1">
-                    <stop offset="0" stop-color="#252525"/>
-                    <stop offset="1" stop-color="#0f0f0f"/>
-                  </linearGradient>
-                  <linearGradient id="ppf-film" x1="0" x2="1">
-                    <stop offset="0" stop-color="#ffffff" stop-opacity=".02"/>
-                    <stop offset=".58" stop-color="#ffffff" stop-opacity=".13"/>
-                    <stop offset="1" stop-color="#F5A623" stop-opacity=".08"/>
-                  </linearGradient>
-                </defs>
-                <path d="M95 244C198 210 307 198 426 207c72 5 139 20 199 45v28H95Z" fill="url(#ppf-surface)" stroke="#fff" stroke-opacity=".12" stroke-width="1.2"/>
-                <path d="M119 198c96-31 198-42 305-34 65 5 126 18 181 40l-18 24c-50-18-105-30-164-34-102-7-198 3-286 31Z" fill="url(#ppf-film)" stroke="#fff" stroke-opacity=".24" stroke-width="1.2"/>
-                <path d="M136 158c91-28 187-38 288-30 58 4 113 16 164 35l-17 22c-47-16-97-26-151-30-96-7-186 2-268 28Z" fill="url(#ppf-film)" stroke="#F5A623" stroke-opacity=".38" stroke-width="1.2"/>
-                <path d="M156 122c82-24 169-32 260-25 52 4 101 14 146 30" fill="none" stroke="#F5A623" stroke-opacity=".72" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M156 122 136 158M562 127l26 36" fill="none" stroke="#F5A623" stroke-opacity=".34" stroke-width="1"/>
-              </svg>
+<defs>
+<linearGradient id="ppf2-paint" x1="0" y1="0" x2=".2" y2="1"><stop stop-color="#565656"/><stop offset=".22" stop-color="#202020"/><stop offset=".6" stop-color="#0A0A0A"/><stop offset="1" stop-color="#181818"/></linearGradient>
+<linearGradient id="ppf2-film" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#fff" stop-opacity=".025"/><stop offset=".45" stop-color="#fff" stop-opacity=".13"/><stop offset=".7" stop-color="#F5A623" stop-opacity=".025"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient>
+<linearGradient id="ppf2-edge"><stop stop-color="#F5A623" stop-opacity="0"/><stop offset=".25" stop-color="#F5A623" stop-opacity=".45"/><stop offset=".55" stop-color="#FBBF24"/><stop offset="1" stop-color="#F5A623" stop-opacity=".08"/></linearGradient>
+<linearGradient id="ppf2-shine"><stop stop-color="#fff" stop-opacity="0"/><stop offset=".48" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<radialGradient id="ppf2-ambient"><stop stop-color="#F5A623" stop-opacity=".12"/><stop offset="1" stop-color="#F5A623" stop-opacity="0"/></radialGradient>
+<radialGradient id="ppf2-flare"><stop stop-color="#FBBF24" stop-opacity=".6"/><stop offset=".18" stop-color="#F5A623" stop-opacity=".2"/><stop offset="1" stop-color="#F5A623" stop-opacity="0"/></radialGradient>
+<linearGradient id="ppf2-stone" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#bdb3a3"/><stop offset=".42" stop-color="#645b4e"/><stop offset="1" stop-color="#272522"/></linearGradient>
+<filter id="ppf2-blur" x="-.5" y="-.5" width="2" height="2"><feGaussianBlur stdDeviation="3"/></filter>
+</defs>
+
+<ellipse cx="374" cy="202" rx="290" ry="110" fill="url(#ppf2-ambient)"/>
+<ellipse cx="366" cy="278" rx="260" ry="17" fill="#000" opacity=".6"/>
+<path d="M75 227Q307 113 597 208L651 256Q379 200 100 282Z" fill="url(#ppf2-paint)" stroke="#fff" stroke-opacity=".13" stroke-width="1.2"/>
+<path d="M100 282Q382 205 651 256L644 271Q366 226 107 293Z" fill="#0A0A0A" stroke="#fff" stroke-opacity=".08"/>
+<path d="M98 228Q315 133 591 212" fill="none" stroke="url(#ppf2-shine)" stroke-width="1.5"/>
+<path d="M133 254Q350 181 615 239" fill="none" stroke="#fff" stroke-opacity=".07"/>
+<path d="M144 220Q324 159 560 211L568 215Q322 166 149 225Z" fill="#fff" opacity=".035"/>
+<path d="M85 171Q314 69 585 150Q616 159 642 186L622 231Q339 155 104 234Z" fill="url(#ppf2-film)" stroke="#fff" stroke-opacity=".2" stroke-width="1.2"/>
+<path d="M85 171Q314 69 585 150Q616 159 642 186" fill="none" stroke="url(#ppf2-edge)" stroke-width="1.6"/>
+<path d="M104 234Q339 155 622 231" fill="none" stroke="url(#ppf2-shine)" stroke-width="1.2"/>
+<path d="M566 145Q597 197 642 186L622 231Q588 207 566 145Z" fill="#fff" fill-opacity=".045" stroke="#fff" stroke-opacity=".2"/>
+<path d="M129 171Q326 92 565 156" fill="none" stroke="#fff" stroke-opacity=".08"/>
+<path d="M103 165Q315 73 583 150" fill="none" stroke="#F5A623" stroke-opacity=".35" stroke-width="3" filter="url(#ppf2-blur)"/>
+<g fill="url(#ppf2-flare)"><ellipse cx="264" cy="117" rx="40" ry="25"/><ellipse cx="431" cy="117" rx="33" ry="24"/></g>
+<g fill="none" stroke-width="1.2" stroke-linecap="round">
+<path d="m212 49 51 63" stroke="#b8ae9b" stroke-opacity=".35" stroke-dasharray="3 6"/>
+<path d="M268 111Q287 72 331 48m-12 1 12-1-5 10" stroke="#F5A623" stroke-opacity=".7"/>
+<path d="m471 47-35 64" stroke="#b8ae9b" stroke-opacity=".3" stroke-dasharray="3 6"/>
+<path d="M438 113Q477 84 529 96m-9-6 9 6-11 4" stroke="#F5A623" stroke-opacity=".65"/>
+<path d="m255 107-9-6m27 5 6-8m-14 26-3 9m164-25-7-6m20 3 5-8" stroke="#FBBF24" stroke-opacity=".8"/>
+</g>
+<g fill="url(#ppf2-stone)" stroke="#d9c6a2" stroke-opacity=".3" stroke-width=".7"><path d="m239 75 8-5 9 6-2 10-10 3-8-7Z"/><path d="m452 71 6-4 7 5-2 8-8 1-5-5Z"/><path d="m307 60 6-4 7 4-3 8-8-1Z"/><path d="m509 93 5-4 7 3-1 7-8 2Z"/></g>
+<g fill="#FBBF24"><circle cx="264" cy="116" r="2"/><circle cx="432" cy="117" r="1.8"/></g>
+<g fill="#F5A623" opacity=".65"><circle cx="209" cy="187" r="1.4"/><circle cx="267" cy="172" r="1"/><circle cx="332" cy="167" r="1.6"/><circle cx="400" cy="170" r="1"/><circle cx="471" cy="181" r="1.5"/><circle cx="523" cy="192" r="1"/></g>
+
+</svg>
             </div>
             <div class="service-interactive-copy">
               <div>
@@ -228,37 +248,43 @@
           <article class="service-interactive-panel" id="service-panel-tint" role="tabpanel" aria-labelledby="service-tab-tint" data-service-panel="tint" hidden>
             <div class="service-interactive-visual" aria-hidden="true">
               <svg class="service-interactive-svg service-interactive-svg-tint" viewBox="0 0 720 320" focusable="false">
-                <defs>
-                  <linearGradient id="tint-glass" x1="0" x2="1" y1="0" y2="1">
-                    <stop offset="0" stop-color="#ffffff" stop-opacity=".10"/>
-                    <stop offset=".5" stop-color="#8d9398" stop-opacity=".08"/>
-                    <stop offset="1" stop-color="#ffffff" stop-opacity=".02"/>
-                  </linearGradient>
-                  <linearGradient id="tint-ray" x1="0" x2="1">
-                    <stop offset="0" stop-color="#F5A623" stop-opacity=".92"/>
-                    <stop offset="1" stop-color="#F5A623" stop-opacity=".16"/>
-                  </linearGradient>
-                </defs>
-                <path d="M294 62 483 95 424 265l-189-33Z" fill="url(#tint-glass)" stroke="#fff" stroke-opacity=".27" stroke-width="1.4"/>
-                <path d="M309 76 465 103 412 249l-156-27Z" fill="#0A0A0A" fill-opacity=".38" stroke="#F5A623" stroke-opacity=".22" stroke-width="1"/>
-                <g fill="none" stroke="url(#tint-ray)" stroke-width="2" stroke-linecap="round">
-                  <path d="M86 82 280 124"/>
-                  <path d="M72 132 264 164"/>
-                  <path d="M70 184 250 205"/>
-                </g>
-                <g fill="none" stroke="#F5A623" stroke-opacity=".18" stroke-width="1.4" stroke-linecap="round">
-                  <path d="M438 145 602 181"/>
-                  <path d="M425 184 573 210"/>
-                  <path d="M412 221 548 238"/>
-                </g>
-                <path d="M486 94c34 36 56 76 66 120" fill="none" stroke="#fff" stroke-opacity=".08" stroke-width="1"/>
-              </svg>
+<defs>
+<radialGradient id="tint2-hot"><stop stop-color="#F5A623" stop-opacity=".19"/><stop offset="1" stop-color="#F5A623" stop-opacity="0"/></radialGradient>
+<radialGradient id="tint2-cabin"><stop stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="tint2-glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".17"/><stop offset=".35" stop-color="#fff" stop-opacity=".035"/><stop offset=".8" stop-color="#fff" stop-opacity=".065"/><stop offset="1" stop-color="#0A0A0A" stop-opacity=".8"/></linearGradient>
+<linearGradient id="tint2-frame"><stop stop-color="#555"/><stop offset=".5" stop-color="#161616"/><stop offset="1" stop-color="#3c3c3c"/></linearGradient>
+<linearGradient id="tint2-ray"><stop stop-color="#F5A623" stop-opacity="0"/><stop offset=".7" stop-color="#F5A623" stop-opacity=".65"/><stop offset="1" stop-color="#FBBF24"/></linearGradient>
+<linearGradient id="tint2-reflect" x1="1" y1="1" x2="0" y2="0"><stop stop-color="#FBBF24" stop-opacity=".8"/><stop offset="1" stop-color="#F5A623" stop-opacity="0"/></linearGradient>
+<linearGradient id="tint2-edge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#F5A623" stop-opacity="0"/><stop offset=".4" stop-color="#FBBF24"/><stop offset="1" stop-color="#F5A623" stop-opacity=".1"/></linearGradient>
+<filter id="tint2-glow" x="-.5" y="-.5" width="2" height="2"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+
+<ellipse cx="209" cy="143" rx="186" ry="132" fill="url(#tint2-hot)"/>
+<ellipse cx="470" cy="174" rx="176" ry="120" fill="url(#tint2-cabin)"/>
+<path d="M303 253 337 92Q341 77 357 72L492 43Q511 40 523 56L602 213Z" fill="#111" stroke="url(#tint2-frame)" stroke-width="8" stroke-linejoin="round"/>
+<path d="m316 241 33-146q2-9 13-12l130-27q14-3 22 9l71 140Z" fill="url(#tint2-glass)" stroke="#fff" stroke-opacity=".3" stroke-width="1.2"/>
+<path d="m492 58 21 10 66 131-22 4Z" fill="#fff" opacity=".035"/>
+<path d="m347 96 11-7-30 140-10 2Z" fill="#fff" opacity=".075"/>
+<path d="m303 253 299-40 20 22-319 44Z" fill="#151515" stroke="#fff" stroke-opacity=".12"/>
+<path d="m320 261 275-36" stroke="#fff" stroke-opacity=".2"/>
+<path d="M463 227q-13-21-8-44l10-47q2-10 12-12l15-3q8-1 11 7l12 47q3 14 21 31" fill="#fff" fill-opacity=".015" stroke="#b8b8b8" stroke-opacity=".2" stroke-width="1.2"/>
+<path d="m469 129 4-18q2-8 10-9l12-2q7-1 9 6l3 18m-47 78 47-7" fill="none" stroke="#b8b8b8" stroke-opacity=".2"/>
+<path d="M74 68 340 126 329 171 66 107Z" fill="#F5A623" opacity=".025"/>
+<g fill="none" stroke="url(#tint2-ray)" stroke-width="1.5" stroke-linecap="round"><path d="m77 82 263 58m-12-8 12 8-13 3M63 143l266 39m-12-7 12 7-13 4M84 202l235 22m-11-7 11 7-12 5"/></g>
+<path d="m343 116-26 119" stroke="#F5A623" stroke-width="5" opacity=".38" filter="url(#tint2-glow)"/>
+<path d="m345 104-30 135" stroke="url(#tint2-edge)" stroke-width="1.5"/>
+<g fill="none" stroke="url(#tint2-reflect)" stroke-width="1.2"><path d="M340 140Q277 111 241 52M329 182Q249 155 201 92M319 224Q244 217 167 160"/><path d="M340 140Q298 92 288 49M329 182Q262 155 219 151" opacity=".45"/></g>
+<g fill="#FBBF24"><circle cx="340" cy="140" r="2"/><circle cx="329" cy="182" r="2"/><circle cx="319" cy="224" r="2"/></g>
+<g fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="1.2" stroke-linecap="round"><path d="M390 151q20-12 43-7M380 179q24-13 49-7M373 206q23-11 47-5"/></g>
+<g stroke="#F5A623" stroke-opacity=".13" fill="none"><circle cx="96" cy="82" r="22"/><circle cx="96" cy="82" r="30" stroke-dasharray="1 7"/></g>
+
+</svg>
             </div>
             <div class="service-interactive-copy">
               <div>
                 <span class="service-interactive-eyebrow">HEAT INSULATION</span>
-                <h2>حرارة أقل داخل المقصورة</h2>
-                <p>فيلم عازل يخفف انتقال الحرارة عبر الزجاج ويساعد على حماية المقصورة من الأشعة فوق البنفسجية.</p>
+                <h2>حرارة أقل داخل السيارة</h2>
+                <p>فيلم عازل يخفف انتقال الحرارة عبر الزجاج ويساعد على حماية الأجزاء الداخلية من الأشعة فوق البنفسجية.</p>
                 <ul class="service-interactive-benefits">
                   <li>تقليل الحرارة</li>
                   <li>حماية من الأشعة فوق البنفسجية</li>
@@ -272,34 +298,45 @@
           <article class="service-interactive-panel" id="service-panel-nano" role="tabpanel" aria-labelledby="service-tab-nano" data-service-panel="nano" hidden>
             <div class="service-interactive-visual" aria-hidden="true">
               <svg class="service-interactive-svg service-interactive-svg-nano" viewBox="0 0 720 320" focusable="false">
-                <defs>
-                  <linearGradient id="nano-surface" x1="0" x2="1" y1="0" y2="1">
-                    <stop offset="0" stop-color="#202020"/>
-                    <stop offset=".6" stop-color="#111"/>
-                    <stop offset="1" stop-color="#090909"/>
-                  </linearGradient>
-                  <radialGradient id="nano-drop" cx=".35" cy=".28" r=".72">
-                    <stop offset="0" stop-color="#fff" stop-opacity=".34"/>
-                    <stop offset=".38" stop-color="#fff" stop-opacity=".09"/>
-                    <stop offset="1" stop-color="#F5A623" stop-opacity=".05"/>
-                  </radialGradient>
-                </defs>
-                <path d="M76 230c122-70 252-91 392-61 67 14 126 40 176 78v38H76Z" fill="url(#nano-surface)" stroke="#fff" stroke-opacity=".11" stroke-width="1.2"/>
-                <path d="M116 232c123-53 247-66 372-39 48 10 92 26 133 48" fill="none" stroke="#F5A623" stroke-opacity=".34" stroke-width="1.5" stroke-linecap="round"/>
-                <g fill="url(#nano-drop)" stroke="#fff" stroke-opacity=".3" stroke-width="1">
-                  <ellipse cx="245" cy="169" rx="25" ry="18"/>
-                  <ellipse cx="330" cy="137" rx="18" ry="13"/>
-                  <ellipse cx="399" cy="181" rx="31" ry="22"/>
-                  <ellipse cx="488" cy="155" rx="15" ry="11"/>
-                </g>
-                <g fill="#fff" fill-opacity=".42">
-                  <ellipse cx="237" cy="163" rx="5" ry="3"/>
-                  <ellipse cx="324" cy="133" rx="4" ry="2.5"/>
-                  <ellipse cx="389" cy="173" rx="6" ry="3.5"/>
-                  <ellipse cx="483" cy="151" rx="3.5" ry="2"/>
-                </g>
-                <path d="M154 216c98-37 194-47 288-30" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="1"/>
-              </svg>
+<defs>
+<linearGradient id="nano2-paint" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#404040"/><stop offset=".2" stop-color="#202020"/><stop offset=".5" stop-color="#0A0A0A"/><stop offset="1" stop-color="#171717"/></linearGradient>
+<linearGradient id="nano2-sweep"><stop stop-color="#F5A623" stop-opacity="0"/><stop offset=".38" stop-color="#FBBF24" stop-opacity=".8"/><stop offset=".7" stop-color="#F5A623" stop-opacity=".25"/><stop offset="1" stop-color="#F5A623" stop-opacity="0"/></linearGradient>
+<radialGradient id="nano2-body" cx=".35" cy=".22" r=".8"><stop stop-color="#fff" stop-opacity=".28"/><stop offset=".2" stop-color="#fff" stop-opacity=".09"/><stop offset=".65" stop-color="#151515" stop-opacity=".7"/><stop offset=".88" stop-color="#F5A623" stop-opacity=".12"/><stop offset="1" stop-color="#fff" stop-opacity=".24"/></radialGradient>
+<linearGradient id="nano2-rim" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff" stop-opacity=".8"/><stop offset=".35" stop-color="#fff" stop-opacity=".13"/><stop offset=".7" stop-color="#F5A623" stop-opacity=".25"/><stop offset="1" stop-color="#FBBF24" stop-opacity=".75"/></linearGradient>
+<radialGradient id="nano2-aura"><stop stop-color="#F5A623" stop-opacity=".1"/><stop offset="1" stop-color="#F5A623" stop-opacity="0"/></radialGradient>
+<filter id="nano2-soft" x="-.5" y="-1" width="2" height="3"><feGaussianBlur stdDeviation="3"/></filter>
+<g id="nano2-bead">
+<ellipse cy="16" rx="31" ry="9" fill="#000" opacity=".55"/>
+<ellipse cy="14" rx="28" ry="5" fill="#F5A623" opacity=".16" filter="url(#nano2-soft)"/>
+<path d="M-28 7C-29-8-16-25 0-26 17-27 29-10 29 5 29 18 13 22-1 22-17 22-27 18-28 7Z" fill="url(#nano2-body)" stroke="url(#nano2-rim)" stroke-width=".8"/>
+<path d="M-21-3q3-14 17-17" fill="none" stroke="#fff" stroke-opacity=".68" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M-20 8Q0-4 23 5" fill="none" stroke="#FBBF24" stroke-opacity=".8" stroke-width="1.3"/>
+<path d="M-20 11Q1 0 24 8" fill="none" stroke="#F5A623" stroke-opacity=".2" stroke-width="2"/>
+<path d="M-13 16q14 5 26-1" fill="none" stroke="#fff" stroke-opacity=".2" stroke-width=".8"/>
+<ellipse cx="-11" cy="-15" rx="4" ry="1.4" fill="#fff" opacity=".6" transform="rotate(-35 -11 -15)"/>
+</g>
+</defs>
+
+<ellipse cx="349" cy="170" rx="280" ry="125" fill="url(#nano2-aura)"/>
+<path d="M62 227Q261 91 492 140q98 21 167 93l-14 54Q353 194 80 285Z" fill="url(#nano2-paint)" stroke="#fff" stroke-opacity=".15" stroke-width="1.2"/>
+<path d="M80 285Q353 194 645 287" fill="none" stroke="#fff" stroke-opacity=".13"/>
+<path d="M94 226Q295 103 526 163" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="1"/>
+<path d="M91 238Q285 118 626 236" fill="none" stroke="url(#nano2-sweep)" stroke-width="9" opacity=".15" filter="url(#nano2-soft)"/>
+<path d="M91 237Q285 117 626 235" fill="none" stroke="url(#nano2-sweep)" stroke-width="1.5"/>
+<path d="M107 244Q306 140 626 241" fill="none" stroke="url(#nano2-sweep)" stroke-width=".8" opacity=".3"/>
+<use href="#nano2-bead" transform="translate(203 184) scale(0.61)"/>
+<use href="#nano2-bead" transform="translate(278 145) scale(0.42)"/>
+<use href="#nano2-bead" transform="translate(458 165) scale(0.6)"/>
+<use href="#nano2-bead" transform="translate(513 211) scale(0.4)"/>
+<use href="#nano2-bead" transform="translate(570 225) scale(0.25)"/>
+<use href="#nano2-bead" transform="translate(159 234) scale(0.3)"/>
+<use href="#nano2-bead" transform="translate(265 233) scale(0.42)"/>
+<use href="#nano2-bead" transform="translate(409 236) scale(0.27)"/>
+<use href="#nano2-bead" transform="translate(459 128) scale(0.23)"/>
+<use href="#nano2-bead" transform="translate(336 111) scale(0.2)"/>
+<use href="#nano2-bead" transform="translate(350 187) scale(1.55)"/>
+<g fill="#FBBF24" opacity=".4"><circle cx="230" cy="203" r="1"/><circle cx="427" cy="190" r="1.2"/><circle cx="298" cy="257" r=".8"/></g>
+</svg>
             </div>
             <div class="service-interactive-copy">
               <div>
