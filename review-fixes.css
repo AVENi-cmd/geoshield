@@ -978,3 +978,35 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
   .service-interactive-action{transition:none!important}
 }
 
+/* Announcement bar — emphasis only */
+.announce{
+  font-family:"Cairo","IBM Plex Sans Arabic",sans-serif;
+  color:#FFFFFF;
+  font-size:15px;
+  font-weight:700;
+  line-height:1.45;
+  padding:12px 14px;
+}
+.announce .announce-copy{
+  display:inline;
+  color:#FFFFFF;
+  text-align:center;
+}
+.announce .announce-highlight{
+  color:#F5A623;
+  font-weight:700;
+}
+@media(max-width:760px){
+  .announce{
+    font-size:13px;
+    line-height:1.5;
+    padding:10px 12px;
+  }
+  .announce .announce-copy{display:inline}
+}
+@media(max-width:390px){
+  .announce{
+    font-size:13px;
+    padding:9px 12px;
+  }
+}
