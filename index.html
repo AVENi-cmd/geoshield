@@ -141,6 +141,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="enhancements.css">
   <link rel="stylesheet" href="refinements.css">
@@ -587,7 +588,7 @@
           </div>
           <div class="form-row">
             <label>الفرع<select name="branch"><option value="hofuf">الأحساء</option><option value="khafji">الخفجي</option></select></label>
-            <label>التاريخ المفضل<input type="date" name="date" dir="ltr" lang="en"></label>
+            <label>التاريخ المفضل<input type="text" name="date" id="dateInput" placeholder="DD/MM/YYYY" dir="ltr" inputmode="numeric" autocomplete="off" pattern="(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/[0-9]{4}" title="DD/MM/YYYY"></label>
           </div>
           <label>ملاحظات<textarea name="notes" rows="3"></textarea></label>
           <button class="button primary submit" type="submit">إرسال عبر واتساب</button>
@@ -650,6 +651,7 @@
     <img alt="عرض مكبر للصورة">
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js" defer></script>
   <script src="script.js" defer></script>
 </body>
 </html>

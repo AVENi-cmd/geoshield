@@ -651,18 +651,46 @@
     location.href = `https://wa.me/${branch.phone}?text=${encodeURIComponent(message)}`;
   });
 
-  const dateInput = $('input[type="date"]');
-  function syncBookingMinDate() {
-    if (!dateInput) return;
+  const dateInput = $('#dateInput');
+  let bookingDatePicker = null;
+
+  function getRiyadhBookingMinDate() {
     const parts = new Intl.DateTimeFormat('en-US', {
       timeZone: 'Asia/Riyadh',
       year: 'numeric',
       month: '2-digit',
       day: '2-digit'
     }).formatToParts(new Date());
-    const part = type => parts.find(item => item.type === type)?.value || '';
-    dateInput.min = `${part('year')}-${part('month')}-${part('day')}`;
+    const part = type => Number(parts.find(item => item.type === type)?.value || 0);
+    return new Date(part('year'), part('month') - 1, part('day'));
   }
+
+  function syncBookingMinDate() {
+    if (!dateInput) return;
+    const minDate = getRiyadhBookingMinDate();
+    if (bookingDatePicker) bookingDatePicker.set('minDate', minDate);
+  }
+
+  if (dateInput && window.flatpickr) {
+    bookingDatePicker = window.flatpickr(dateInput, {
+      dateFormat: 'd/m/Y',
+      disableMobile: true,
+      allowInput: false,
+      clickOpens: true,
+      locale: window.flatpickr.l10ns.default,
+      minDate: getRiyadhBookingMinDate(),
+      ariaDateFormat: 'F j, Y',
+      onReady: (_selectedDates, _dateStr, instance) => {
+        instance.calendarContainer.setAttribute('dir', 'ltr');
+        instance.calendarContainer.setAttribute('lang', 'en');
+      },
+      onOpen: (_selectedDates, _dateStr, instance) => {
+        instance.calendarContainer.setAttribute('dir', 'ltr');
+        instance.calendarContainer.setAttribute('lang', 'en');
+      }
+    });
+  }
+
   syncBookingMinDate();
 
   document.addEventListener('visibilitychange', () => {
