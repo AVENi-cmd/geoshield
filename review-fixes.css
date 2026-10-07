@@ -1010,3 +1010,38 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
     padding:9px 12px;
   }
 }
+
+/* Booking date picker — locale-independent English UI */
+#dateInput{
+  direction:ltr;
+  text-align:left;
+  font-variant-numeric:tabular-nums;
+}
+.flatpickr-calendar{
+  direction:ltr;
+  z-index:9999;
+  font-family:"IBM Plex Sans Arabic","Segoe UI",Arial,sans-serif;
+}
+.flatpickr-calendar,
+.flatpickr-months,
+.flatpickr-weekdays,
+.flatpickr-days{
+  text-align:left;
+}
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected:hover,
+.flatpickr-day.startRange:hover,
+.flatpickr-day.endRange:hover{
+  background:#F5A623;
+  border-color:#F5A623;
+  color:#0A0A0A;
+}
+.flatpickr-day.today{border-color:#F5A623}
+.flatpickr-day.today:hover,
+.flatpickr-day.today:focus{
+  background:#F5A623;
+  border-color:#F5A623;
+  color:#0A0A0A;
+}
