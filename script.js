@@ -4,7 +4,6 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
   const saveData = navigator.connection?.saveData === true;
 
   const promiseIcons = [
@@ -17,8 +16,6 @@
   const uiIcons = {
     previous: '<svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>',
     next: '<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>',
-    pause: '<svg viewBox="0 0 24 24"><path d="M9 7v10M15 7v10"/></svg>',
-    play: '<svg viewBox="0 0 24 24"><path d="m9 7 8 5-8 5V7Z"/></svg>',
     phone: '<svg viewBox="0 0 24 24"><path d="M7.2 3.8 9.8 7l-2 2.2a15.8 15.8 0 0 0 7 7l2.2-2 3.2 2.6c.4.3.5.9.2 1.3-1 1.5-2.4 2.2-4 2-6.5-.9-11.6-6-12.5-12.5-.2-1.6.5-3 2-4 .4-.3 1-.2 1.3.2Z"/></svg>',
     message: '<svg viewBox="0 0 24 24"><path d="M5 5h14v11H9l-4 3V5Z"/><path d="M8 9h8M8 12h5"/></svg>',
     map: '<svg viewBox="0 0 24 24"><path d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11Z"/><circle cx="12" cy="10" r="2"/></svg>',
@@ -83,169 +80,77 @@
     sections.forEach(section => navObserver.observe(section));
   }
 
-  const hero = $('.hero');
-  const slides = $$('.hero-slide');
-  const dots = $('.hero-dots');
-  const progress = $('.hero-progress i');
-  const previousArrow = $('.hero-arrow.prev');
-  const nextArrow = $('.hero-arrow.next');
-  const heroPauseReasons = new Set();
-  let current = Math.max(0, slides.findIndex(slide => slide.classList.contains('active')));
-  let timer;
-  let touchStartX = 0;
-  let userPaused = false;
-  let heroPauseControl = null;
+  const interactiveServices = $('.services-interactive');
+  if (interactiveServices) {
+    const serviceTabs = $$('[data-service-tab]', interactiveServices);
+    const servicePanels = $$('[data-service-panel]', interactiveServices);
+    const serviceStage = $('.services-interactive-stage', interactiveServices);
+    let serviceTransitionTimer = 0;
 
-  hero?.setAttribute('role', 'region');
-  hero?.setAttribute('aria-roledescription', 'carousel');
-  if (previousArrow) previousArrow.innerHTML = uiIcons.previous;
-  if (nextArrow) nextArrow.innerHTML = uiIcons.next;
-  if (dots) {
-    dots.setAttribute('role', 'group');
-    dots.replaceChildren();
-  }
+    const applyServicePanel = key => {
+      serviceTabs.forEach(tab => {
+        const active = tab.dataset.serviceTab === key;
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+      });
 
-  slides.forEach((slide, index) => {
-    const slideId = `hero-slide-${index + 1}`;
-    slide.id = slideId;
-    slide.setAttribute('role', 'group');
-    slide.setAttribute('aria-roledescription', 'slide');
-    slide.setAttribute('aria-label', `${index + 1} من ${slides.length}`);
-    slide.setAttribute('aria-hidden', String(index !== current));
-    if (!dots) return;
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.setAttribute('aria-label', `عرض الشريحة ${index + 1}`);
-    button.setAttribute('aria-controls', slideId);
-    button.addEventListener('click', () => goToSlide(index));
-    dots.append(button);
-  });
+      servicePanels.forEach(panel => {
+        const active = panel.dataset.servicePanel === key;
+        panel.classList.toggle('active', active);
+        panel.hidden = !active;
+      });
+    };
 
-  if (hero && slides.length > 1 && !reduceMotion && !saveData) {
-    if (!$('#gs-hero-pause-style')) {
-      const pauseStyle = document.createElement('style');
-      pauseStyle.id = 'gs-hero-pause-style';
-      pauseStyle.textContent = '.hero-pause-control{position:absolute;z-index:8;bottom:14px;right:clamp(14px,2.4vw,38px);width:42px;height:42px;display:grid;place-items:center;padding:0;border:1px solid rgba(255,255,255,.22);border-radius:12px;background:rgba(8,10,12,.58);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}.hero-pause-control:hover{background:rgba(245,166,35,.9);border-color:#F5A623;color:#090a0b}.hero-pause-control:active{transform:scale(.96)}.hero-pause-control:focus-visible{outline:2px solid #FBBF24;outline-offset:3px}.hero-pause-control svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}@media(max-width:760px){.hero-pause-control{right:max(10px,env(safe-area-inset-right));bottom:10px;width:38px;height:38px;border-radius:11px}}@media(prefers-reduced-transparency:reduce){.hero-pause-control{backdrop-filter:none;-webkit-backdrop-filter:none;background:#101214}}';
-      document.head.append(pauseStyle);
-    }
+    const activateService = key => {
+      if (!serviceTabs.some(tab => tab.dataset.serviceTab === key)) return;
+      clearTimeout(serviceTransitionTimer);
 
-    heroPauseControl = document.createElement('button');
-    heroPauseControl.type = 'button';
-    heroPauseControl.className = 'hero-pause-control';
-    heroPauseControl.setAttribute('aria-pressed', 'false');
-    hero.append(heroPauseControl);
-  }
+      if (reduceMotion || !serviceStage) {
+        applyServicePanel(key);
+        return;
+      }
 
-  const heroCanRun = () => !reduceMotion && !saveData && !userPaused && !document.hidden && heroPauseReasons.size === 0 && slides.length > 1;
+      serviceStage.classList.add('is-switching');
+      serviceTransitionTimer = window.setTimeout(() => {
+        applyServicePanel(key);
+        requestAnimationFrame(() => serviceStage.classList.remove('is-switching'));
+      }, 150);
+    };
 
-  function syncHeroPauseControl() {
-    if (!heroPauseControl) return;
-    heroPauseControl.setAttribute('aria-pressed', String(userPaused));
-    heroPauseControl.setAttribute('aria-label', userPaused ? 'تشغيل العرض التلقائي' : 'إيقاف العرض التلقائي');
-    heroPauseControl.title = userPaused ? 'تشغيل العرض التلقائي' : 'إيقاف العرض التلقائي';
-    heroPauseControl.innerHTML = userPaused ? uiIcons.play : uiIcons.pause;
-  }
+    serviceTabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateService(tab.dataset.serviceTab));
+      tab.addEventListener('keydown', event => {
+        const keys = ['ArrowRight', 'ArrowLeft', 'Home', 'End'];
+        if (!keys.includes(event.key)) return;
+        event.preventDefault();
 
-  function stopHero() {
-    clearTimeout(timer);
-    if (progress) progress.style.transition = 'none';
-  }
+        let nextIndex = index;
+        if (event.key === 'Home') nextIndex = 0;
+        else if (event.key === 'End') nextIndex = serviceTabs.length - 1;
+        else {
+          const step = event.key === 'ArrowRight' ? -1 : 1;
+          nextIndex = (index + step + serviceTabs.length) % serviceTabs.length;
+        }
 
-  function scheduleHero() {
-    clearTimeout(timer);
-    if (heroCanRun()) timer = setTimeout(() => goToSlide(current + 1), 6500);
-  }
-
-  function restartProgress() {
-    if (!progress) return;
-    progress.style.transition = 'none';
-    progress.style.width = '0';
-    if (!heroCanRun()) return;
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      if (!heroCanRun()) return;
-      progress.style.transition = 'width 6.5s linear';
-      progress.style.width = '100%';
-    }));
-  }
-
-  function setHeroPause(reason, paused) {
-    if (paused) heroPauseReasons.add(reason);
-    else heroPauseReasons.delete(reason);
-    if (heroCanRun()) {
-      restartProgress();
-      scheduleHero();
-    } else {
-      stopHero();
-    }
-  }
-
-  function goToSlide(index) {
-    if (!slides.length) return;
-    current = (index + slides.length) % slides.length;
-    slides.forEach((slide, slideIndex) => {
-      const active = slideIndex === current;
-      slide.classList.toggle('active', active);
-      slide.setAttribute('aria-hidden', String(!active));
+        const nextTab = serviceTabs[nextIndex];
+        activateService(nextTab.dataset.serviceTab);
+        nextTab.focus();
+      });
     });
-    if (dots) $$('button', dots).forEach((button, buttonIndex) => {
-      const active = buttonIndex === current;
-      button.classList.toggle('active', active);
-      if (active) button.setAttribute('aria-current', 'true');
-      else button.removeAttribute('aria-current');
+
+    $$('.service-interactive-action', interactiveServices).forEach(link => {
+      link.addEventListener('click', () => {
+        const bookingService = $('select[name="service"]');
+        const requestedService = link.dataset.interactiveService;
+        if (!bookingService || !requestedService) return;
+        const matchingOption = [...bookingService.options].find(option => option.value === requestedService);
+        if (matchingOption) bookingService.value = requestedService;
+      });
     });
-    restartProgress();
-    scheduleHero();
+
+    applyServicePanel(serviceTabs.find(tab => tab.classList.contains('active'))?.dataset.serviceTab || 'ppf');
   }
-
-  heroPauseControl?.addEventListener('click', () => {
-    userPaused = !userPaused;
-    syncHeroPauseControl();
-    if (heroCanRun()) {
-      restartProgress();
-      scheduleHero();
-    } else {
-      stopHero();
-    }
-  });
-  syncHeroPauseControl();
-
-  previousArrow?.addEventListener('click', () => goToSlide(current - 1));
-  nextArrow?.addEventListener('click', () => goToSlide(current + 1));
-
-  hero?.addEventListener('touchstart', event => {
-    touchStartX = event.touches[0].clientX;
-    setHeroPause('touch', true);
-  }, { passive: true });
-
-  hero?.addEventListener('touchend', event => {
-    const distance = event.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(distance) > 48) goToSlide(current + (distance > 0 ? -1 : 1));
-    setHeroPause('touch', false);
-  }, { passive: true });
-
-  hero?.addEventListener('touchcancel', () => setHeroPause('touch', false), { passive: true });
-
-  if (canHover) {
-    hero?.addEventListener('pointerenter', () => setHeroPause('pointer', true));
-    hero?.addEventListener('pointerleave', () => setHeroPause('pointer', false));
-  }
-
-  hero?.addEventListener('focusin', () => setHeroPause('focus', true));
-  hero?.addEventListener('focusout', event => {
-    if (!hero.contains(event.relatedTarget)) setHeroPause('focus', false);
-  });
-
-  document.addEventListener('visibilitychange', () => setHeroPause('document', document.hidden));
-
-  if (hero && 'IntersectionObserver' in window) {
-    const heroObserver = new IntersectionObserver(entries => {
-      const entry = entries[0];
-      if (entry) setHeroPause('viewport', !entry.isIntersecting);
-    }, { threshold: .08 });
-    heroObserver.observe(hero);
-  }
-
-  goToSlide(current);
 
   if ('IntersectionObserver' in window && !reduceMotion) {
     const revealObserver = new IntersectionObserver(entries => {
