@@ -1,6 +1,6 @@
-# GeoShield Saudi
+# geoshield Saudi
 
-Official website for GeoShield branches in Al Ahsa (Al Hofuf) and Al Khafji, Saudi Arabia.
+Official website for geoshield branches in Al Ahsa (Al Hofuf) and Al Khafji, Saudi Arabia.
 
 Website: https://aveni-cmd.github.io/geoshield/
 Language: Arabic (RTL)
@@ -19,7 +19,7 @@ Affiliation: وكالة جيوشيلد لفرعي الأحساء والخفجي 
 
 ## Branches
 
-Both GeoShield branches are affiliated with مجموعة عواد الظفيري.
+Both geoshield branches are affiliated with مجموعة عواد الظفيري.
 
 ### Al Ahsa - Al Hofuf
 - Arabic name: فرع الأحساء - الهفوف
