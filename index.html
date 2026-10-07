@@ -140,9 +140,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="images/hero-nano-refresh.webp" media="(min-width:761px)" fetchpriority="high">
-  <link rel="preload" as="image" href="images/mobile-nano-refresh.webp" media="(max-width:760px)" fetchpriority="high">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="enhancements.css">
   <link rel="stylesheet" href="refinements.css">
@@ -175,31 +173,149 @@
   <main id="main-content">
     <div id="top"></div>
 
-    <section class="hero hero-refreshed" aria-label="خدمات جيوشيلد">
-      <div class="hero-track">
-        <article class="hero-slide">
-          <picture>
-            <source media="(max-width:760px)" srcset="images/mobile-ppf-refresh.webp" width="1080" height="1350">
-            <img src="images/hero-ppf-refresh.webp" width="1920" height="768" loading="lazy" fetchpriority="low" decoding="async" alt="أفلام حماية PPF — حماية شفافة تحافظ على طلاء سيارتك">
-          </picture>
-        </article>
-        <article class="hero-slide active">
-          <picture>
-            <source media="(max-width:760px)" srcset="images/mobile-nano-refresh.webp" width="1080" height="1350">
-            <img src="images/hero-nano-refresh.webp" width="1920" height="768" loading="eager" fetchpriority="high" decoding="async" alt="نانو سيراميك — لمعان عميق وعناية أسهل">
-          </picture>
-        </article>
-        <article class="hero-slide">
-          <picture>
-            <source media="(max-width:760px)" srcset="images/mobile-tint-refresh.webp" width="1080" height="1350">
-            <img src="images/hero-tint-refresh.webp" width="1920" height="768" loading="lazy" fetchpriority="low" decoding="async" alt="العازل الحراري — راحة داخلية وحماية من الأشعة فوق البنفسجية">
-          </picture>
-        </article>
+    <section class="services-interactive" aria-labelledby="interactive-services-title">
+      <div class="shell services-interactive-shell">
+        <div class="services-interactive-heading">
+          <span class="services-interactive-label">GEOSHIELD PROTECTION</span>
+          <h1 id="interactive-services-title">حماية تناسب سيارتك</h1>
+          <p>اختر الخدمة وشاهد كيف تعمل الحماية قبل الانتقال إلى التفاصيل.</p>
+        </div>
+
+        <div class="services-interactive-tabs" role="tablist" aria-label="خدمات الحماية">
+          <button class="active" id="service-tab-ppf" type="button" role="tab" aria-selected="true" aria-controls="service-panel-ppf" data-service-tab="ppf">حماية الطلاء <bdi>PPF</bdi></button>
+          <button id="service-tab-tint" type="button" role="tab" aria-selected="false" aria-controls="service-panel-tint" tabindex="-1" data-service-tab="tint">العازل الحراري</button>
+          <button id="service-tab-nano" type="button" role="tab" aria-selected="false" aria-controls="service-panel-nano" tabindex="-1" data-service-tab="nano">نانو سيراميك</button>
+        </div>
+
+        <div class="services-interactive-stage">
+          <article class="service-interactive-panel active" id="service-panel-ppf" role="tabpanel" aria-labelledby="service-tab-ppf" data-service-panel="ppf">
+            <div class="service-interactive-visual" aria-hidden="true">
+              <svg class="service-interactive-svg service-interactive-svg-ppf" viewBox="0 0 720 320" focusable="false">
+                <defs>
+                  <linearGradient id="ppf-surface" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#252525"/>
+                    <stop offset="1" stop-color="#0f0f0f"/>
+                  </linearGradient>
+                  <linearGradient id="ppf-film" x1="0" x2="1">
+                    <stop offset="0" stop-color="#ffffff" stop-opacity=".02"/>
+                    <stop offset=".58" stop-color="#ffffff" stop-opacity=".13"/>
+                    <stop offset="1" stop-color="#F5A623" stop-opacity=".08"/>
+                  </linearGradient>
+                </defs>
+                <path d="M95 244C198 210 307 198 426 207c72 5 139 20 199 45v28H95Z" fill="url(#ppf-surface)" stroke="#fff" stroke-opacity=".12" stroke-width="1.2"/>
+                <path d="M119 198c96-31 198-42 305-34 65 5 126 18 181 40l-18 24c-50-18-105-30-164-34-102-7-198 3-286 31Z" fill="url(#ppf-film)" stroke="#fff" stroke-opacity=".24" stroke-width="1.2"/>
+                <path d="M136 158c91-28 187-38 288-30 58 4 113 16 164 35l-17 22c-47-16-97-26-151-30-96-7-186 2-268 28Z" fill="url(#ppf-film)" stroke="#F5A623" stroke-opacity=".38" stroke-width="1.2"/>
+                <path d="M156 122c82-24 169-32 260-25 52 4 101 14 146 30" fill="none" stroke="#F5A623" stroke-opacity=".72" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M156 122 136 158M562 127l26 36" fill="none" stroke="#F5A623" stroke-opacity=".34" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="service-interactive-copy">
+              <div>
+                <span class="service-interactive-eyebrow">PAINT PROTECTION FILM</span>
+                <h2>حماية شفافة فوق الطلاء</h2>
+                <p>فيلم حماية فعلي يكوّن حاجزًا شفافًا فوق سطح السيارة للمساعدة على الحفاظ على الطلاء من الاستخدام اليومي.</p>
+                <ul class="service-interactive-benefits">
+                  <li>مقاومة الخدوش السطحية</li>
+                  <li>خصائص شفاء ذاتي</li>
+                  <li>مقاومة الاصفرار</li>
+                </ul>
+              </div>
+              <a class="service-interactive-action" href="#booking" data-interactive-service="حماية كاملة" aria-label="استفسر عن خدمة حماية الطلاء PPF">استفسر عن الخدمة</a>
+            </div>
+          </article>
+
+          <article class="service-interactive-panel" id="service-panel-tint" role="tabpanel" aria-labelledby="service-tab-tint" data-service-panel="tint" hidden>
+            <div class="service-interactive-visual" aria-hidden="true">
+              <svg class="service-interactive-svg service-interactive-svg-tint" viewBox="0 0 720 320" focusable="false">
+                <defs>
+                  <linearGradient id="tint-glass" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#ffffff" stop-opacity=".10"/>
+                    <stop offset=".5" stop-color="#8d9398" stop-opacity=".08"/>
+                    <stop offset="1" stop-color="#ffffff" stop-opacity=".02"/>
+                  </linearGradient>
+                  <linearGradient id="tint-ray" x1="0" x2="1">
+                    <stop offset="0" stop-color="#F5A623" stop-opacity=".92"/>
+                    <stop offset="1" stop-color="#F5A623" stop-opacity=".16"/>
+                  </linearGradient>
+                </defs>
+                <path d="M294 62 483 95 424 265l-189-33Z" fill="url(#tint-glass)" stroke="#fff" stroke-opacity=".27" stroke-width="1.4"/>
+                <path d="M309 76 465 103 412 249l-156-27Z" fill="#0A0A0A" fill-opacity=".38" stroke="#F5A623" stroke-opacity=".22" stroke-width="1"/>
+                <g fill="none" stroke="url(#tint-ray)" stroke-width="2" stroke-linecap="round">
+                  <path d="M86 82 280 124"/>
+                  <path d="M72 132 264 164"/>
+                  <path d="M70 184 250 205"/>
+                </g>
+                <g fill="none" stroke="#F5A623" stroke-opacity=".18" stroke-width="1.4" stroke-linecap="round">
+                  <path d="M438 145 602 181"/>
+                  <path d="M425 184 573 210"/>
+                  <path d="M412 221 548 238"/>
+                </g>
+                <path d="M486 94c34 36 56 76 66 120" fill="none" stroke="#fff" stroke-opacity=".08" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="service-interactive-copy">
+              <div>
+                <span class="service-interactive-eyebrow">HEAT INSULATION</span>
+                <h2>حرارة أقل داخل المقصورة</h2>
+                <p>فيلم عازل يخفف انتقال الحرارة عبر الزجاج ويساعد على حماية المقصورة من الأشعة فوق البنفسجية.</p>
+                <ul class="service-interactive-benefits">
+                  <li>تقليل الحرارة</li>
+                  <li>حماية من الأشعة فوق البنفسجية</li>
+                  <li>راحة ووضوح أفضل</li>
+                </ul>
+              </div>
+              <a class="service-interactive-action" href="#booking" data-interactive-service="تظليل v-nano" aria-label="استفسر عن خدمة العازل الحراري">استفسر عن الخدمة</a>
+            </div>
+          </article>
+
+          <article class="service-interactive-panel" id="service-panel-nano" role="tabpanel" aria-labelledby="service-tab-nano" data-service-panel="nano" hidden>
+            <div class="service-interactive-visual" aria-hidden="true">
+              <svg class="service-interactive-svg service-interactive-svg-nano" viewBox="0 0 720 320" focusable="false">
+                <defs>
+                  <linearGradient id="nano-surface" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#202020"/>
+                    <stop offset=".6" stop-color="#111"/>
+                    <stop offset="1" stop-color="#090909"/>
+                  </linearGradient>
+                  <radialGradient id="nano-drop" cx=".35" cy=".28" r=".72">
+                    <stop offset="0" stop-color="#fff" stop-opacity=".34"/>
+                    <stop offset=".38" stop-color="#fff" stop-opacity=".09"/>
+                    <stop offset="1" stop-color="#F5A623" stop-opacity=".05"/>
+                  </radialGradient>
+                </defs>
+                <path d="M76 230c122-70 252-91 392-61 67 14 126 40 176 78v38H76Z" fill="url(#nano-surface)" stroke="#fff" stroke-opacity=".11" stroke-width="1.2"/>
+                <path d="M116 232c123-53 247-66 372-39 48 10 92 26 133 48" fill="none" stroke="#F5A623" stroke-opacity=".34" stroke-width="1.5" stroke-linecap="round"/>
+                <g fill="url(#nano-drop)" stroke="#fff" stroke-opacity=".3" stroke-width="1">
+                  <ellipse cx="245" cy="169" rx="25" ry="18"/>
+                  <ellipse cx="330" cy="137" rx="18" ry="13"/>
+                  <ellipse cx="399" cy="181" rx="31" ry="22"/>
+                  <ellipse cx="488" cy="155" rx="15" ry="11"/>
+                </g>
+                <g fill="#fff" fill-opacity=".42">
+                  <ellipse cx="237" cy="163" rx="5" ry="3"/>
+                  <ellipse cx="324" cy="133" rx="4" ry="2.5"/>
+                  <ellipse cx="389" cy="173" rx="6" ry="3.5"/>
+                  <ellipse cx="483" cy="151" rx="3.5" ry="2"/>
+                </g>
+                <path d="M154 216c98-37 194-47 288-30" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="service-interactive-copy">
+              <div>
+                <span class="service-interactive-eyebrow">NANO CERAMIC</span>
+                <h2>سطح أملس ولمعان أعمق</h2>
+                <p>طبقة سيراميكية تعزز لمعان السطح وتمنحه خواص طاردة للماء لتصبح العناية اليومية أسهل.</p>
+                <ul class="service-interactive-benefits">
+                  <li>طرد الماء والأوساخ</li>
+                  <li>لمعان أعمق</li>
+                  <li>تنظيف أسهل</li>
+                </ul>
+              </div>
+              <a class="service-interactive-action" href="#booking" data-interactive-service="نانو سيراميك t3 (اربع طبقات)" aria-label="استفسر عن خدمة النانو سيراميك">استفسر عن الخدمة</a>
+            </div>
+          </article>
+        </div>
       </div>
-      <button class="hero-arrow prev" type="button" aria-label="الشريحة السابقة">‹</button>
-      <button class="hero-arrow next" type="button" aria-label="الشريحة التالية">›</button>
-      <div class="hero-dots" aria-label="اختيار شريحة العرض"></div>
-      <div class="hero-progress" aria-hidden="true"><i></i></div>
     </section>
 
     <section class="trust" aria-label="مزايا جيوشيلد">
