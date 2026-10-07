@@ -799,7 +799,7 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
   font:600 10px/1.4 "IBM Plex Sans Arabic",system-ui,sans-serif;
   letter-spacing:.16em;
 }
-.services-interactive-heading h1{
+.services-interactive-heading h2{
   margin:0;
   color:#FFFFFF;
   font-family:"Cairo","IBM Plex Sans Arabic",system-ui,sans-serif;
@@ -952,7 +952,7 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
   .services-interactive{padding:118px 0 44px}
   .services-interactive-heading{margin-bottom:18px}
   .services-interactive-label{margin-bottom:5px;font-size:8px}
-  .services-interactive-heading h1{font-size:clamp(31px,9.6vw,40px);line-height:1.3}
+  .services-interactive-heading h2{font-size:clamp(31px,9.6vw,40px);line-height:1.3}
   .services-interactive-heading p{margin-top:7px;font-size:11.5px;line-height:1.65}
   .services-interactive-tabs{gap:4px;margin-bottom:14px;padding:4px;border-radius:12px}
   .services-interactive-tabs button{min-height:42px;padding:7px 5px;border-radius:8px;font-size:10px}
