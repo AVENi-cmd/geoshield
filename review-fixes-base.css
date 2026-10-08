@@ -110,18 +110,18 @@ main,section,.shell,.split,.service-stack,.work-grid,.package-panel,.package-ser
 .package-panel article .package-book{margin-top:18px}
 
 /* PPF */
-.package-panel article[data-package-id="ppf-standard"]::before{background-image:url('images/services/geoshield-package-premium-02-optimized.webp')}
-.package-panel article[data-package-id="ppf-half"]::before{background-image:url('images/services/geoshield-package-premium-04-optimized.webp')}
-.package-panel article[data-package-id="ppf-full"]::before{background-image:url('images/services/geoshield-package-mercedes-jawhara-optimized.webp')}
+.package-panel article[data-package-id="ppf-standard"]::before{background-image:url('images/packages/ppf-standard.webp')}
+.package-panel article[data-package-id="ppf-half"]::before{background-image:url('images/packages/ppf-half.webp')}
+.package-panel article[data-package-id="ppf-full"]::before{background-image:url('images/packages/ppf-full.webp')}
 
 /* Thermal insulation */
-.package-panel article[data-package-id="tint-vnano"]::before{background-image:url('images/services/geoshield-package-premium-02-optimized.webp')}
-.package-panel article[data-package-id="tint-apex"]::before{background-image:url('images/services/geoshield-package-premium-03-optimized.webp')}
-.package-panel article[data-package-id="tint-c2"]::before{background-image:url('images/services/geoshield-package-premium-04-optimized.webp')}
+.package-panel article[data-package-id="tint-vnano"]::before{background-image:url('images/packages/tint-vnano.webp')}
+.package-panel article[data-package-id="tint-apex"]::before{background-image:url('images/packages/tint-apex.webp')}
+.package-panel article[data-package-id="tint-c2"]::before{background-image:url('images/packages/tint-c2.webp')}
 
 /* Nano */
-.package-panel article[data-package-id="nano-g5"]::before{background-image:url('images/services/geoshield-package-premium-03-optimized.webp')}
-.package-panel article[data-package-id="nano-t3"]::before{background-image:url('images/services/geoshield-package-04-optimized.webp')}
+.package-panel article[data-package-id="nano-g5"]::before{background-image:url('images/packages/nano-g5.webp')}
+.package-panel article[data-package-id="nano-t3"]::before{background-image:url('images/packages/nano-t3.webp')}
 
 /* Detailing card — image is a real element so content always flows below it. */
 .package-services .polish{grid-column:1/-1;width:100%;max-width:100%;overflow:hidden;padding:24px;border:1px solid rgba(245,166,35,.2);border-radius:28px;background-color:#fff;background-image:none;display:flex;flex-direction:column;gap:24px}
