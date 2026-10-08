@@ -1063,3 +1063,16 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
     height:18px;
   }
 }
+
+/* Cairo derivative scoped to the PPF heading: only the damma outline is
+   raised by 120/1000 em; shaping anchors and letter outlines are unchanged. */
+@font-face{
+  font-family:"GeoShield Heading";
+  src:url("fonts/geoshield-heading-bold.woff") format("woff");
+  font-style:normal;
+  font-weight:700;
+  font-display:swap;
+}
+#service-panel-ppf .service-interactive-copy h2{
+  font-family:"GeoShield Heading","Cairo","IBM Plex Sans Arabic",sans-serif!important;
+}
