@@ -1045,3 +1045,21 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
   border-color:#F5A623;
   color:#0A0A0A;
 }
+
+/* Keep warranty and aftercare icons proportional to mobile cards. */
+@media(max-width:760px){
+  main > .warranty .warranty-grid > article,
+  main > .warranty .aftercare > li{
+    grid-template-columns:32px minmax(0,1fr);
+    column-gap:12px;
+  }
+  main > .warranty .care-icon{
+    width:32px;
+    height:32px;
+    border-radius:8px;
+  }
+  main > .warranty .care-icon svg{
+    width:18px;
+    height:18px;
+  }
+}
