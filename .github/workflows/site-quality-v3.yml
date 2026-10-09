@@ -63,7 +63,7 @@ jobs:
           review_css = (root / 'review-fixes.css').read_text(encoding='utf-8')
 
           def visible_text(source):
-              return re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', source)).strip()
+              return re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', source)).strip()
 
           agency = 'وكالة جيوشيلد لفرعي الأحساء والخفجي تابعة لمجموعة عواد الظفيري'
           package_ids = ['ppf-standard','ppf-half','ppf-full','tint-vnano','tint-apex','tint-c2','nano-g5','nano-t3']
@@ -84,7 +84,7 @@ jobs:
               'Stable package ids': all(f'data-package-id="{x}"' in html for x in package_ids),
               'Package booking mapping': all(f'data-booking-service="{x}"' in html for x in booking_services[:8]),
               'Booking choices': all(f'<option>{x}</option>' in html for x in booking_services),
-              'Package semantics': all(x in html for x in ['الحماية القياسية','الحماية النصفية','الحماية الكاملة','V-NANO Premium','APEX Premium','C2 Premium','G5 Premium (4 Layers)','T3 Premium (4 Layers)']),
+              'Package semantics': all(x in html for x in ['الحماية القياسية','الحماية النصفية','الحماية الكاملة','V-NANO Premium','APEX Premium','C2 Premium','نانو جرافين G5','نانو سيراميك T3']),
               'No generated package copy': all(x not in review_css for x in ['content:"PPF Premium','content:"V-NANO','content:"Nano Graphene G5','content:"Nano Ceramic T3']),
               'Quote notes': html.count('class="quote-note"') == 8 and 'class="polish-price quote-note"' in html,
               'Quote CTA': 'احصل على عرض السعر' in script,
@@ -115,22 +115,25 @@ jobs:
               'عيوب الصناعة، الفقاعات، التقشير، الاصفرار والتشقق.',
               'عيوب الصناعة، الفقاعات، التقشير، الاصفرار والانفصال.',
               '<h3>نانو سيراميك 9H</h3><strong>3 + 5 سنوات</strong><p>3 سنوات للتطبيق و5 سنوات للطبقات.</p>',
-              '<li><b>7 أيام</b><span>بدون غسيل بعد PPF أو السيراميك.</span></li>',
-              '<li><b>48 ساعة</b><span>بدون فتح النوافذ بعد تركيب العازل الحراري.</span></li>',
-              '<li><b>4 ساعات</b><span>بدون مواد كيميائية أو مطر.</span></li>',
-              '<li><b>4 أسابيع</b><span>فحص مجاني خلالها.</span></li>',
-              '<li><b>6 شهور</b><span>صيانة دورية لحفظ الضمان.</span></li>',
+              '7 أيام بدون غسيل بعد PPF أو السيراميك.',
+              '48 ساعة بدون فتح النوافذ بعد تركيب العازل الحراري.',
+              '4 ساعات بدون مواد كيميائية أو مطر.',
+              '4 أسابيع فحص مجاني خلالها.',
+              '6 شهور صيانة دورية لحفظ الضمان.',
               'عدم الالتزام بالصيانة الدورية يلغي الضمان.',
           ]:
-              if snippet not in html:
+              if visible_text(snippet) not in visible_text(html):
                   raise SystemExit('Protected warranty/aftercare content changed: ' + snippet)
 
-          hero_assets = ['images/hero-slider-geoshield-protection.webp','images/hero-slider-geoshield-installments.webp','images/hero-slider-geoshield-ppf.webp']
-          positions = [html.find(asset) for asset in hero_assets]
-          if any(p < 0 for p in positions) or positions != sorted(positions):
-              raise SystemExit('Hero slide order changed unexpectedly')
-          if 'hero-slider-geoshield-installments.webp" width="1920" height="768" loading="eager" fetchpriority="high"' not in html:
-              raise SystemExit('Installments hero priority changed unexpectedly')
+          # The hero slider was replaced by three manual SVG service panels.
+          for key in ['ppf', 'tint', 'nano']:
+              panel = re.search(r'<article\b[^>]*data-service-panel="' + key + r'"[^>]*>.*?</article>', html, re.S)
+              if not panel or '<svg' not in panel.group(0) or 'viewBox="0 0 720 320"' not in panel.group(0):
+                  raise SystemExit('Missing interactive SVG service panel: ' + key)
+              if f'data-service-tab="{key}"' not in html:
+                  raise SystemExit('Missing interactive service tab: ' + key)
+          if 'hero-slider' in html:
+              raise SystemExit('Legacy hero slider must not be restored')
 
           blocks = re.findall(r'<script\s+type="application/ld\+json">\s*(.*?)\s*</script>', html, re.S)
           if not blocks:
@@ -167,6 +170,13 @@ jobs:
           for image in audit.images:
               if not image.get('alt','').strip(): raise SystemExit('Image missing alt: ' + image.get('src',''))
               if not image.get('width') or not image.get('height'): raise SystemExit('Image missing dimensions: ' + image.get('src',''))
+          for css in root.glob('*.css'):
+              audit.assets.extend(re.findall(r'url\(\s*[\"\']?([^\)\"\']+)', css.read_text(encoding='utf-8')))
+          import xml.etree.ElementTree as ET
+          sitemap = ET.parse(root / 'sitemap.xml')
+          for loc in sitemap.findall('.//{http://www.google.com/schemas/sitemap-image/1.1}loc'):
+              prefix = 'https://aveni-cmd.github.io/geoshield/'
+              if loc.text and loc.text.startswith(prefix): audit.assets.append(loc.text[len(prefix):])
           for ref in audit.assets:
               if ref.startswith(('http://','https://','//','data:')): continue
               path = urlsplit(ref).path.lstrip('/')
