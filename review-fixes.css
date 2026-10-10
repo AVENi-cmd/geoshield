@@ -1076,3 +1076,23 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
 #service-panel-ppf .service-interactive-copy h2{
   font-family:"GeoShield Heading","Cairo","IBM Plex Sans Arabic",sans-serif!important;
 }
+
+/* General service packages share the existing card style and imagery. */
+.package-panel:not(.package-services) article[data-package-id$="-general"]{
+  grid-column:1/-1;
+  max-width:640px;
+  justify-self:center;
+}
+.package-panel article[data-package-id="tint-general"]::before{
+  background-image:url('images/packages/tint-vnano.webp');
+}
+.package-panel article[data-package-id="nano-general"]::before{
+  background-image:url('images/packages/nano-t3.webp');
+}
+.package-panel .package-benefits{
+  margin:18px 0 0;
+  padding-inline-start:20px;
+  color:#626a70;
+  font-size:14px;
+  line-height:2;
+}
