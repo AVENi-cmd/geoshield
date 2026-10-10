@@ -224,6 +224,11 @@
 
   function chooseServiceAndBook(serviceName = '') {
     if (!bookingServiceSelect || !bookingSection) return;
+    // General package requests must not select a branch-specific product.
+    if (['العازل الحراري', 'نانو سيراميك'].includes(serviceName) && !bookingServiceValues.has(serviceName)) {
+      bookingServiceSelect.add(new Option(serviceName, serviceName));
+      bookingServiceValues.add(serviceName);
+    }
     if (serviceName && bookingServiceValues.has(serviceName)) bookingServiceSelect.value = serviceName;
     bookingSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
     setTimeout(() => bookingServiceSelect.focus({ preventScroll: true }), reduceMotion ? 0 : 450);
@@ -245,7 +250,7 @@
   $$('.package-panel article').forEach(card => {
     if (card.querySelector('.package-book')) return;
     const serviceName = card.dataset.bookingService || '';
-    if (!serviceName || !bookingServiceValues.has(serviceName)) return;
+    if (!serviceName || (!bookingServiceValues.has(serviceName) && !['العازل الحراري', 'نانو سيراميك'].includes(serviceName))) return;
     const visibleLabel = card.dataset.packageLabel || serviceName;
     const action = document.createElement('button');
     action.type = 'button';
