@@ -588,7 +588,7 @@
           <label>الاسم الكامل<input name="name" autocomplete="name" required></label>
           <label>رقم الجوال<input name="phone" autocomplete="tel-national" dir="ltr" required inputmode="tel" pattern="05[0-9]{8}" maxlength="10" placeholder="05xxxxxxxx"></label>
           <div class="form-row">
-            <label>نوع السيارة
+            <label>ماركة السيارة
               <select name="car" required>
                 <option value="">اختر</option><option>تويوتا</option><option>لكزس</option><option>نيسان</option><option>هيونداي</option><option>كيا</option><option>فورد</option><option>شفروليه</option><option>GMC</option><option>مرسيدس</option><option>BMW</option><option>أودي</option><option>بورشه</option><option>لاند روفر</option><option>جيب</option><option>أخرى</option>
               </select>
@@ -612,7 +612,8 @@
             <label>الفرع<select name="branch"><option value="hofuf">الأحساء</option><option value="khafji">الخفجي</option></select></label>
             <label>التاريخ المفضل<input type="text" name="date" id="dateInput" placeholder="DD/MM/YYYY" dir="ltr" inputmode="numeric" autocomplete="off" pattern="(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/[0-9]{4}" title="DD/MM/YYYY"></label>
           </div>
-          <label>ملاحظات<textarea name="notes" rows="3"></textarea></label>
+          <label>ملاحظات<textarea name="notes" rows="3" aria-describedby="car-details-hint" placeholder="مثال: كامري 2024"></textarea></label>
+          <p id="car-details-hint" class="car-details-hint">اكتب موديل السيارة وسنة الصنع في الملاحظات للمساعدة في تحديد عرض السعر.</p>
           <button class="button primary submit" type="submit">إرسال عبر واتساب</button>
         </form>
       </div>

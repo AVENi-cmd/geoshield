@@ -1131,3 +1131,11 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
   main > .branches .branch-card .actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding-top:14px}
   main > .branches .branch-card .actions .button{min-height:44px;padding:10px 8px;font-size:12px}
 }
+
+/* Car model guidance belongs to the existing optional notes field. */
+main > .booking .booking-form .car-details-hint{
+  margin:-4px 0 16px;
+  color:#626a70;
+  font-size:13px;
+  line-height:1.65;
+}

@@ -642,7 +642,7 @@
       '',
       `الاسم: ${value('name')}`,
       `رقم الجوال: ${normalizeSaudiMobile(value('phone'))}`,
-      `السيارة: ${value('car')}`,
+      `ماركة السيارة: ${value('car')}`,
       `الخدمة: ${value('service')}`,
       `الفرع: ${branchName}`,
       `التاريخ المفضل: ${value('date') || 'غير محدد'}`,
