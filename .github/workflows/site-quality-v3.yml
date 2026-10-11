@@ -66,8 +66,9 @@ jobs:
               return re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', source)).strip()
 
           agency = 'وكالة جيوشيلد لفرعي الأحساء والخفجي تابعة لمجموعة عواد الظفيري'
-          package_ids = ['ppf-standard','ppf-half','ppf-full','tint-vnano','tint-apex','tint-c2','nano-g5','nano-t3']
-          booking_services = ['حماية كاملة','حماية نصفية','حماية قياسية','تظليل apex','تظليل v-nano','تظليل c2','نانو جرافيني g5 (اربع طبقات)','نانو سيراميك t3 (اربع طبقات)','تلميع داخلي','تلميع خارجي','تلميع كامل']
+          package_ids = ['ppf-standard','ppf-half','ppf-full','tint-general','nano-general']
+          package_services = ['حماية قياسية','حماية نصفية','حماية كاملة','العازل الحراري','نانو سيراميك']
+          booking_services = package_services + ['تلميع داخلي','تلميع خارجي','تلميع كامل']
 
           checks = {
               'Arabic RTL': '<html lang="ar" dir="rtl">' in html,
@@ -82,11 +83,13 @@ jobs:
               'Friday README': '| الجمعة | ٤:٠٠ م - ٨:٠٠ م | — |' in readme,
               'Friday llms': 'Friday: 16:00-20:00' in llms,
               'Stable package ids': all(f'data-package-id="{x}"' in html for x in package_ids),
-              'Package booking mapping': all(f'data-booking-service="{x}"' in html for x in booking_services[:8]),
+              'Package booking mapping': all(f'data-booking-service="{x}"' in html for x in package_services),
               'Booking choices': all(f'<option>{x}</option>' in html for x in booking_services),
-              'Package semantics': all(x in html for x in ['الحماية القياسية','الحماية النصفية','الحماية الكاملة','V-NANO Premium','APEX Premium','C2 Premium','نانو جرافين G5','نانو سيراميك T3']),
+              'General service choices only': all(f'<option>{x}</option>' not in html for x in ['تظليل apex','تظليل v-nano','تظليل c2','نانو جرافيني g5 (اربع طبقات)','نانو سيراميك t3 (اربع طبقات)']),
+              'General interactive requests': 'data-interactive-service="العازل الحراري"' in html and 'data-interactive-service="نانو سيراميك"' in html,
+              'Package semantics': all(x in html for x in ['الحماية القياسية','الحماية النصفية','الحماية الكاملة','data-package-id="tint-general"','data-package-id="nano-general"']),
               'No generated package copy': all(x not in review_css for x in ['content:"PPF Premium','content:"V-NANO','content:"Nano Graphene G5','content:"Nano Ceramic T3']),
-              'Quote notes': html.count('class="quote-note"') == 8 and 'class="polish-price quote-note"' in html,
+              'Quote notes': html.count('class="quote-note"') == len(package_ids) and 'class="polish-price quote-note"' in html,
               'Quote CTA': 'احصل على عرض السعر' in script,
               'Canonical': '<link rel="canonical" href="https://aveni-cmd.github.io/geoshield/">' in html,
               'Favicon': '<link rel="icon" type="image/svg+xml" href="images/favicon.svg">' in html,
