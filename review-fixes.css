@@ -772,7 +772,7 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
 .services-interactive{
   position:relative;
   overflow:hidden;
-  padding:clamp(150px,12vw,184px) 0 clamp(54px,6vw,84px);
+  padding:clamp(48px,5vw,72px) 0 clamp(44px,5vw,64px);
   background:#0A0A0A;
   color:#FFFFFF;
   border-bottom:1px solid rgba(245,166,35,.20);
@@ -814,6 +814,7 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
   color:#E5E5E5;
   font:400 clamp(13px,1.1vw,16px)/1.8 "IBM Plex Sans Arabic",system-ui,sans-serif;
 }
+.services-interactive-cta{margin-top:18px}
 .services-interactive-tabs{
   width:min(760px,100%);
   margin:0 auto clamp(20px,2.4vw,30px);
@@ -862,7 +863,7 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
 }
 .service-interactive-panel[hidden]{display:none!important}
 .service-interactive-visual{
-  height:clamp(190px,25vw,300px);
+  height:clamp(190px,20vw,240px);
   display:grid;
   place-items:center;
   overflow:hidden;
@@ -949,7 +950,7 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
 .service-interactive-action:hover{background:#E5E5E5;transform:translateY(-1px)}
 .service-interactive-action:focus-visible{outline:2px solid #F5A623;outline-offset:3px}
 @media(max-width:760px){
-  .services-interactive{padding:118px 0 44px}
+  .services-interactive{padding:38px 0 36px}
   .services-interactive-heading{margin-bottom:18px}
   .services-interactive-label{margin-bottom:5px;font-size:8px}
   .services-interactive-heading h2{font-size:clamp(31px,9.6vw,40px);line-height:1.3}
@@ -968,7 +969,7 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
   .service-interactive-action{width:100%;min-height:46px;border-radius:9px}
 }
 @media(max-width:390px){
-  .services-interactive{padding-top:112px}
+  .services-interactive{padding-top:30px}
   .service-interactive-visual{height:138px}
   .services-interactive-tabs button{font-size:9.5px}
 }
