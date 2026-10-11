@@ -224,11 +224,6 @@
 
   function chooseServiceAndBook(serviceName = '') {
     if (!bookingServiceSelect || !bookingSection) return;
-    // General package requests must not select a branch-specific product.
-    if (['العازل الحراري', 'نانو سيراميك'].includes(serviceName) && !bookingServiceValues.has(serviceName)) {
-      bookingServiceSelect.add(new Option(serviceName, serviceName));
-      bookingServiceValues.add(serviceName);
-    }
     if (serviceName && bookingServiceValues.has(serviceName)) bookingServiceSelect.value = serviceName;
     bookingSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
     setTimeout(() => bookingServiceSelect.focus({ preventScroll: true }), reduceMotion ? 0 : 450);
@@ -236,21 +231,22 @@
 
   $$('.service-card').forEach(card => {
     const title = $('h3', card)?.textContent.trim();
+    const serviceName = card.dataset.bookingService || '';
     const copy = card.querySelector(':scope > div');
-    if (!title || !copy || copy.querySelector('.service-book')) return;
+    if (!title || !copy || !bookingServiceValues.has(serviceName) || copy.querySelector('.service-book')) return;
     const action = document.createElement('button');
     action.type = 'button';
     action.className = 'package-book service-book';
     action.setAttribute('aria-label', `احجز خدمة ${title}`);
     action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احجز الخدمة</span>`;
-    action.addEventListener('click', () => chooseServiceAndBook());
+    action.addEventListener('click', () => chooseServiceAndBook(serviceName));
     copy.append(action);
   });
 
   $$('.package-panel article').forEach(card => {
     if (card.querySelector('.package-book')) return;
     const serviceName = card.dataset.bookingService || '';
-    if (!serviceName || (!bookingServiceValues.has(serviceName) && !['العازل الحراري', 'نانو سيراميك'].includes(serviceName))) return;
+    if (!serviceName || !bookingServiceValues.has(serviceName)) return;
     const visibleLabel = card.dataset.packageLabel || serviceName;
     const action = document.createElement('button');
     action.type = 'button';
@@ -646,7 +642,7 @@
       '',
       `الاسم: ${value('name')}`,
       `رقم الجوال: ${normalizeSaudiMobile(value('phone'))}`,
-      `السيارة: ${value('car')}`,
+      `ماركة السيارة: ${value('car')}`,
       `الخدمة: ${value('service')}`,
       `الفرع: ${branchName}`,
       `التاريخ المفضل: ${value('date') || 'غير محدد'}`,
@@ -677,11 +673,14 @@
   }
 
   if (dateInput && window.flatpickr) {
+    const bookingDateMedia = window.matchMedia('(max-width:760px)');
+    const bookingDatePosition = () => bookingDateMedia.matches ? 'auto center' : 'auto';
     bookingDatePicker = window.flatpickr(dateInput, {
       dateFormat: 'd/m/Y',
       disableMobile: true,
       allowInput: false,
       clickOpens: true,
+      position: bookingDatePosition(),
       locale: window.flatpickr.l10ns.default,
       minDate: getRiyadhBookingMinDate(),
       ariaDateFormat: 'F j, Y',
@@ -693,6 +692,9 @@
         instance.calendarContainer.setAttribute('dir', 'ltr');
         instance.calendarContainer.setAttribute('lang', 'en');
       }
+    });
+    bookingDateMedia.addEventListener('change', () => {
+      bookingDatePicker.set('position', bookingDatePosition());
     });
   }
 

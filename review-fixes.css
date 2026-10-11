@@ -772,7 +772,7 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
 .services-interactive{
   position:relative;
   overflow:hidden;
-  padding:clamp(150px,12vw,184px) 0 clamp(54px,6vw,84px);
+  padding:clamp(48px,5vw,72px) 0 clamp(44px,5vw,64px);
   background:#0A0A0A;
   color:#FFFFFF;
   border-bottom:1px solid rgba(245,166,35,.20);
@@ -814,6 +814,7 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
   color:#E5E5E5;
   font:400 clamp(13px,1.1vw,16px)/1.8 "IBM Plex Sans Arabic",system-ui,sans-serif;
 }
+.services-interactive-cta{margin-top:18px}
 .services-interactive-tabs{
   width:min(760px,100%);
   margin:0 auto clamp(20px,2.4vw,30px);
@@ -862,7 +863,7 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
 }
 .service-interactive-panel[hidden]{display:none!important}
 .service-interactive-visual{
-  height:clamp(190px,25vw,300px);
+  height:clamp(190px,20vw,240px);
   display:grid;
   place-items:center;
   overflow:hidden;
@@ -949,28 +950,28 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
 .service-interactive-action:hover{background:#E5E5E5;transform:translateY(-1px)}
 .service-interactive-action:focus-visible{outline:2px solid #F5A623;outline-offset:3px}
 @media(max-width:760px){
-  .services-interactive{padding:118px 0 44px}
+  .services-interactive{padding:38px 0 36px}
   .services-interactive-heading{margin-bottom:18px}
-  .services-interactive-label{margin-bottom:5px;font-size:8px}
+  .services-interactive-label{margin-bottom:5px;font-size:11px}
   .services-interactive-heading h2{font-size:clamp(31px,9.6vw,40px);line-height:1.3}
   .services-interactive-heading p{margin-top:7px;font-size:11.5px;line-height:1.65}
   .services-interactive-tabs{gap:4px;margin-bottom:14px;padding:4px;border-radius:12px}
-  .services-interactive-tabs button{min-height:42px;padding:7px 5px;border-radius:8px;font-size:10px}
+  .services-interactive-tabs button{min-height:44px;padding:7px 5px;border-radius:8px;font-size:12px}
   .service-interactive-panel{padding:14px;border-radius:14px}
   .service-interactive-visual{height:150px}
   .service-interactive-copy{grid-template-columns:1fr;gap:15px;padding-top:15px}
-  .service-interactive-eyebrow{margin-bottom:4px;font-size:7.5px}
+  .service-interactive-eyebrow{margin-bottom:4px;font-size:11px}
   .service-interactive-copy h2{margin-bottom:5px!important;font-size:22px!important;line-height:1.35!important}
   .service-interactive-copy p{font-size:11.5px;line-height:1.7}
   .service-interactive-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:11px}
-  .service-interactive-benefits li{min-height:38px;padding:6px 8px;display:grid;place-items:center;border-radius:9px;font-size:9px;line-height:1.35;text-align:center}
+  .service-interactive-benefits li{min-height:44px;padding:6px 8px;display:grid;place-items:center;border-radius:9px;font-size:11.5px;line-height:1.4;text-align:center}
   .service-interactive-benefits li::before{display:none}
   .service-interactive-action{width:100%;min-height:46px;border-radius:9px}
 }
 @media(max-width:390px){
-  .services-interactive{padding-top:112px}
+  .services-interactive{padding-top:30px}
   .service-interactive-visual{height:138px}
-  .services-interactive-tabs button{font-size:9.5px}
+  .services-interactive-tabs button{font-size:11px}
 }
 @media(prefers-reduced-motion:reduce){
   .services-interactive-stage,
@@ -1129,4 +1130,52 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
   main > .branches .weekly-hours .hours-row :is(span,strong){font-size:12px;line-height:1.45}
   main > .branches .branch-card .actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding-top:14px}
   main > .branches .branch-card .actions .button{min-height:44px;padding:10px 8px;font-size:12px}
+}
+
+/* Car model guidance belongs to the existing optional notes field. */
+main > .booking .booking-form .car-details-hint{
+  margin:-4px 0 16px;
+  color:#626a70;
+  font-size:13px;
+  line-height:1.65;
+}
+
+/* Center the final pair after removing the unverified aftercare item. */
+@media(min-width:761px){
+  main > .warranty .aftercare{grid-template-columns:repeat(6,minmax(0,1fr))}
+  main > .warranty .aftercare > li{grid-column:span 2}
+  main > .warranty .aftercare > li:nth-child(4){grid-column:2/span 2}
+  main > .warranty .aftercare > li:nth-child(5){grid-column:4/span 2}
+}
+
+/* Balance only the detailing card with the package card rhythm. */
+.package-services .polish{
+  min-height:560px;
+  margin-top:0;
+}
+.package-services .polish-copy{
+  width:100%;
+}
+.package-services .polish .package-benefits{
+  padding:0;
+  list-style:none;
+}
+.package-services .polish .package-benefits li{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+}
+.package-services .polish .package-benefits li::before{
+  content:"✓";
+  color:var(--accent);
+  font-weight:700;
+  flex-shrink:0;
+}
+.package-services .polish-price{
+  margin-top:auto;
+}
+@media(max-width:760px){
+  .package-services .polish{
+    min-height:0;
+  }
 }
