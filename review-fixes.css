@@ -914,24 +914,20 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
   gap:8px;
 }
 .service-interactive-benefits li{
-  position:relative;
-  padding:7px 20px 7px 10px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 10px;
   border:1px solid rgba(255,255,255,.10);
   border-radius:999px;
   color:#E5E5E5;
   font:500 10.5px/1.4 "IBM Plex Sans Arabic",system-ui,sans-serif;
 }
 .service-interactive-benefits li::before{
-  content:"";
-  position:absolute;
-  right:9px;
-  top:50%;
-  width:4px;
-  height:4px;
-  border-radius:50%;
-  background:#FFFFFF;
-  transform:translateY(-50%);
-  opacity:.72;
+  content:"✓";
+  color:var(--accent);
+  font-weight:700;
+  flex-shrink:0;
 }
 .service-interactive-action{
   min-height:48px;
@@ -964,8 +960,7 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
   .service-interactive-copy h2{margin-bottom:5px!important;font-size:22px!important;line-height:1.35!important}
   .service-interactive-copy p{font-size:11.5px;line-height:1.7}
   .service-interactive-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:11px}
-  .service-interactive-benefits li{min-height:44px;padding:6px 8px;display:grid;place-items:center;border-radius:9px;font-size:11.5px;line-height:1.4;text-align:center}
-  .service-interactive-benefits li::before{display:none}
+  .service-interactive-benefits li{min-height:44px;padding:6px 8px;display:flex;align-items:center;justify-content:center;gap:5px;border-radius:9px;font-size:11.5px;line-height:1.4;text-align:center}
   .service-interactive-action{width:100%;min-height:46px;border-radius:9px}
 }
 @media(max-width:390px){
@@ -1156,16 +1151,16 @@ main > .booking .booking-form .car-details-hint{
 .package-services .polish-copy{
   width:100%;
 }
-.package-services .polish .package-benefits{
+.package-panel .package-benefits{
   padding:0;
   list-style:none;
 }
-.package-services .polish .package-benefits li{
+.package-panel .package-benefits li{
   display:flex;
   align-items:baseline;
   gap:10px;
 }
-.package-services .polish .package-benefits li::before{
+.package-panel .package-benefits li::before{
   content:"✓";
   color:var(--accent);
   font-weight:700;
