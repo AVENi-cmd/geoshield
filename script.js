@@ -231,14 +231,15 @@
 
   $$('.service-card').forEach(card => {
     const title = $('h3', card)?.textContent.trim();
+    const serviceName = card.dataset.bookingService || '';
     const copy = card.querySelector(':scope > div');
-    if (!title || !copy || copy.querySelector('.service-book')) return;
+    if (!title || !copy || !bookingServiceValues.has(serviceName) || copy.querySelector('.service-book')) return;
     const action = document.createElement('button');
     action.type = 'button';
     action.className = 'package-book service-book';
     action.setAttribute('aria-label', `احجز خدمة ${title}`);
     action.innerHTML = `${iconSpan(uiIcons.calendar)}<span>احجز الخدمة</span>`;
-    action.addEventListener('click', () => chooseServiceAndBook());
+    action.addEventListener('click', () => chooseServiceAndBook(serviceName));
     copy.append(action);
   });
 
