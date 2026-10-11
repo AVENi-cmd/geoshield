@@ -673,11 +673,14 @@
   }
 
   if (dateInput && window.flatpickr) {
+    const bookingDateMedia = window.matchMedia('(max-width:760px)');
+    const bookingDatePosition = () => bookingDateMedia.matches ? 'auto center' : 'auto';
     bookingDatePicker = window.flatpickr(dateInput, {
       dateFormat: 'd/m/Y',
       disableMobile: true,
       allowInput: false,
       clickOpens: true,
+      position: bookingDatePosition(),
       locale: window.flatpickr.l10ns.default,
       minDate: getRiyadhBookingMinDate(),
       ariaDateFormat: 'F j, Y',
@@ -689,6 +692,9 @@
         instance.calendarContainer.setAttribute('dir', 'ltr');
         instance.calendarContainer.setAttribute('lang', 'en');
       }
+    });
+    bookingDateMedia.addEventListener('change', () => {
+      bookingDatePicker.set('position', bookingDatePosition());
     });
   }
 
