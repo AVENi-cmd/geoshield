@@ -1147,3 +1147,35 @@ main > .booking .booking-form .car-details-hint{
   main > .warranty .aftercare > li:nth-child(4){grid-column:2/span 2}
   main > .warranty .aftercare > li:nth-child(5){grid-column:4/span 2}
 }
+
+/* Balance only the detailing card with the package card rhythm. */
+.package-services .polish{
+  min-height:560px;
+  margin-top:0;
+}
+.package-services .polish-copy{
+  width:100%;
+}
+.package-services .polish .package-benefits{
+  padding:0;
+  list-style:none;
+}
+.package-services .polish .package-benefits li{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+}
+.package-services .polish .package-benefits li::before{
+  content:"✓";
+  color:var(--accent);
+  font-weight:700;
+  flex-shrink:0;
+}
+.package-services .polish-price{
+  margin-top:auto;
+}
+@media(max-width:760px){
+  .package-services .polish{
+    min-height:0;
+  }
+}
