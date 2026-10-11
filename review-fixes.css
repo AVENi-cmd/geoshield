@@ -1114,3 +1114,19 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
     margin-inline:-22px;
   }
 }
+
+/* Compact branch cards on phones without hiding contact or opening hours. */
+@media(max-width:760px){
+  main > .branches .branch-cards{gap:16px}
+  main > .branches .branch-card{padding:20px 18px;min-height:0}
+  main > .branches .branch-card-top{gap:12px}
+  main > .branches .branch-card h3{font-size:24px;line-height:1.35;margin:12px 0 8px}
+  main > .branches .branch-address{font-size:13px;line-height:1.6;margin-bottom:6px;min-height:0}
+  main > .branches .branch-phone{font-size:20px;line-height:1.4;min-height:44px;margin-top:0}
+  main > .branches .weekly-hours{margin-top:12px;padding-top:12px;gap:0}
+  main > .branches .weekly-hours .hours-title{font-size:12px;line-height:1.5;margin-bottom:6px}
+  main > .branches .weekly-hours .hours-row{min-height:0;grid-template-columns:72px minmax(0,1fr);gap:8px;padding-block:4px}
+  main > .branches .weekly-hours .hours-row :is(span,strong){font-size:12px;line-height:1.45}
+  main > .branches .branch-card .actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding-top:14px}
+  main > .branches .branch-card .actions .button{min-height:44px;padding:10px 8px;font-size:12px}
+}
