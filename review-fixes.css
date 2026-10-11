@@ -1096,3 +1096,21 @@ main > :is(.intro,.services,.packages,.booking,.faq) :is(a,button,input,select,t
   font-size:14px;
   line-height:2;
 }
+
+/* Match the edge-to-edge 16:9 imagery used by the other package cards. */
+.package-services .polish{
+  padding-top:0;
+}
+.package-services .polish-image{
+  width:calc(100% + 48px);
+  max-width:none;
+  margin-inline:-24px;
+  border-radius:0;
+  flex-shrink:0;
+}
+@media(max-width:760px){
+  .package-services .polish-image{
+    width:calc(100% + 44px);
+    margin-inline:-22px;
+  }
+}
