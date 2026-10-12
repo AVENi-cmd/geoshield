@@ -1227,3 +1227,8 @@ main > .booking .booking-form .car-details-hint{
 @media(max-width:760px){
   .services-interactive-cta .button{min-width:178px}
 }
+
+/* The calendar is a mobile-only header action. */
+@media(min-width:761px){
+  .header-booking{display:none}
+}
