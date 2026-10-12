@@ -1174,3 +1174,9 @@ main > .booking .booking-form .car-details-hint{
     min-height:0;
   }
 }
+
+/* Preserve the hero button dimensions when changing its label. */
+.services-interactive-cta .button{min-width:190px}
+@media(max-width:760px){
+  .services-interactive-cta .button{min-width:178px}
+}
