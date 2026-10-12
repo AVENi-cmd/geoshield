@@ -1233,7 +1233,15 @@ main > .booking .booking-form .car-details-hint{
   .header-booking{display:none}
 }
 
-/* Resolve deferred card heights before the direct hero or calendar jump. */
+/* Resolve deferred heights once an in-page navigation is requested. */
+html.anchor-layout-ready :is(.service-card,.package-panel article,.branch-card,.booking-form),
 body:has(:is(#bookingForm,#packages-intro):target) :is(.service-card,.package-panel article,.branch-card,.booking-form){
   content-visibility:visible;
+}
+
+/* An explicitly requested heading must not move during its reveal animation. */
+.reveal.anchor-arrival{
+  opacity:1!important;
+  transform:none!important;
+  transition:none!important;
 }
