@@ -47,7 +47,40 @@
     menu.setAttribute('aria-label', open ? 'إغلاق القائمة' : 'فتح القائمة');
   });
 
-  $$('#nav a').forEach(link => link.addEventListener('click', () => closeMenu()));
+  const anchorIds = new Set(['top', 'services', 'work', 'packages', 'warranty', 'branches', 'booking', 'bookingForm', 'packages-intro', 'faq']);
+
+  function scrollToDestination(target) {
+    if (!target) return;
+    closeMenu();
+    // Cache the real card heights before calculating a long scroll.
+    document.documentElement.classList.add('anchor-layout-ready');
+    const destination = target.id === 'booking' ? $('#bookingForm')
+      : target.matches('section') ? $('.heading', target) || $('h2', target)?.parentElement || target
+      : target;
+    if (!destination) return;
+    if (destination.classList.contains('reveal')) destination.classList.add('anchor-arrival');
+    const top = target.id === 'top' ? 0 : destination.getBoundingClientRect().top + scrollY - (header?.offsetHeight || 0) - 16;
+    scrollTo({ top: Math.max(0, top), behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
+
+  document.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = event.target.closest('a[href^="#"]');
+    const hash = link?.getAttribute('href');
+    if (!hash || !anchorIds.has(hash.slice(1))) return;
+    const target = document.getElementById(hash.slice(1));
+    if (!target) return;
+    event.preventDefault();
+    if (location.hash !== hash) history.pushState(null, '', hash);
+    scrollToDestination(target);
+  });
+
+  function alignCurrentAnchor() {
+    const id = location.hash.slice(1);
+    if (anchorIds.has(id)) requestAnimationFrame(() => scrollToDestination(document.getElementById(location.hash.slice(1))));
+  }
+  addEventListener('popstate', alignCurrentAnchor);
+  addEventListener('load', alignCurrentAnchor, { once: true });
 
   document.addEventListener('pointerdown', event => {
     if (innerWidth <= 1050 && nav?.classList.contains('open') && !nav.contains(event.target) && !menu?.contains(event.target)) closeMenu();
@@ -225,7 +258,7 @@
   function chooseServiceAndBook(serviceName = '') {
     if (!bookingServiceSelect || !bookingSection) return;
     if (serviceName && bookingServiceValues.has(serviceName)) bookingServiceSelect.value = serviceName;
-    bookingSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    scrollToDestination(bookingSection);
     setTimeout(() => bookingServiceSelect.focus({ preventScroll: true }), reduceMotion ? 0 : 450);
   }
 
@@ -459,7 +492,7 @@
     const key = button.dataset.bookBranch;
     if (!branchSelect || !bookingSection || !branches[key]) return;
     branchSelect.value = key;
-    bookingSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    scrollToDestination(bookingSection);
     setTimeout(() => branchSelect.focus({ preventScroll: true }), reduceMotion ? 0 : 450);
   }));
 
