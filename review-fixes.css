@@ -1233,7 +1233,7 @@ main > .booking .booking-form .car-details-hint{
   .header-booking{display:none}
 }
 
-/* Resolve deferred card heights before jumping to the booking form. */
-body:has(#bookingForm:target) :is(.service-card,.package-panel article,.branch-card,.booking-form){
+/* Resolve deferred card heights before the direct hero or calendar jump. */
+body:has(:is(#bookingForm,#packages-intro):target) :is(.service-card,.package-panel article,.branch-card,.booking-form){
   content-visibility:visible;
 }
