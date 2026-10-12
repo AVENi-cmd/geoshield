@@ -1215,8 +1215,7 @@ main > .booking .booking-form .car-details-hint{
   }
 }
 @media(max-width:1050px){
-  .header-actions{flex:1}
-  .header-booking{margin-inline:auto}
+  .header-actions{gap:10px}
 }
 @media(forced-colors:active){
   .header-booking{background:ButtonFace;color:ButtonText;border-color:ButtonText}
